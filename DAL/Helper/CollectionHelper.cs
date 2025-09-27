@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BLL
+namespace DAL.Helper
 {
-    public class Class1
+    internal class CollectionHelper
     {
     }
 }
