@@ -1,0 +1,6 @@
+@TaiKhoanService_HostAddress = http://localhost:5001
+
+GET {{TaiKhoanService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

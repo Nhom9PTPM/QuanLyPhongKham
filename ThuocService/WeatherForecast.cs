@@ -1,4 +1,4 @@
-namespace QuanLyPhongKham
+namespace ThuocService
 {
     public class WeatherForecast
     {

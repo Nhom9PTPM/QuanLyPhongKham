@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace QuanLyPhongKham.Controllers
+namespace HoaDonService.Controllers
 {
     [ApiController]
     [Route("[controller]")]
