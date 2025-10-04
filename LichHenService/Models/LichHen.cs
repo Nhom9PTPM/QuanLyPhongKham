@@ -7,6 +7,6 @@
         public int maBacSi { get; set; }
         public DateTime ngayHen { get; set; }
         public TimeSpan gioHen { get; set; }
-        public string trangThai { get; set; }
+        public string? trangThai { get; set; }
     }
 }
