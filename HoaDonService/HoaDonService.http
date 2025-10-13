@@ -1,6 +1,0 @@
-@HoaDonService_HostAddress = http://localhost:5022
-
-GET {{HoaDonService_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
