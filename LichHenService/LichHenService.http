@@ -1,6 +1,0 @@
-@LichHenService_HostAddress = http://localhost:5150
-
-GET {{LichHenService_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
