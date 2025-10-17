@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\GateWay\\QuanLyPhongKham-Admin\\QuanLyPhongKham-Admin\\QuanLyPhongKham-Admin.csproj": {}
+    "C:\\Users\\admin\\source\\repos\\Nhom9PTPM\\Gateway\\GateWay\\QuanLyPhongKham-Admin\\QuanLyPhongKham-Admin\\QuanLyPhongKham-Admin.csproj": {}
   },
   "projects": {
-    "D:\\GateWay\\QuanLyPhongKham-Admin\\QuanLyPhongKham-Admin\\QuanLyPhongKham-Admin.csproj": {
+    "C:\\Users\\admin\\source\\repos\\Nhom9PTPM\\Gateway\\GateWay\\QuanLyPhongKham-Admin\\QuanLyPhongKham-Admin\\QuanLyPhongKham-Admin.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\GateWay\\QuanLyPhongKham-Admin\\QuanLyPhongKham-Admin\\QuanLyPhongKham-Admin.csproj",
+        "projectUniqueName": "C:\\Users\\admin\\source\\repos\\Nhom9PTPM\\Gateway\\GateWay\\QuanLyPhongKham-Admin\\QuanLyPhongKham-Admin\\QuanLyPhongKham-Admin.csproj",
         "projectName": "QuanLyPhongKham-Admin",
-        "projectPath": "D:\\GateWay\\QuanLyPhongKham-Admin\\QuanLyPhongKham-Admin\\QuanLyPhongKham-Admin.csproj",
+        "projectPath": "C:\\Users\\admin\\source\\repos\\Nhom9PTPM\\Gateway\\GateWay\\QuanLyPhongKham-Admin\\QuanLyPhongKham-Admin\\QuanLyPhongKham-Admin.csproj",
         "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "D:\\GateWay\\QuanLyPhongKham-Admin\\QuanLyPhongKham-Admin\\obj\\",
+        "outputPath": "C:\\Users\\admin\\source\\repos\\Nhom9PTPM\\Gateway\\GateWay\\QuanLyPhongKham-Admin\\QuanLyPhongKham-Admin\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -45,6 +45,20 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.4.0, )"

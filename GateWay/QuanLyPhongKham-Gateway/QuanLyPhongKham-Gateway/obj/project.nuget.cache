@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "CG+WOmZ1twz+sKsdEeEl+i1lHZiV7mSAP5ph3gZQtE0ypZAInDXQ+vm401VLMJgfpwHNxYB/I4HpUNBL7qUmBw==",
+  "dgSpecHash": "8mal+CT2/Qc5Yvho/0e07orm4wGo6XYSSG4Q0R2Wsx88z52amfY9hXEkEtxCX1Jt7x5DejbhPUS4gKAhwkT7DQ==",
   "success": true,
-  "projectFilePath": "D:\\GateWay\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway.csproj",
+  "projectFilePath": "C:\\Users\\admin\\source\\repos\\Nhom9PTPM\\Gateway\\GateWay\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "C:\\Users\\admin\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",

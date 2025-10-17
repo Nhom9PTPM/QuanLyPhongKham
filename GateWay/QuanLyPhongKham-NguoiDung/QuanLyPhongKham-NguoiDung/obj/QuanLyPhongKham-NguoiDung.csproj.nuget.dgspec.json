@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\GateWay\\QuanLyPhongKham-NguoiDung\\QuanLyPhongKham-NguoiDung\\QuanLyPhongKham-NguoiDung.csproj": {}
+    "C:\\Users\\admin\\source\\repos\\Nhom9PTPM\\Gateway\\GateWay\\QuanLyPhongKham-NguoiDung\\QuanLyPhongKham-NguoiDung\\QuanLyPhongKham-NguoiDung.csproj": {}
   },
   "projects": {
-    "D:\\GateWay\\QuanLyPhongKham-NguoiDung\\QuanLyPhongKham-NguoiDung\\QuanLyPhongKham-NguoiDung.csproj": {
+    "C:\\Users\\admin\\source\\repos\\Nhom9PTPM\\Gateway\\GateWay\\QuanLyPhongKham-NguoiDung\\QuanLyPhongKham-NguoiDung\\QuanLyPhongKham-NguoiDung.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\GateWay\\QuanLyPhongKham-NguoiDung\\QuanLyPhongKham-NguoiDung\\QuanLyPhongKham-NguoiDung.csproj",
+        "projectUniqueName": "C:\\Users\\admin\\source\\repos\\Nhom9PTPM\\Gateway\\GateWay\\QuanLyPhongKham-NguoiDung\\QuanLyPhongKham-NguoiDung\\QuanLyPhongKham-NguoiDung.csproj",
         "projectName": "QuanLyPhongKham-NguoiDung",
-        "projectPath": "D:\\GateWay\\QuanLyPhongKham-NguoiDung\\QuanLyPhongKham-NguoiDung\\QuanLyPhongKham-NguoiDung.csproj",
+        "projectPath": "C:\\Users\\admin\\source\\repos\\Nhom9PTPM\\Gateway\\GateWay\\QuanLyPhongKham-NguoiDung\\QuanLyPhongKham-NguoiDung\\QuanLyPhongKham-NguoiDung.csproj",
         "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "D:\\GateWay\\QuanLyPhongKham-NguoiDung\\QuanLyPhongKham-NguoiDung\\obj\\",
+        "outputPath": "C:\\Users\\admin\\source\\repos\\Nhom9PTPM\\Gateway\\GateWay\\QuanLyPhongKham-NguoiDung\\QuanLyPhongKham-NguoiDung\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -45,6 +45,18 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.4.0, )"

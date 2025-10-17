@@ -433,11 +433,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\GateWay\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway.csproj",
+      "projectUniqueName": "C:\\Users\\admin\\source\\repos\\Nhom9PTPM\\Gateway\\GateWay\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway.csproj",
       "projectName": "QuanLyPhongKham-Gateway",
-      "projectPath": "D:\\GateWay\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway.csproj",
+      "projectPath": "C:\\Users\\admin\\source\\repos\\Nhom9PTPM\\Gateway\\GateWay\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway.csproj",
       "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-      "outputPath": "D:\\GateWay\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway\\obj\\",
+      "outputPath": "C:\\Users\\admin\\source\\repos\\Nhom9PTPM\\Gateway\\GateWay\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
