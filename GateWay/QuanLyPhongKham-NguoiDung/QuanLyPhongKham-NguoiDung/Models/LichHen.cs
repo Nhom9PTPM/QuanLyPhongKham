@@ -8,15 +8,11 @@ namespace QuanLyPhongKham_NguoiDung.Models
     {
         [Key]
         public int MaLichHen { get; set; }
-
-        [ForeignKey("BenhNhan")]
-        public int MaBenhNhan { get; set; }
-
+        public int? MaBenhNhan { get; set; }
+        public int? MaBacSi { get; set; }
         public DateTime NgayHen { get; set; }
-        public string? GioHen { get; set; }
-        public string? TrangThai { get; set; }
-        public string? GhiChu { get; set; }
+        public string? LyDoKham { get; set; }
+        public string? TrangThai { get; set; } = "Chờ xác nhận";
 
-        public virtual BenhNhan? BenhNhan { get; set; }
     }
 }

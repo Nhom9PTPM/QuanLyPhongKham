@@ -14,5 +14,12 @@ namespace QuanLyPhongKham.Models
         public string? DiaChi { get; set; }
         public string? CMTND_NV { get; set; }
         public DateTime NgayTao { get; set; } = DateTime.UtcNow;
+        public bool DaXoa { get; set; } = false;
+
+        [Timestamp]
+        public byte[]? RowVersion { get; set; }
+
+        public ICollection<LichHen>? LichHens { get; set; }
+        public ICollection<HoSoBenhAn>? HoSoBenhAns { get; set; }
     }
 }

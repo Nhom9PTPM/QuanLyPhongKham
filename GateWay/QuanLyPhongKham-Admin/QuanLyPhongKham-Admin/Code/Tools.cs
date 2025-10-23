@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 
 
 namespace QuanLyPhongKham_Admin.Code
@@ -12,33 +13,25 @@ namespace QuanLyPhongKham_Admin.Code
             _env = env;
         }
 
-        public string CreatePathFile(string relativePath)
+        public string CreatePathFile(string filePath)
         {
-            var fullPath = Path.Combine(_env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"), relativePath);
-            var dir = Path.GetDirectoryName(fullPath);
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-            return fullPath;
+            string path = Path.Combine(_env.ContentRootPath, filePath);
+            string? directory = Path.GetDirectoryName(path);
+
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory!);
+
+            return path;
         }
 
-        public bool DeleteFile(string relativePath)
+        public string GenerateRandomCode(int length)
         {
-            try
-            {
-                var fullPath = Path.Combine(_env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"), relativePath);
-                if (File.Exists(fullPath))
-                {
-                    File.Delete(fullPath);
-                    return true;
-                }
-                return false;
-            }
-            catch
-            {
-                return false;
-            }
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var random = new Random();
+            var result = new StringBuilder(length);
+            for (int i = 0; i < length; i++)
+                result.Append(chars[random.Next(chars.Length)]);
+            return result.ToString();
         }
     }
 }

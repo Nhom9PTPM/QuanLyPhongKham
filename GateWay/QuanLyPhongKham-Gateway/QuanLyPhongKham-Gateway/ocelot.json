@@ -1,0 +1,27 @@
+{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/api-admin/benhnhan/{everything}",
+      "DownstreamPathTemplate": "/api/benhnhan/{everything}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api-nguoidung/lichhen/{everything}",
+      "DownstreamPathTemplate": "/api/lichhen/{everything}",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ]
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:8080"
+  }
+}

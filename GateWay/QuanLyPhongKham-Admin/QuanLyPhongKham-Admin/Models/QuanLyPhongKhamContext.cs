@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace QuanLyPhongKham_Admin.Models
 {
-    public class PhongKhamContext : DbContext
+    public class QuanLyPhongKhamContext : DbContext
     {
         private readonly IConfiguration _configuration;
-        public PhongKhamContext(IConfiguration configuration)
+        public QuanLyPhongKhamContext(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -19,5 +18,6 @@ namespace QuanLyPhongKham_Admin.Models
 
         public DbSet<BenhNhan> BenhNhans { get; set; }
         public DbSet<LichHen> LichHens { get; set; }
+
     }
 }

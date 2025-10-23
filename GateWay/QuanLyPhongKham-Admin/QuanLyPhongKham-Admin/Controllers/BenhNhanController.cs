@@ -8,11 +8,11 @@ namespace QuanLyPhongKham_Admin.Controllers
     [Route("api/[controller]")]
     public class BenhNhanController : ControllerBase
     {
-        private PhongKhamContext db = null;
+        private QuanLyPhongKhamContext db = null;
 
         public BenhNhanController(IConfiguration configuration)
         {
-            db = new PhongKhamContext(configuration);
+            db = new QuanLyPhongKhamContext(configuration);
         }
 
         [Route("get-all")]

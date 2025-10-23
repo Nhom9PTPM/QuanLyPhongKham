@@ -2,7 +2,7 @@
 {
     public interface ITools
     {
-        string CreatePathFile(string relativePath);
-        bool DeleteFile(string relativePath);
+        string CreatePathFile(string filePath);
+        string GenerateRandomCode(int length);
     }
 }
