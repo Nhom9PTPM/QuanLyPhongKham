@@ -6,11 +6,10 @@ namespace QuanLyPhongKham_Admin.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LichHenController : ControllerBase
+    public class KhamBenhController : ControllerBase
     {
         private QuanLyPhongKhamContext db = null;
-
-        public LichHenController(IConfiguration configuration)
+        public KhamBenhController(IConfiguration configuration)
         {
             db = new QuanLyPhongKhamContext(configuration);
         }
@@ -21,18 +20,19 @@ namespace QuanLyPhongKham_Admin.Controllers
         {
             try
             {
-                var obj = db.LichHens.Where(x => x.MaLichHen == id)
-                    .Select(x => new
+                var obj = db.KhamBenhs.Where(x => x.MaKham == id).Select(
+                    x => new
                     {
-                        x.MaLichHen,
+                        x.MaKham,
+                        x.MaHoSo,
                         x.MaBenhNhan,
                         x.MaBacSi,
-                        x.NgayBatDau,
-                        x.NgayKetThuc,
-                        x.GioHen,
-                        x.TrangThai,
+                        x.NgayKham,
+                        x.ChanDoan,
+                        x.ChiDinhXN,
+                        x.ChiDinhCLS,
                         x.GhiChu,
-                        x.NguoiTao
+                        x.NguoiThucHien
                     }).SingleOrDefault();
 
                 return Ok(obj);
@@ -45,13 +45,15 @@ namespace QuanLyPhongKham_Admin.Controllers
 
         [Route("create")]
         [HttpPost]
-        public IActionResult Create(LichHen model)
+        public IActionResult Create(KhamBenh model)
         {
             try
             {
+                model.NgayKham = DateTime.Now;
                 model.NgayTao = DateTime.Now;
-                db.LichHens.Add(model);
+                db.KhamBenhs.Add(model);
                 db.SaveChanges();
+
                 return Ok("OK");
             }
             catch
@@ -62,19 +64,19 @@ namespace QuanLyPhongKham_Admin.Controllers
 
         [Route("update")]
         [HttpPost]
-        public IActionResult Update(LichHen model)
+        public IActionResult Update(KhamBenh model)
         {
             try
             {
-                var obj = db.LichHens.SingleOrDefault(x => x.MaLichHen == model.MaLichHen);
+                var obj = db.KhamBenhs.SingleOrDefault(x => x.MaKham == model.MaKham);
                 if (obj != null)
                 {
-                    obj.GioHen = model.GioHen;
-                    obj.NgayBatDau = model.NgayBatDau;
-                    obj.NgayKetThuc = model.NgayKetThuc;
-                    obj.MaBacSi = model.MaBacSi;
-                    obj.TrangThai = model.TrangThai;
+                    obj.ChanDoan = model.ChanDoan;
+                    obj.ChiDinhXN = model.ChiDinhXN;
+                    obj.ChiDinhCLS = model.ChiDinhCLS;
                     obj.GhiChu = model.GhiChu;
+                    obj.MaBacSi = model.MaBacSi;
+                    obj.NguoiThucHien = model.NguoiThucHien;
 
                     db.SaveChanges();
                     return Ok("OK");
@@ -94,8 +96,8 @@ namespace QuanLyPhongKham_Admin.Controllers
         {
             try
             {
-                var obj = db.LichHens.SingleOrDefault(x => x.MaLichHen == id);
-                db.LichHens.Remove(obj);
+                var obj = db.KhamBenhs.SingleOrDefault(x => x.MaKham == id);
+                db.KhamBenhs.Remove(obj);
                 db.SaveChanges();
 
                 return Ok("OK");
@@ -111,62 +113,49 @@ namespace QuanLyPhongKham_Admin.Controllers
         public ResponseModel Search([FromBody] Dictionary<string, object> formData)
         {
             var response = new ResponseModel();
-
             try
             {
                 var page = int.Parse(formData["page"].ToString());
                 var pageSize = int.Parse(formData["pageSize"].ToString());
 
-                string HoTen = "";
+                string ten = "";
                 if (formData.Keys.Contains("HoTen"))
-                    HoTen = Convert.ToString(formData["HoTen"]);
-
-                string TrangThai = "";
-                if (formData.Keys.Contains("TrangThai"))
-                    TrangThai = Convert.ToString(formData["TrangThai"]);
+                    ten = Convert.ToString(formData["HoTen"]);
 
                 DateTime? fr_date = null;
-                if (formData.Keys.Contains("fr_Ngay"))
+                if (formData.Keys.Contains("fr_NgayKham") && formData["fr_NgayKham"] != null)
                 {
-                    if (formData["fr_Ngay"] != null && formData["fr_Ngay"].ToString() != "")
-                    {
-                        var dt = Convert.ToDateTime(formData["fr_Ngay"]);
-                        fr_date = new DateTime(dt.Year, dt.Month, dt.Day, 0, 0, 0);
-                    }
+                    var dt = Convert.ToDateTime(formData["fr_NgayKham"].ToString());
+                    fr_date = new DateTime(dt.Year, dt.Month, dt.Day, 0, 0, 0);
                 }
 
                 DateTime? to_date = null;
-                if (formData.Keys.Contains("to_Ngay"))
+                if (formData.Keys.Contains("to_NgayKham") && formData["to_NgayKham"] != null)
                 {
-                    if (formData["to_Ngay"] != null && formData["to_Ngay"].ToString() != "")
-                    {
-                        var dt = Convert.ToDateTime(formData["to_Ngay"]);
-                        to_date = new DateTime(dt.Year, dt.Month, dt.Day, 23, 59, 59);
-                    }
+                    var dt = Convert.ToDateTime(formData["to_NgayKham"].ToString());
+                    to_date = new DateTime(dt.Year, dt.Month, dt.Day, 23, 59, 59);
                 }
 
-                var query = from l in db.LichHens
-                            join b in db.BenhNhans on l.MaBenhNhan equals b.MaBenhNhan
+                var query = from k in db.KhamBenhs
+                            join b in db.BenhNhans on k.MaBenhNhan equals b.MaBenhNhan
                             select new
                             {
-                                l.MaLichHen,
+                                k.MaKham,
                                 b.HoTen,
-                                l.NgayBatDau,
-                                l.GioHen,
-                                l.TrangThai,
-                                l.GhiChu
+                                k.NgayKham,
+                                k.ChanDoan,
+                                k.NguoiThucHien
                             };
 
                 var data = query.Where(x =>
-                        (HoTen == "" || x.HoTen.Contains(HoTen)) &&
-                        (TrangThai == "" || x.TrangThai == TrangThai) &&
+                        (ten == "" || x.HoTen.Contains(ten)) &&
                         (
                             (fr_date == null && to_date == null) ||
-                            (fr_date != null && x.NgayBatDau >= fr_date && to_date == null) ||
-                            (fr_date == null && to_date != null && x.NgayBatDau <= to_date) ||
-                            (x.NgayBatDau >= fr_date && x.NgayBatDau <= to_date)
+                            (fr_date != null && x.NgayKham >= fr_date && to_date == null) ||
+                            (fr_date == null && to_date != null && x.NgayKham <= to_date) ||
+                            (x.NgayKham >= fr_date && x.NgayKham <= to_date)
                         )
-                ).OrderByDescending(x => x.MaLichHen).ToList();
+                ).OrderByDescending(x => x.MaKham).ToList();
 
                 response.TotalItems = data.Count;
                 response.Page = page;

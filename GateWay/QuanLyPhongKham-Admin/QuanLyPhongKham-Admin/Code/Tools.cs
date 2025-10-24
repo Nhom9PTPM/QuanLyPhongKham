@@ -1,37 +1,40 @@
-﻿using System.IO;
-using System.Text;
-
+﻿using Microsoft.Extensions.Configuration;
+using System;
+using System.IO;
 
 namespace QuanLyPhongKham_Admin.Code
 {
+    public interface ITools
+    {
+        string CreatePathFile(string RelativePathFileName);
+    }
+
     public class Tools : ITools
     {
-        private readonly IWebHostEnvironment _env;
+        private IConfiguration _configuration;
 
-        public Tools(IWebHostEnvironment env)
+        public Tools(IConfiguration configuration)
         {
-            _env = env;
+            _configuration = configuration;
         }
 
-        public string CreatePathFile(string filePath)
+        public string CreatePathFile(string RelativePathFileName)
         {
-            string path = Path.Combine(_env.ContentRootPath, filePath);
-            string? directory = Path.GetDirectoryName(path);
+            try
+            {
+                string serverRootPathFolder = _configuration["AppSettings:WEB_SERVER_FULL_PATH"].ToString();
+                string fullPathFile = $@"{serverRootPathFolder}\{RelativePathFileName}";
+                string? fullPathFolder = Path.GetDirectoryName(fullPathFile);
 
-            if (!Directory.Exists(directory))
-                Directory.CreateDirectory(directory!);
+                if (!Directory.Exists(fullPathFolder))
+                    Directory.CreateDirectory(fullPathFolder);
 
-            return path;
-        }
-
-        public string GenerateRandomCode(int length)
-        {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            var random = new Random();
-            var result = new StringBuilder(length);
-            for (int i = 0; i < length; i++)
-                result.Append(chars[random.Next(chars.Length)]);
-            return result.ToString();
+                return fullPathFile;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
     }
 }
