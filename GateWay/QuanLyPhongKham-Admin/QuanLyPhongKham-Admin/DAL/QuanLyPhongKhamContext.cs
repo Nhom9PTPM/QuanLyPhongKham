@@ -14,6 +14,8 @@ namespace QuanLyPhongKham_Admin.DAL
         // 🔽 Thêm vào đây
         public DbSet<KhamBenh> KhamBenh { get; set; }
         public DbSet<DonThuoc> DonThuoc { get; set; }
+        public DbSet<LichHen> LichHen { get; set; }
+
         public DbSet<ChiTietDonThuoc> ChiTietDonThuoc { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
