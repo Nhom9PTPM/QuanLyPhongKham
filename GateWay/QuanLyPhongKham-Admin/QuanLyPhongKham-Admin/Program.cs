@@ -13,6 +13,9 @@ builder.Services.AddDbContext<QuanLyPhongKhamContext>(options =>
 // Đăng ký các lớp DAL & BLL
 builder.Services.AddScoped<BenhNhanDAL>();
 builder.Services.AddScoped<BenhNhanBLL>();
+builder.Services.AddScoped<KhamBenhDAL>();
+builder.Services.AddScoped<KhamBenhBLL>();
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
