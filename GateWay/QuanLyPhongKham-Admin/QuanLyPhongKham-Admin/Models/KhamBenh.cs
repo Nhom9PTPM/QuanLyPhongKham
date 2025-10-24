@@ -1,25 +1,53 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuanLyPhongKham_Admin.Models
 {
+    [Table("KhamBenh")]
     public class KhamBenh
     {
         [Key]
+        [Column("MaKham")]
         public int MaKham { get; set; }
 
+        [Column("MaHoSo")]
         public int? MaHoSo { get; set; }
+
+        [Column("MaBenhNhan")]
         public int MaBenhNhan { get; set; }
+
+        [Column("MaBacSi")]
         public int? MaBacSi { get; set; }
+
+        [Column("NgayKham")]
         public DateTime NgayKham { get; set; }
 
-        public string? ChanDoan { get; set; }     // ✅ Cho phép null
-        public string? ChiDinhXN { get; set; }    // ✅ Cho phép null
-        public string? ChiDinhCLS { get; set; }   // ✅ Cho phép null
-        public string? GhiChu { get; set; }       // ✅ Cho phép null
-        public string? NguoiThucHien { get; set; } // ✅ Cho phép null
+        [Column("ChanDoan")]
+        public string? ChanDoan { get; set; }
 
+        [Column("ChiDinhXN")]
+        public string? ChiDinhXN { get; set; }
+
+        [Column("ChiDinhCLS")]
+        public string? ChiDinhCLS { get; set; }
+
+        [Column("GhiChu")]
+        public string? GhiChu { get; set; }
+
+        [Column("NguoiThucHien")]
+        public string? NguoiThucHien { get; set; }
+
+        [Column("NgayTao")]
         public DateTime NgayTao { get; set; }
+
+        [Column("DaXoa")]
         public bool DaXoa { get; set; }
+
+        [ForeignKey(nameof(MaHoSo))]
+        public HoSoBenhAn? HoSoBenhAn { get; set; }
+
+        public List<DonThuoc>? DonThuoc { get; set; }
     }
 }

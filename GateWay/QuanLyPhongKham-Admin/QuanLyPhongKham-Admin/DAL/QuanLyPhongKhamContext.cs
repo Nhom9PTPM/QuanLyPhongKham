@@ -11,7 +11,7 @@ namespace QuanLyPhongKham_Admin.DAL
         public DbSet<HoSoBenhAn> HoSoBenhAn { get; set; }
         public DbSet<TapTin> TapTin { get; set; }
 
-        // 🔽 Thêm vào đây
+        //  Thêm vào đây
         public DbSet<KhamBenh> KhamBenh { get; set; }
         public DbSet<DonThuoc> DonThuoc { get; set; }
         public DbSet<LichHen> LichHen { get; set; }

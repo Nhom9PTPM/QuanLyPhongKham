@@ -53,5 +53,17 @@ namespace QuanLyPhongKham_Admin.DAL
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task<List<HoSoBenhAn>> GetHoSoByBenhNhanId(int maBenhNhan)
+        {
+            return await _context.HoSoBenhAn
+                .Include(h => h.DanhSachKham!)
+                    .ThenInclude(k => k.DonThuoc!)
+                        .ThenInclude(d => d.ChiTiet)
+                .Include(h => h.TapTin)
+                .Where(h => h.MaBenhNhan == maBenhNhan && !h.DaXoa)
+                .OrderByDescending(h => h.NgayLap)
+                .ToListAsync();
+        }
+
     }
 }

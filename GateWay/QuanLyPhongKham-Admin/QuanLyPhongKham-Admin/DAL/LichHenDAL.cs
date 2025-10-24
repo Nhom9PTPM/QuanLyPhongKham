@@ -37,5 +37,15 @@ namespace QuanLyPhongKham_Admin.DAL
             await _context.SaveChangesAsync();
             return true;
         }
+
+        // ✅ MỚI: Lấy lịch hẹn theo bác sĩ và ngày (phục vụ API gợi ý lịch hẹn)
+        public async Task<List<LichHen>> GetByBacSiVaNgay(int maBacSi, DateTime ngay)
+        {
+            return await _context.LichHen
+                .Where(l => l.MaBacSi == maBacSi
+                         && l.NgayBatDau.Date == ngay.Date
+                         && !l.DaXoa)
+                .ToListAsync();
+        }
     }
 }

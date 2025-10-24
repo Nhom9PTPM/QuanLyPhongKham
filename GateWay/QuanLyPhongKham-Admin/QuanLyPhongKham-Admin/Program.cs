@@ -6,9 +6,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-// 🔗 Kết nối database
 builder.Services.AddDbContext<QuanLyPhongKhamContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+           .EnableSensitiveDataLogging() // 👈 thêm dòng này
+           .LogTo(Console.WriteLine, LogLevel.Information));
+
 
 // Đăng ký các lớp DAL & BLL
 builder.Services.AddScoped<BenhNhanDAL>();

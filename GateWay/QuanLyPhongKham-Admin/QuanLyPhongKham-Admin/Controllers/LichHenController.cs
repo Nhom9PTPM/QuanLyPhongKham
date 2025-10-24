@@ -38,5 +38,16 @@ namespace QuanLyPhongKham_Admin.Controllers
             if (!ok) return NotFound(new { success = false, message = "Không tìm thấy lịch hẹn cần cập nhật." });
             return Ok(new { success = true, message = $"Lịch hẹn {maLichHen} đã liên kết với hồ sơ {maHoSo}." });
         }
+
+        // ✅ API gợi ý khung giờ trống trong ngày cho bác sĩ
+        [HttpGet("Goiy")]
+        public async Task<IActionResult> GoiY([FromQuery] int maBacSi, [FromQuery] DateTime ngay)
+        {
+            if (maBacSi <= 0)
+                return BadRequest(new { success = false, message = "Thiếu mã bác sĩ." });
+
+            var data = await _bll.GoiYLichHen(maBacSi, ngay);
+            return Ok(new { success = true, data });
+        }
     }
 }

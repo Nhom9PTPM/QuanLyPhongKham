@@ -1,6 +1,5 @@
 ﻿using QuanLyPhongKham_Admin.DAL;
 using QuanLyPhongKham_Admin.Models;
-using QuanLyPhongKham_Admin.Common; // ✅ Thêm namespace để dùng Masking
 
 namespace QuanLyPhongKham_Admin.BLL
 {
@@ -13,19 +12,9 @@ namespace QuanLyPhongKham_Admin.BLL
             _benhNhanDAL = benhNhanDAL;
         }
 
-        // ✅ Áp dụng Masking
         public async Task<List<BenhNhan>> LayDanhSach()
         {
-            var list = await _benhNhanDAL.GetAllAsync();
-
-            // Ẩn dữ liệu nhạy cảm
-            foreach (var bn in list)
-            {
-                bn.SoDienThoai = DataMaskHelper.MaskPhone(bn.SoDienThoai);
-                bn.CMTND_NV = DataMaskHelper.MaskCMT(bn.CMTND_NV);
-            }
-
-            return list;
+            return await _benhNhanDAL.GetAllAsync();
         }
 
         public async Task<BenhNhan?> LayChiTiet(int id)
@@ -35,9 +24,6 @@ namespace QuanLyPhongKham_Admin.BLL
 
         public async Task Them(BenhNhan bn)
         {
-            if (string.IsNullOrWhiteSpace(bn.HoTen))
-                throw new Exception("Tên bệnh nhân không được để trống.");
-
             await _benhNhanDAL.AddAsync(bn);
         }
 
@@ -49,6 +35,59 @@ namespace QuanLyPhongKham_Admin.BLL
         public async Task Xoa(int id)
         {
             await _benhNhanDAL.DeleteAsync(id);
+        }
+
+        //  Hàm tổng hợp
+        public async Task<object?> LayThongTinDayDu(int maBenhNhan)
+        {
+            var bn = await _benhNhanDAL.GetByIdAsync(maBenhNhan);
+            if (bn is null) return null;
+            var hoSoList = await _benhNhanDAL.GetHoSoByBenhNhanId(maBenhNhan);
+
+            var ketQua = new
+            {
+                BenhNhan = new
+                {
+                    bn.MaBenhNhan,
+                    bn.HoTen,
+                    bn.NgaySinh,
+                    bn.GioiTinh,
+                    bn.SoDienThoai,
+                    bn.Email,
+                    bn.DiaChi,
+                    bn.CMTND_NV
+                },
+                HoSoBenhAn = hoSoList.Select(h => new
+                {
+                    h.MaHoSo,
+                    h.NgayLap,
+                    ChanDoan = h.ChanDoanChinh,
+                    TomTat = h.TomTatBenhLy,
+                    LichSuBenhLy = h.LichSuBenhLy,
+                    NguoiLap = h.NguoiLap,
+
+                    DanhSachKham = h.DanhSachKham?.Select(k => new
+                    {
+                        k.NgayKham,
+                        k.ChanDoan,
+                        k.GhiChu,
+                        DonThuoc = k.DonThuoc?.Select(d => new
+                        {
+                            d.MaDonThuoc,
+                            d.GhiChu,
+                            d.NguoiKe
+                        })
+                    }),
+
+                    TapTin = h.TapTin?.Select(t => new
+                    {
+                        t.TenTapTin,
+                        t.DuongDan
+                    })
+                })
+            };
+
+            return ketQua;
         }
     }
 }

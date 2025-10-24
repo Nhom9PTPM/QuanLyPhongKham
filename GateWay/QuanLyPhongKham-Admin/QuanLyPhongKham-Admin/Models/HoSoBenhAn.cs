@@ -1,20 +1,43 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuanLyPhongKham_Admin.Models
 {
+    [Table("HoSoBenhAn")]
     public class HoSoBenhAn
     {
-        [Key] // 🔑 Khóa chính
+        [Key]
+        [Column("MaHoSo")]
         public int MaHoSo { get; set; }
 
-        public int MaBenhNhan { get; set; }         // FK → BenhNhan
-        public string TomTatBenhLy { get; set; }
-        public string ChanDoanChinh { get; set; }
-        public string LichSuBenhLy { get; set; }
-        public string TapTinDinhKem { get; set; }
+        [Column("MaBenhNhan")]
+        public int MaBenhNhan { get; set; }
+
+        [Column("TomTatBenhLy")]
+        public string? TomTatBenhLy { get; set; }
+
+        [Column("ChanDoanChinh")]
+        public string? ChanDoanChinh { get; set; }
+
+        [Column("LichSuBenhLy")]
+        public string? LichSuBenhLy { get; set; }
+
+        [Column("NgayLap")]
         public DateTime NgayLap { get; set; }
-        public string NguoiLap { get; set; }
+
+        [Column("NguoiLap")]
+        public string? NguoiLap { get; set; }
+
+        [Column("DaXoa")]
         public bool DaXoa { get; set; }
+
+        [ForeignKey(nameof(MaBenhNhan))]
+        public BenhNhan? BenhNhan { get; set; }
+
+        // Quan hệ 1-n: HoSoBenhAn -> KhamBenh
+        public List<KhamBenh>? DanhSachKham { get; set; }
+
+        // Quan hệ 1-n: HoSoBenhAn -> TapTin
+        public List<TapTin>? TapTin { get; set; }
     }
 }

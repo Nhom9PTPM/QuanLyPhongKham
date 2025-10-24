@@ -1,18 +1,26 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuanLyPhongKham_Admin.Models
 {
+    [Table("TapTin")]
     public class TapTin
     {
-        [Key] // 🔑 Khóa chính
+        [Key]
+        [Column("MaTapTin")]
         public int MaTapTin { get; set; }
 
-        public string TenTapTin { get; set; }
-        public string DuongDan { get; set; }
-        public long? KichThuoc { get; set; }
-        public string DinhDang { get; set; }
-        public int? MaHoSo { get; set; }             // FK → HoSoBenhAn
-        public DateTime NgayTao { get; set; }
+        [Column("TenTapTin")]
+        public string TenTapTin { get; set; } = string.Empty;
+
+        [Column("DuongDan")]
+        public string DuongDan { get; set; } = string.Empty;
+
+        [Column("MaHoSo")]
+        public int? MaHoSo { get; set; }
+
+        [ForeignKey(nameof(MaHoSo))]
+        public HoSoBenhAn? HoSoBenhAn { get; set; }
     }
 }
