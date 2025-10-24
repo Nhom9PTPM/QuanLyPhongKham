@@ -433,11 +433,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ASUS\\source\\repos\\QuanLyPhongKham\\GateWay\\QuanLyPhongKham\\QuanLyPhongKham\\QuanLyPhongKham.csproj",
+      "projectUniqueName": "C:\\Users\\ASUS\\source\\repos\\QuanLyPhongKham_2\\QuanLyPhongKham\\GateWay\\QuanLyPhongKham\\QuanLyPhongKham\\QuanLyPhongKham.csproj",
       "projectName": "QuanLyPhongKham",
-      "projectPath": "C:\\Users\\ASUS\\source\\repos\\QuanLyPhongKham\\GateWay\\QuanLyPhongKham\\QuanLyPhongKham\\QuanLyPhongKham.csproj",
+      "projectPath": "C:\\Users\\ASUS\\source\\repos\\QuanLyPhongKham_2\\QuanLyPhongKham\\GateWay\\QuanLyPhongKham\\QuanLyPhongKham\\QuanLyPhongKham.csproj",
       "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ASUS\\source\\repos\\QuanLyPhongKham\\GateWay\\QuanLyPhongKham\\QuanLyPhongKham\\obj\\",
+      "outputPath": "C:\\Users\\ASUS\\source\\repos\\QuanLyPhongKham_2\\QuanLyPhongKham\\GateWay\\QuanLyPhongKham\\QuanLyPhongKham\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
