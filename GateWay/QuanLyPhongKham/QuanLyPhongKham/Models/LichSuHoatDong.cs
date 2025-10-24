@@ -1,14 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
 
 namespace QuanLyPhongKham.Models
 {
-    public class LichSuHoatDong
+    public partial class LichSuHoatDong
     {
-        [Key]
         public int MaLichSu { get; set; }
         public int? MaTaiKhoan { get; set; }
-        public string HanhDong { get; set; } = "";
-        public DateTime DongThoiGian { get; set; } = DateTime.UtcNow;
+        public string HanhDong { get; set; } = null!;
+        public DateTime DongThoiGian { get; set; }
         public string? DiaChiIP { get; set; }
         public string? ChiTiet { get; set; }
     }

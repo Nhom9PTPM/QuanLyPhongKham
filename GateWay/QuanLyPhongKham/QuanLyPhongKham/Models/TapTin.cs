@@ -1,21 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
 
 namespace QuanLyPhongKham.Models
 {
-    public class TapTin
+    public partial class TapTin
     {
-        [Key]
         public int MaTapTin { get; set; }
-        public string TenTapTin { get; set; } = "";
-        public string DuongDan { get; set; } = "";
+        public string TenTapTin { get; set; } = null!;
+        public string DuongDan { get; set; } = null!;
         public long? KichThuoc { get; set; }
         public string? DinhDang { get; set; }
-
-        [ForeignKey("HoSoBenhAn")]
         public int? MaHoSo { get; set; }
-        public HoSoBenhAn? HoSoBenhAn { get; set; }
+        public DateTime NgayTao { get; set; }
 
-        public DateTime NgayTao { get; set; } = DateTime.UtcNow;
+        public virtual HoSoBenhAn? MaHoSoNavigation { get; set; }
     }
 }

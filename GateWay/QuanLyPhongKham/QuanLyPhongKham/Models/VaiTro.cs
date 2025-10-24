@@ -1,16 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
 namespace QuanLyPhongKham.Models
 {
-    public class VaiTro
+    public partial class VaiTro
     {
-        [Key]
-        public int MaVaiTro { get; set; }
-        public string TenVaiTro { get; set; } = "";
-        public string? MoTa { get; set; }
-        public DateTime NgayTao { get; set; } = DateTime.UtcNow;
-        public bool DaXoa { get; set; } = false;
+        public VaiTro()
+        {
+            TaiKhoans = new HashSet<TaiKhoan>();
+        }
 
-        public ICollection<TaiKhoan>? TaiKhoans { get; set; }
+        public int MaVaiTro { get; set; }
+        public string TenVaiTro { get; set; } = null!;
+        public string? MoTa { get; set; }
+        public DateTime NgayTao { get; set; }
+        public bool DaXoa { get; set; }
+
+        public virtual ICollection<TaiKhoan> TaiKhoans { get; set; }
     }
 }

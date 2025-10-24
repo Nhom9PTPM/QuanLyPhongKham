@@ -1,22 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
 
 namespace QuanLyPhongKham.Models
 {
-    public class TonKhoThuoc
+    public partial class TonKhoThuoc
     {
-        [Key]
         public int MaTonKho { get; set; }
-
-        [ForeignKey("Thuoc")]
         public int MaThuoc { get; set; }
-        public Thuoc? Thuoc { get; set; }
-
-        public int SoLuong { get; set; } = 0;
+        public int SoLuong { get; set; }
         public string? MaKho { get; set; }
-        public DateTime NgayCapNhat { get; set; } = DateTime.UtcNow;
+        public DateTime NgayCapNhat { get; set; }
 
-        [Timestamp]
-        public byte[]? RowVersion { get; set; }
+        public virtual Thuoc MaThuocNavigation { get; set; } = null!;
     }
 }

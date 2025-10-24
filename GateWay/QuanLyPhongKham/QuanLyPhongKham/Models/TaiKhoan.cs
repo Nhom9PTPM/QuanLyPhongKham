@@ -1,26 +1,27 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
 namespace QuanLyPhongKham.Models
 {
-    public class TaiKhoan
+    public partial class TaiKhoan
     {
-        [Key]
+        public TaiKhoan()
+        {
+            ThongBaos = new HashSet<ThongBao>();
+        }
+
         public int MaTaiKhoan { get; set; }
-
-        public string TenDangNhap { get; set; } = "";
-        public string MatKhau { get; set; } = ""; 
-
-        [ForeignKey("NguoiDung")]
+        public string TenDangNhap { get; set; } = null!;
+        public string MatKhau { get; set; } = null!;
         public int MaNguoiDung { get; set; }
-        public NguoiDung? NguoiDung { get; set; }
-
-        [ForeignKey("VaiTro")]
         public int? MaVaiTro { get; set; }
-        public VaiTro? VaiTro { get; set; }
+        public string? LoaiQuyen { get; set; }
+        public bool TrangThai { get; set; }
+        public DateTime NgayTao { get; set; }
 
-        public string? LoaiQuyen { get; set; } 
-        public bool TrangThai { get; set; } = true;
-        public DateTime NgayTao { get; set; } = DateTime.UtcNow;
+        public virtual NguoiDung MaNguoiDungNavigation { get; set; } = null!;
+        public virtual VaiTro? MaVaiTroNavigation { get; set; }
+
+        public virtual ICollection<ThongBao> ThongBaos { get; set; }
     }
 }

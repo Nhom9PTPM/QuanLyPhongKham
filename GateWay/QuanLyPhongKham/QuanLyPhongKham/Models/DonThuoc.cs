@@ -1,29 +1,26 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
 namespace QuanLyPhongKham.Models
 {
-    public class DonThuoc
+    public partial class DonThuoc
     {
-        [Key]
+        public DonThuoc()
+        {
+            ChiTietDonThuocs = new HashSet<ChiTietDonThuoc>();
+        }
+
         public int MaDonThuoc { get; set; }
-
-        [ForeignKey("KhamBenh")]
         public int? MaKham { get; set; }
-        public KhamBenh? KhamBenh { get; set; }
-
-        [ForeignKey("BacSi")]
         public int? MaBacSi { get; set; }
-        public BacSi? BacSi { get; set; }
-
-        public DateTime NgayKe { get; set; } = DateTime.UtcNow;
+        public DateTime NgayKe { get; set; }
         public string? GhiChu { get; set; }
         public string? NguoiKe { get; set; }
-        public bool DaXoa { get; set; } = false;
+        public bool DaXoa { get; set; }
 
-        [Timestamp]
-        public byte[]? RowVersion { get; set; }
+        public virtual KhamBenh? MaKhamNavigation { get; set; }
+        public virtual BacSi? MaBacSiNavigation { get; set; }
 
-        public ICollection<ChiTietDonThuoc>? ChiTietDonThuocs { get; set; }
+        public virtual ICollection<ChiTietDonThuoc> ChiTietDonThuocs { get; set; }
     }
 }
