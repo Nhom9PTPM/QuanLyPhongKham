@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\GateWay\\QuanLyPhongKham\\QuanLyPhongKham\\QuanLyPhongKham.csproj": {}
+    "C:\\Users\\ASUS\\source\\repos\\QuanLyPhongKham\\GateWay\\QuanLyPhongKham\\QuanLyPhongKham\\QuanLyPhongKham.csproj": {}
   },
   "projects": {
-    "D:\\GateWay\\QuanLyPhongKham\\QuanLyPhongKham\\QuanLyPhongKham.csproj": {
+    "C:\\Users\\ASUS\\source\\repos\\QuanLyPhongKham\\GateWay\\QuanLyPhongKham\\QuanLyPhongKham\\QuanLyPhongKham.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\GateWay\\QuanLyPhongKham\\QuanLyPhongKham\\QuanLyPhongKham.csproj",
+        "projectUniqueName": "C:\\Users\\ASUS\\source\\repos\\QuanLyPhongKham\\GateWay\\QuanLyPhongKham\\QuanLyPhongKham\\QuanLyPhongKham.csproj",
         "projectName": "QuanLyPhongKham",
-        "projectPath": "D:\\GateWay\\QuanLyPhongKham\\QuanLyPhongKham\\QuanLyPhongKham.csproj",
-        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "D:\\GateWay\\QuanLyPhongKham\\QuanLyPhongKham\\obj\\",
+        "projectPath": "C:\\Users\\ASUS\\source\\repos\\QuanLyPhongKham\\GateWay\\QuanLyPhongKham\\QuanLyPhongKham\\QuanLyPhongKham.csproj",
+        "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ASUS\\source\\repos\\QuanLyPhongKham\\GateWay\\QuanLyPhongKham\\QuanLyPhongKham\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
