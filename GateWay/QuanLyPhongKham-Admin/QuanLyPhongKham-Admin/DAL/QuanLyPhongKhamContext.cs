@@ -15,6 +15,8 @@ namespace QuanLyPhongKham_Admin.DAL
         public DbSet<KhamBenh> KhamBenh { get; set; }
         public DbSet<DonThuoc> DonThuoc { get; set; }
         public DbSet<LichHen> LichHen { get; set; }
+        public DbSet<BacSi> BacSi { get; set; }
+        public DbSet<HoaDon> HoaDon { get; set; }
         public DbSet<LichSuHoatDong> LichSuHoatDong { get; set; }
 
         public DbSet<ChiTietDonThuoc> ChiTietDonThuoc { get; set; }

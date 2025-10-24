@@ -19,6 +19,9 @@ builder.Services.AddScoped<KhamBenhDAL>();
 builder.Services.AddScoped<KhamBenhBLL>();
 builder.Services.AddScoped<LichHenDAL>();
 builder.Services.AddScoped<LichHenBLL>();
+builder.Services.AddScoped<ThongKeDAL>();
+builder.Services.AddScoped<ThongKeBLL>();
+
 
 
 builder.Services.AddEndpointsApiExplorer();
