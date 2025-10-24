@@ -1,5 +1,6 @@
 ﻿using QuanLyPhongKham_Admin.DAL;
 using QuanLyPhongKham_Admin.Models;
+using QuanLyPhongKham_Admin.Common; // ✅ Thêm namespace để dùng Masking
 
 namespace QuanLyPhongKham_Admin.BLL
 {
@@ -12,9 +13,19 @@ namespace QuanLyPhongKham_Admin.BLL
             _benhNhanDAL = benhNhanDAL;
         }
 
+        // ✅ Áp dụng Masking
         public async Task<List<BenhNhan>> LayDanhSach()
         {
-            return await _benhNhanDAL.GetAllAsync();
+            var list = await _benhNhanDAL.GetAllAsync();
+
+            // Ẩn dữ liệu nhạy cảm
+            foreach (var bn in list)
+            {
+                bn.SoDienThoai = DataMaskHelper.MaskPhone(bn.SoDienThoai);
+                bn.CMTND_NV = DataMaskHelper.MaskCMT(bn.CMTND_NV);
+            }
+
+            return list;
         }
 
         public async Task<BenhNhan?> LayChiTiet(int id)
