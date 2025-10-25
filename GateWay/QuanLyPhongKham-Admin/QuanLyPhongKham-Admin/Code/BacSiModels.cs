@@ -18,7 +18,9 @@ namespace QuanLyPhongKham_Admin.Code
     {
         public int MaLichHen { get; set; }
         public int? MaBacSi { get; set; }
-        public DateTime? NgayHen { get; set; }
-        public int TrangThai { get; set; }
+        public int? MaBenhNhan { get; set; }
+        public DateTime? NgayBatDau { get; set; }
+        public DateTime? NgayKetThuc { get; set; }
+        public string TrangThai { get; set; }
     }
 }
