@@ -1,7 +1,10 @@
-﻿namespace QuanLyPhongKham_Admin.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace QuanLyPhongKham_Admin.Models
 {
     public partial class LichSuHoatDong
     {
+        [Key]
         public int MaLichSu { get; set; }
         public int? MaTaiKhoan { get; set; }
         public string HanhDong { get; set; } = null!;

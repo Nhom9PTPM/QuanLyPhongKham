@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuanLyPhongKham_Admin.Models
 {
+    [Table("VaiTro")]
     public partial class VaiTro
     {
         public VaiTro()

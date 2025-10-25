@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuanLyPhongKham.Models
 {
+    [Table("LichHen")]
     public partial class LichHen
     {
         public int MaLichHen { get; set; }

@@ -24,11 +24,9 @@ namespace QuanLyPhongKham_Admin.Code
             {
                 string serverRootPathFolder = _configuration["AppSettings:WEB_SERVER_FULL_PATH"].ToString();
                 string fullPathFile = $@"{serverRootPathFolder}\{RelativePathFileName}";
-                string? fullPathFolder = Path.GetDirectoryName(fullPathFile);
-
+                string fullPathFolder = System.IO.Path.GetDirectoryName(fullPathFile);
                 if (!Directory.Exists(fullPathFolder))
                     Directory.CreateDirectory(fullPathFolder);
-
                 return fullPathFile;
             }
             catch (Exception ex)

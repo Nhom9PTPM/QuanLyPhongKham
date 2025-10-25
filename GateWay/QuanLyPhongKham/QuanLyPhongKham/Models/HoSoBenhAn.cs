@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuanLyPhongKham.Models
 {
+    [Table("HoSoBenhAn")]
     public partial class HoSoBenhAn
     {
         public HoSoBenhAn()

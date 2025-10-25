@@ -1,7 +1,11 @@
-﻿namespace QuanLyPhongKham_Admin.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace QuanLyPhongKham_Admin.Models
 {
+    [Table("HoaDon")]
     public partial class HoaDon
     {
+
         public HoaDon()
         {
             ChiTietHoaDons = new HashSet<ChiTietHoaDon>();

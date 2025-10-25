@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace QuanLyPhongKham.Models
 {
+    [Table("BacSi")]
     public partial class BacSi
     {
         public BacSi()

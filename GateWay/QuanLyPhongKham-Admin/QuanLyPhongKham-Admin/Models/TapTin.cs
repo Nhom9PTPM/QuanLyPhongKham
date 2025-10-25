@@ -1,5 +1,8 @@
-﻿namespace QuanLyPhongKham_Admin.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace QuanLyPhongKham_Admin.Models
 {
+    [Table("TapTin")]
     public partial class TapTin
     {
         public int MaTapTin { get; set; }

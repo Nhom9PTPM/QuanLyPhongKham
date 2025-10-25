@@ -1,5 +1,8 @@
-﻿namespace QuanLyPhongKham_Admin.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace QuanLyPhongKham_Admin.Models
 {
+    [Table("ChiTietHoaDon")]
     public partial class ChiTietHoaDon
     {
         public int MaChiTietHoaDon { get; set; }

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuanLyPhongKham.Models
 {
+    [Table("TapTin")]
     public partial class TapTin
     {
         public int MaTapTin { get; set; }
