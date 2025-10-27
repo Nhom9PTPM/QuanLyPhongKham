@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuanLyPhongKham-Admin", "QuanLyPhongKham-Admin\QuanLyPhongKham-Admin.csproj", "{97E853BA-4FF5-46CA-91E0-02CEF289CFBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuanLyPhongKham-Admin", "QuanLyPhongKham-Admin\QuanLyPhongKham-Admin.csproj", "{97E853BA-4FF5-46CA-91E0-02CEF289CFBF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuanLyPhongKham-Gateway", "QuanLyPhongKham-Gateway\QuanLyPhongKham-Gateway.csproj", "{1A2B1AF3-2348-4330-9370-09B309B6A52D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{97E853BA-4FF5-46CA-91E0-02CEF289CFBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97E853BA-4FF5-46CA-91E0-02CEF289CFBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97E853BA-4FF5-46CA-91E0-02CEF289CFBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A2B1AF3-2348-4330-9370-09B309B6A52D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A2B1AF3-2348-4330-9370-09B309B6A52D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A2B1AF3-2348-4330-9370-09B309B6A52D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A2B1AF3-2348-4330-9370-09B309B6A52D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

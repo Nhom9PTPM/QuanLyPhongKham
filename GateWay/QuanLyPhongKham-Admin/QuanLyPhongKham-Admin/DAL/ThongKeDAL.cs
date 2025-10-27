@@ -12,7 +12,7 @@ namespace QuanLyPhongKham_Admin.DAL
             _context = context;
         }
 
-        // 🔹 Lấy thống kê tổng hợp
+        //  Lấy thống kê tổng hợp
         public async Task<object> LayThongKeTongHopAsync()
         {
             var tongBenhNhan = await _context.BenhNhan.CountAsync();

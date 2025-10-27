@@ -1,0 +1,6 @@
+@QuanLyPhongKham_Gateway_HostAddress = http://localhost:5057
+
+GET {{QuanLyPhongKham_Gateway_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
