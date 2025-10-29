@@ -1,58 +1,95 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham.Models;
+using System.Linq;
 
 namespace QuanLyPhongKham.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class DonThuocsController : ControllerBase
     {
         private readonly QuanLyPhongKhamContext db = new QuanLyPhongKhamContext();
 
-        [HttpGet("get-all")]
+        [Route("get-all")]
+        [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(db.DonThuocs.Where(x => x.DaXoa == false));
+            return Ok(db.DonThuocs.ToList());
         }
 
-        [HttpGet("get-by-id/{id}")]
+        [Route("get-by-id/{id}")]
+        [HttpGet]
         public IActionResult GetById(int id)
         {
-            return Ok(db.DonThuocs.SingleOrDefault(x => x.MaDonThuoc == id));
+            try
+            {
+                var donThuoc = db.DonThuocs
+                    .Where(x => x.MaDonThuoc == id)
+                    .Select(x => new
+                    {
+                        x.MaDonThuoc,
+                        x.MaKham,
+                        x.MaBacSi,
+                        x.NgayKe,
+                        x.GhiChu,
+                        x.NguoiKe,
+                        x.DaXoa
+                    })
+                    .SingleOrDefault();
+                return Ok(donThuoc);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
-        [HttpPost("create")]
-        public IActionResult Create(DonThuoc model)
+        [Route("create-donthuoc")]
+        [HttpPost]
+        public IActionResult CreateDonThuoc(DonThuoc model)
         {
             db.DonThuocs.Add(model);
             db.SaveChanges();
-            return Ok("Thành công");
+            return Ok("Thực hiện thành công");
         }
 
-        [HttpPost("update")]
-        public IActionResult Update(DonThuoc model)
+        [Route("update-donthuoc")]
+        [HttpPost]
+        public IActionResult UpdateDonThuoc(DonThuoc model)
         {
-            var item = db.DonThuocs.SingleOrDefault(x => x.MaDonThuoc == model.MaDonThuoc);
-            if (item != null)
+            var donThuoc = db.DonThuocs.SingleOrDefault(x => x.MaDonThuoc == model.MaDonThuoc);
+            if (donThuoc != null)
             {
-                item.GhiChu = model.GhiChu;
+                donThuoc.MaKham = model.MaKham;
+                donThuoc.MaBacSi = model.MaBacSi;
+                donThuoc.NgayKe = model.NgayKe;
+                donThuoc.GhiChu = model.GhiChu;
+                donThuoc.NguoiKe = model.NguoiKe;
+                donThuoc.DaXoa = model.DaXoa;
                 db.SaveChanges();
-                return Ok("Cập nhật thành công");
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest("Không tồn tại");
+            else
+            {
+                return Ok("Mã đơn thuốc không tồn tại");
+            }
         }
 
-        [HttpDelete("delete/{id}")]
-        public IActionResult Delete(int id)
+        [Route("delete-donthuoc")]
+        [HttpPost]
+        public IActionResult DeleteDonThuoc(int id)
         {
-            var item = db.DonThuocs.SingleOrDefault(x => x.MaDonThuoc == id);
-            if (item != null)
+            var donThuoc = db.DonThuocs.SingleOrDefault(x => x.MaDonThuoc == id);
+            if (donThuoc != null)
             {
-                item.DaXoa = true;
+                db.DonThuocs.Remove(donThuoc);
                 db.SaveChanges();
-                return Ok("Đã xóa mềm");
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest();
+            else
+            {
+                return Ok("Mã đơn thuốc không tồn tại");
+            }
         }
     }
 }

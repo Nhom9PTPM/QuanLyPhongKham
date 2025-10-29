@@ -1,45 +1,94 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham.Models;
+using System.Linq;
 
 namespace QuanLyPhongKham.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class LichSuHoatDongsController : ControllerBase
+    [Route("api/[controller]")]
+    public class LichSuHoatDongController : ControllerBase
     {
         private readonly QuanLyPhongKhamContext db = new QuanLyPhongKhamContext();
 
-        [HttpGet("get-all")]
+        [Route("get-all")]
+        [HttpGet]
         public IActionResult GetAll()
         {
             return Ok(db.LichSuHoatDongs.ToList());
         }
 
-        [HttpGet("get-by-id/{id}")]
+        [Route("get-by-id/{id}")]
+        [HttpGet]
         public IActionResult GetById(int id)
         {
-            return Ok(db.LichSuHoatDongs.SingleOrDefault(x => x.MaLichSu == id));
+            try
+            {
+                var item = db.LichSuHoatDongs
+                    .Where(x => x.MaLichSu == id)
+                    .Select(x => new
+                    {
+                        x.MaLichSu,
+                        x.MaTaiKhoan,
+                        x.HanhDong,
+                        x.DongThoiGian,
+                        x.DiaChiIP,
+                        x.ChiTiet
+                    })
+                    .SingleOrDefault();
+
+                return Ok(item);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
-        [HttpPost("create")]
-        public IActionResult Create(LichSuHoatDong model)
+        [Route("create-lichsuhoatdong")]
+        [HttpPost]
+        public IActionResult CreateLichSuHoatDong(LichSuHoatDong model)
         {
             db.LichSuHoatDongs.Add(model);
             db.SaveChanges();
-            return Ok("Thành công");
+            return Ok("Thực hiện thành công");
         }
 
-        [HttpDelete("delete/{id}")]
-        public IActionResult Delete(int id)
+        [Route("update-lichsuhoatdong")]
+        [HttpPost]
+        public IActionResult UpdateLichSuHoatDong(LichSuHoatDong model)
+        {
+            var item = db.LichSuHoatDongs.SingleOrDefault(x => x.MaLichSu == model.MaLichSu);
+            if (item != null)
+            {
+                item.MaTaiKhoan = model.MaTaiKhoan;
+                item.HanhDong = model.HanhDong;
+                item.DongThoiGian = model.DongThoiGian;
+                item.DiaChiIP = model.DiaChiIP;
+                item.ChiTiet = model.ChiTiet;
+                db.SaveChanges();
+                return Ok("Thực hiện thành công");
+            }
+            else
+            {
+                return Ok("Mã lịch sử hoạt động không tồn tại");
+            }
+        }
+
+        [Route("delete-lichsuhoatdong")]
+        [HttpPost]
+        public IActionResult DeleteLichSuHoatDong(int id)
         {
             var item = db.LichSuHoatDongs.SingleOrDefault(x => x.MaLichSu == id);
             if (item != null)
             {
                 db.LichSuHoatDongs.Remove(item);
                 db.SaveChanges();
-                return Ok("Đã xóa");
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest();
+            else
+            {
+                return Ok("Mã lịch sử hoạt động không tồn tại");
+            }
         }
     }
 }

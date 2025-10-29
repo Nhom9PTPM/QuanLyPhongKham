@@ -1,62 +1,104 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham.Models;
+using System.Linq;
 
 namespace QuanLyPhongKham.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class NguoiDungsController : ControllerBase
+    [Route("api/[controller]")]
+    public class NguoiDungController : ControllerBase
     {
         private readonly QuanLyPhongKhamContext db = new QuanLyPhongKhamContext();
 
-        [HttpGet("get-all")]
+        [Route("get-all")]
+        [HttpGet]
         public IActionResult GetAll()
         {
             return Ok(db.NguoiDungs.ToList());
         }
 
-        [HttpGet("get-by-id/{id}")]
+        [Route("get-by-id/{id}")]
+        [HttpGet]
         public IActionResult GetById(int id)
         {
-            return Ok(db.NguoiDungs.SingleOrDefault(x => x.MaNguoiDung == id));
+            try
+            {
+                var nguoiDung = db.NguoiDungs
+                    .Where(x => x.MaNguoiDung == id)
+                    .Select(x => new
+                    {
+                        x.MaNguoiDung,
+                        x.HoTen,
+                        x.GioiTinh,
+                        x.NgaySinh,
+                        x.SoDienThoai,
+                        x.Email,
+                        x.DiaChi,
+                        x.AnhDaiDien,
+                        x.LoaiNguoiDung,
+                        x.GhiChu,
+                        x.NgayTao,
+                        x.DaXoa
+                    })
+                    .SingleOrDefault();
+                return Ok(nguoiDung);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
-        [HttpPost("create")]
-        public IActionResult Create(NguoiDung model)
+        [Route("create-nguoidung")]
+        [HttpPost]
+        public IActionResult CreateNguoiDung(NguoiDung model)
         {
             db.NguoiDungs.Add(model);
             db.SaveChanges();
-            return Ok("Thành công");
+            return Ok("Thực hiện thành công");
         }
 
-        [HttpPost("update")]
-        public IActionResult Update(NguoiDung model)
+        [Route("update-nguoidung")]
+        [HttpPost]
+        public IActionResult UpdateNguoiDung(NguoiDung model)
         {
-            var item = db.NguoiDungs.SingleOrDefault(x => x.MaNguoiDung == model.MaNguoiDung);
-            if (item != null)
+            var nguoiDung = db.NguoiDungs.SingleOrDefault(x => x.MaNguoiDung == model.MaNguoiDung);
+            if (nguoiDung != null)
             {
-                item.HoTen = model.HoTen;
-                item.Email = model.Email;
-                item.GioiTinh = model.GioiTinh;
-                item.DiaChi = model.DiaChi;
-                item.SoDienThoai = model.SoDienThoai;
+                nguoiDung.HoTen = model.HoTen;
+                nguoiDung.GioiTinh = model.GioiTinh;
+                nguoiDung.NgaySinh = model.NgaySinh;
+                nguoiDung.SoDienThoai = model.SoDienThoai;
+                nguoiDung.Email = model.Email;
+                nguoiDung.DiaChi = model.DiaChi;
+                nguoiDung.AnhDaiDien = model.AnhDaiDien;
+                nguoiDung.LoaiNguoiDung = model.LoaiNguoiDung;
+                nguoiDung.GhiChu = model.GhiChu;
+                nguoiDung.DaXoa = model.DaXoa;
                 db.SaveChanges();
-                return Ok("Thành công");
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest();
+            else
+            {
+                return Ok("Mã người dùng không tồn tại");
+            }
         }
 
-        [HttpDelete("delete/{id}")]
-        public IActionResult Delete(int id)
+        [Route("delete-nguoidung")]
+        [HttpPost]
+        public IActionResult DeleteNguoiDung(int id)
         {
-            var item = db.NguoiDungs.SingleOrDefault(x => x.MaNguoiDung == id);
-            if (item != null)
+            var nguoiDung = db.NguoiDungs.SingleOrDefault(x => x.MaNguoiDung == id);
+            if (nguoiDung != null)
             {
-                db.NguoiDungs.Remove(item);
+                db.NguoiDungs.Remove(nguoiDung);
                 db.SaveChanges();
-                return Ok();
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest();
+            else
+            {
+                return Ok("Mã người dùng không tồn tại");
+            }
         }
     }
 }

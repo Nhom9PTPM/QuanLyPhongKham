@@ -1,36 +1,55 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham.Models;
+using System.Linq;
 
 namespace QuanLyPhongKham.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class VaiTrosController : ControllerBase
     {
         private readonly QuanLyPhongKhamContext db = new QuanLyPhongKhamContext();
 
-        [HttpGet("get-all")]
+        [Route("get-all")]
+        [HttpGet]
         public IActionResult GetAll()
         {
             return Ok(db.VaiTros.ToList());
         }
 
-        [HttpGet("get-by-id/{id}")]
+        [Route("get-by-id/{id}")]
+        [HttpGet]
         public IActionResult GetById(int id)
         {
-            var data = db.VaiTros.SingleOrDefault(x => x.MaVaiTro == id);
-            return Ok(data);
+            var item = db.VaiTros
+                .Where(x => x.MaVaiTro == id)
+                .Select(x => new
+                {
+                    x.MaVaiTro,
+                    x.TenVaiTro,
+                    x.MoTa,
+                    x.NgayTao,
+                    x.DaXoa
+                })
+                .SingleOrDefault();
+
+            if (item != null)
+                return Ok(item);
+            else
+                return NotFound("Không tìm thấy vai trò");
         }
 
-        [HttpPost("create")]
+        [Route("create")]
+        [HttpPost]
         public IActionResult Create(VaiTro model)
         {
             db.VaiTros.Add(model);
             db.SaveChanges();
-            return Ok("Thành công");
+            return Ok("Thêm vai trò thành công");
         }
 
-        [HttpPost("update")]
+        [Route("update")]
+        [HttpPost]
         public IActionResult Update(VaiTro model)
         {
             var item = db.VaiTros.SingleOrDefault(x => x.MaVaiTro == model.MaVaiTro);
@@ -38,13 +57,19 @@ namespace QuanLyPhongKham.Controllers
             {
                 item.TenVaiTro = model.TenVaiTro;
                 item.MoTa = model.MoTa;
+                item.NgayTao = model.NgayTao;
+                item.DaXoa = model.DaXoa;
                 db.SaveChanges();
-                return Ok("Thành công");
+                return Ok("Cập nhật vai trò thành công");
             }
-            return BadRequest("Không tồn tại");
+            else
+            {
+                return NotFound("Vai trò không tồn tại");
+            }
         }
 
-        [HttpDelete("delete/{id}")]
+        [Route("delete/{id}")]
+        [HttpPost]
         public IActionResult Delete(int id)
         {
             var item = db.VaiTros.SingleOrDefault(x => x.MaVaiTro == id);
@@ -52,9 +77,12 @@ namespace QuanLyPhongKham.Controllers
             {
                 db.VaiTros.Remove(item);
                 db.SaveChanges();
-                return Ok("Xóa thành công");
+                return Ok("Xóa vai trò thành công");
             }
-            return BadRequest("Không tồn tại");
+            else
+            {
+                return NotFound("Vai trò không tồn tại");
+            }
         }
     }
 }

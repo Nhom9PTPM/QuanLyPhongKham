@@ -1,59 +1,95 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham.Models;
+using System.Linq;
 
 namespace QuanLyPhongKham.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class BacSisController : ControllerBase
     {
         private readonly QuanLyPhongKhamContext db = new QuanLyPhongKhamContext();
 
-        [HttpGet("get-all")]
+        [Route("get-all")]
+        [HttpGet]
         public IActionResult GetAll()
         {
             return Ok(db.BacSis.ToList());
         }
 
-        [HttpGet("get-by-id/{id}")]
+        [Route("get-by-id/{id}")]
+        [HttpGet]
         public IActionResult GetById(int id)
         {
-            return Ok(db.BacSis.SingleOrDefault(x => x.MaBacSi == id));
+            try
+            {
+                var bacSi = db.BacSis
+                    .Where(x => x.MaBacSi == id)
+                    .Select(x => new
+                    {
+                        x.MaBacSi,
+                        x.MaNguoiDung,
+                        x.ChuyenKhoa,
+                        x.BangCap,
+                        x.KinhNghiem,
+                        x.SoPhong,
+                        x.TrangThai,
+                        x.NgayTao
+                    })
+                    .SingleOrDefault();
+                return Ok(bacSi);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
-        [HttpPost("create")]
-        public IActionResult Create(BacSi model)
+        [Route("create-bacsi")]
+        [HttpPost]
+        public IActionResult CreateBacSi(BacSi model)
         {
             db.BacSis.Add(model);
             db.SaveChanges();
-            return Ok();
+            return Ok("Thực hiện thành công");
         }
 
-        [HttpPost("update")]
-        public IActionResult Update(BacSi model)
+        [Route("update-bacsi")]
+        [HttpPost]
+        public IActionResult UpdateBacSi(BacSi model)
         {
-            var item = db.BacSis.SingleOrDefault(x => x.MaBacSi == model.MaBacSi);
-            if (item != null)
+            var bacSi = db.BacSis.SingleOrDefault(x => x.MaBacSi == model.MaBacSi);
+            if (bacSi != null)
             {
-                item.BangCap = model.BangCap;
-                item.ChuyenKhoa = model.ChuyenKhoa;
+                bacSi.MaNguoiDung = model.MaNguoiDung;
+                bacSi.ChuyenKhoa = model.ChuyenKhoa;
+                bacSi.BangCap = model.BangCap;
+                bacSi.KinhNghiem = model.KinhNghiem;
+                bacSi.SoPhong = model.SoPhong;
+                bacSi.TrangThai = model.TrangThai;
                 db.SaveChanges();
-                return Ok();
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest();
+            else
+            {
+                return Ok("Mã bác sĩ không tồn tại");
+            }
         }
-
-        [HttpDelete("delete/{id}")]
-        public IActionResult Delete(int id)
+        [Route("delete-bacsi")]
+        [HttpPost]
+        public IActionResult DeleteBacSi(int id)
         {
-            var item = db.BacSis.SingleOrDefault(x => x.MaBacSi == id);
-            if (item != null)
+            var bacSi = db.BacSis.SingleOrDefault(x => x.MaBacSi == id);
+            if (bacSi != null)
             {
-                db.BacSis.Remove(item);
+                db.BacSis.Remove(bacSi);
                 db.SaveChanges();
-                return Ok();
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest();
+            else
+            {
+                return Ok("Mã bác sĩ không tồn tại");
+            }
         }
     }
 }

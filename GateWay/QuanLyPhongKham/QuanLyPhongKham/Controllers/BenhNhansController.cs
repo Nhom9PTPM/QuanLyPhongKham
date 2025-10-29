@@ -1,60 +1,101 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham.Models;
+using System.Linq;
 
 namespace QuanLyPhongKham.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class BenhNhansController : ControllerBase
     {
         private readonly QuanLyPhongKhamContext db = new QuanLyPhongKhamContext();
 
-        [HttpGet("get-all")]
+        [Route("get-all")]
+        [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(db.BenhNhans.Where(x => x.DaXoa == false));
+            return Ok(db.BenhNhans.ToList());
         }
 
-        [HttpGet("get-by-id/{id}")]
+        [Route("get-by-id/{id}")]
+        [HttpGet]
         public IActionResult GetById(int id)
         {
-            return Ok(db.BenhNhans.SingleOrDefault(x => x.MaBenhNhan == id));
+            try
+            {
+                var benhNhan = db.BenhNhans
+                    .Where(x => x.MaBenhNhan == id)
+                    .Select(x => new
+                    {
+                        x.MaBenhNhan,
+                        x.HoTen,
+                        x.NgaySinh,
+                        x.GioiTinh,
+                        x.SoDienThoai,
+                        x.Email,
+                        x.DiaChi,
+                        x.CMTND_NV,
+                        x.NgayTao,
+                        x.DaXoa
+                    })
+                    .SingleOrDefault();
+                return Ok(benhNhan);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
-        [HttpPost("create")]
-        public IActionResult Create(BenhNhan model)
+        [Route("create-benhnhan")]
+        [HttpPost]
+        public IActionResult CreateBenhNhan(BenhNhan model)
         {
             db.BenhNhans.Add(model);
             db.SaveChanges();
-            return Ok();
+            return Ok("Thực hiện thành công");
         }
 
-        [HttpPost("update")]
-        public IActionResult Update(BenhNhan model)
+        [Route("update-benhnhan")]
+        [HttpPost]
+        public IActionResult UpdateBenhNhan(BenhNhan model)
         {
-            var item = db.BenhNhans.SingleOrDefault(x => x.MaBenhNhan == model.MaBenhNhan);
-            if (item != null)
+            var benhNhan = db.BenhNhans.SingleOrDefault(x => x.MaBenhNhan == model.MaBenhNhan);
+            if (benhNhan != null)
             {
-                item.HoTen = model.HoTen;
-                item.Email = model.Email;
-                item.SoDienThoai = model.SoDienThoai;
+                benhNhan.HoTen = model.HoTen;
+                benhNhan.NgaySinh = model.NgaySinh;
+                benhNhan.GioiTinh = model.GioiTinh;
+                benhNhan.SoDienThoai = model.SoDienThoai;
+                benhNhan.Email = model.Email;
+                benhNhan.DiaChi = model.DiaChi;
+                benhNhan.CMTND_NV = model.CMTND_NV;
+                benhNhan.NgayTao = model.NgayTao;
+                benhNhan.DaXoa = model.DaXoa;
                 db.SaveChanges();
-                return Ok();
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest();
+            else
+            {
+                return Ok("Mã bệnh nhân không tồn tại");
+            }
         }
 
-        [HttpDelete("delete/{id}")]
-        public IActionResult Delete(int id)
+        [Route("delete-benhnhan")]
+        [HttpPost]
+        public IActionResult DeleteBenhNhan(int id)
         {
-            var item = db.BenhNhans.SingleOrDefault(x => x.MaBenhNhan == id);
-            if (item != null)
+            var benhNhan = db.BenhNhans.SingleOrDefault(x => x.MaBenhNhan == id);
+            if (benhNhan != null)
             {
-                item.DaXoa = true; 
+                db.BenhNhans.Remove(benhNhan);
                 db.SaveChanges();
-                return Ok();
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest();
+            else
+            {
+                return Ok("Mã bệnh nhân không tồn tại");
+            }
         }
     }
 }

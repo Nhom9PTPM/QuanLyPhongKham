@@ -1,59 +1,93 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham.Models;
+using System.Linq;
 
 namespace QuanLyPhongKham.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class ChiTietHoaDonsController : ControllerBase
     {
         private readonly QuanLyPhongKhamContext db = new QuanLyPhongKhamContext();
 
-        [HttpGet("get-all")]
+        [Route("get-all")]
+        [HttpGet]
         public IActionResult GetAll()
         {
             return Ok(db.ChiTietHoaDons.ToList());
         }
 
-        [HttpGet("get-by-id/{id}")]
+        [Route("get-by-id/{id}")]
+        [HttpGet]
         public IActionResult GetById(int id)
         {
-            return Ok(db.ChiTietHoaDons.SingleOrDefault(x => x.MaChiTietHoaDon == id));
+            try
+            {
+                var chiTiet = db.ChiTietHoaDons
+                    .Where(x => x.MaChiTietHoaDon == id)
+                    .Select(x => new
+                    {
+                        x.MaChiTietHoaDon,
+                        x.MaHoaDon,
+                        x.MaDichVu,
+                        x.MaThuoc,
+                        x.SoLuong,
+                        x.DonGia
+                    })
+                    .SingleOrDefault();
+                return Ok(chiTiet);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
-        [HttpPost("create")]
-        public IActionResult Create(ChiTietHoaDon model)
+        [Route("create-chitiethoadon")]
+        [HttpPost]
+        public IActionResult CreateChiTietHoaDon(ChiTietHoaDon model)
         {
             db.ChiTietHoaDons.Add(model);
             db.SaveChanges();
-            return Ok("Thành công");
+            return Ok("Thực hiện thành công");
         }
 
-        [HttpPost("update")]
-        public IActionResult Update(ChiTietHoaDon model)
+        [Route("update-chitiethoadon")]
+        [HttpPost]
+        public IActionResult UpdateChiTietHoaDon(ChiTietHoaDon model)
         {
-            var item = db.ChiTietHoaDons.SingleOrDefault(x => x.MaChiTietHoaDon == model.MaChiTietHoaDon);
-            if (item != null)
+            var chiTiet = db.ChiTietHoaDons.SingleOrDefault(x => x.MaChiTietHoaDon == model.MaChiTietHoaDon);
+            if (chiTiet != null)
             {
-                item.SoLuong = model.SoLuong;
-                item.DonGia = model.DonGia;
+                chiTiet.MaHoaDon = model.MaHoaDon;
+                chiTiet.MaDichVu = model.MaDichVu;
+                chiTiet.MaThuoc = model.MaThuoc;
+                chiTiet.SoLuong = model.SoLuong;
+                chiTiet.DonGia = model.DonGia;
                 db.SaveChanges();
-                return Ok("Cập nhật thành công");
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest("Không tồn tại");
+            else
+            {
+                return Ok("Mã chi tiết hóa đơn không tồn tại");
+            }
         }
 
-        [HttpDelete("delete/{id}")]
-        public IActionResult Delete(int id)
+        [Route("delete-chitiethoadon")]
+        [HttpPost]
+        public IActionResult DeleteChiTietHoaDon(int id)
         {
-            var item = db.ChiTietHoaDons.SingleOrDefault(x => x.MaChiTietHoaDon == id);
-            if (item != null)
+            var chiTiet = db.ChiTietHoaDons.SingleOrDefault(x => x.MaChiTietHoaDon == id);
+            if (chiTiet != null)
             {
-                db.ChiTietHoaDons.Remove(item);
+                db.ChiTietHoaDons.Remove(chiTiet);
                 db.SaveChanges();
-                return Ok("Đã xóa");
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest();
+            else
+            {
+                return Ok("Mã chi tiết hóa đơn không tồn tại");
+            }
         }
     }
 }

@@ -2,17 +2,10 @@
 {
     public class ResponseModel
     {
+        public long TotalItems { get; set; }
         public int Page { get; set; }
         public int PageSize { get; set; }
-        public int TotalItems { get; set; }
-        public object? Data { get; set; }
-
-        public ResponseModel()
-        {
-            Page = 1;
-            PageSize = 10;
-            TotalItems = 0;
-            Data = null;
-        }
+        public dynamic Data { get; set; }
     }
+
 }

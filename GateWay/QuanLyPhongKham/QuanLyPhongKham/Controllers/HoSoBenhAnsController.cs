@@ -1,59 +1,99 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham.Models;
+using System.Linq;
 
 namespace QuanLyPhongKham.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class HoSoBenhAnsController : ControllerBase
     {
         private readonly QuanLyPhongKhamContext db = new QuanLyPhongKhamContext();
 
-        [HttpGet("get-all")]
+        [Route("get-all")]
+        [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(db.HoSoBenhAns.Where(x => x.DaXoa == false));
+            return Ok(db.HoSoBenhAns.ToList());
         }
 
-        [HttpGet("get-by-id/{id}")]
+        [Route("get-by-id/{id}")]
+        [HttpGet]
         public IActionResult GetById(int id)
         {
-            return Ok(db.HoSoBenhAns.SingleOrDefault(x => x.MaHoSo == id));
+            try
+            {
+                var hs = db.HoSoBenhAns
+                    .Where(x => x.MaHoSo == id)
+                    .Select(x => new
+                    {
+                        x.MaHoSo,
+                        x.MaBenhNhan,
+                        x.TomTatBenhLy,
+                        x.ChanDoanChinh,
+                        x.LichSuBenhLy,
+                        x.TapTinDinhKem,
+                        x.NgayLap,
+                        x.NguoiLap,
+                        x.DaXoa
+                    })
+                    .SingleOrDefault();
+                return Ok(hs);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
-        [HttpPost("create")]
-        public IActionResult Create(HoSoBenhAn model)
+        [Route("create-hosobenhan")]
+        [HttpPost]
+        public IActionResult CreateHoSoBenhAn(HoSoBenhAn model)
         {
             db.HoSoBenhAns.Add(model);
             db.SaveChanges();
-            return Ok();
+            return Ok("Thực hiện thành công");
         }
 
-        [HttpPost("update")]
-        public IActionResult Update(HoSoBenhAn model)
+        [Route("update-hosobenhan")]
+        [HttpPost]
+        public IActionResult UpdateHoSoBenhAn(HoSoBenhAn model)
         {
-            var item = db.HoSoBenhAns.SingleOrDefault(x => x.MaHoSo == model.MaHoSo);
-            if (item != null)
+            var hs = db.HoSoBenhAns.SingleOrDefault(x => x.MaHoSo == model.MaHoSo);
+            if (hs != null)
             {
-                item.ChanDoanChinh = model.ChanDoanChinh;
-                item.TomTatBenhLy = model.TomTatBenhLy;
+                hs.MaBenhNhan = model.MaBenhNhan;
+                hs.TomTatBenhLy = model.TomTatBenhLy;
+                hs.ChanDoanChinh = model.ChanDoanChinh;
+                hs.LichSuBenhLy = model.LichSuBenhLy;
+                hs.TapTinDinhKem = model.TapTinDinhKem;
+                hs.NgayLap = model.NgayLap;
+                hs.NguoiLap = model.NguoiLap;
+                hs.DaXoa = model.DaXoa;
                 db.SaveChanges();
-                return Ok();
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest();
+            else
+            {
+                return Ok("Mã hồ sơ bệnh án không tồn tại");
+            }
         }
 
-        [HttpDelete("delete/{id}")]
-        public IActionResult Delete(int id)
+        [Route("delete-hosobenhan")]
+        [HttpPost]
+        public IActionResult DeleteHoSoBenhAn(int id)
         {
-            var item = db.HoSoBenhAns.SingleOrDefault(x => x.MaHoSo == id);
-            if (item != null)
+            var hs = db.HoSoBenhAns.SingleOrDefault(x => x.MaHoSo == id);
+            if (hs != null)
             {
-                item.DaXoa = true;
+                db.HoSoBenhAns.Remove(hs);
                 db.SaveChanges();
-                return Ok();
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest();
+            else
+            {
+                return Ok("Mã hồ sơ bệnh án không tồn tại");
+            }
         }
     }
 }

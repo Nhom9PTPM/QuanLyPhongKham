@@ -1,61 +1,100 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham.Models;
+using System.Linq;
 
 namespace QuanLyPhongKham.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class NhaCungCapsController : ControllerBase
     {
         private readonly QuanLyPhongKhamContext db = new QuanLyPhongKhamContext();
 
-        [HttpGet("get-all")]
+        [Route("get-all")]
+        [HttpGet]
         public IActionResult GetAll()
         {
             return Ok(db.NhaCungCaps.ToList());
         }
 
-        [HttpGet("get-by-id/{id}")]
+        [Route("get-by-id/{id}")]
+        [HttpGet]
         public IActionResult GetById(int id)
         {
-            return Ok(db.NhaCungCaps.SingleOrDefault(x => x.MaNhaCungCap == id));
+            try
+            {
+                var item = db.NhaCungCaps
+                    .Where(x => x.MaNhaCungCap == id)
+                    .Select(x => new
+                    {
+                        x.MaNhaCungCap,
+                        x.TenNhaCungCap,
+                        x.DiaChi,
+                        x.SoDienThoai,
+                        x.Email,
+                        x.NguoiLienHe,
+                        x.GhiChu,
+                        x.NgayTao,
+                        x.DaXoa
+                    })
+                    .SingleOrDefault();
+
+                return Ok(item);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
-        [HttpPost("create")]
-        public IActionResult Create(NhaCungCap model)
+        [Route("create-nhacungcap")]
+        [HttpPost]
+        public IActionResult CreateNhaCungCap(NhaCungCap model)
         {
             db.NhaCungCaps.Add(model);
             db.SaveChanges();
-            return Ok("Thành công");
+            return Ok("Thực hiện thành công");
         }
 
-        [HttpPost("update")]
-        public IActionResult Update(NhaCungCap model)
+        [Route("update-nhacungcap")]
+        [HttpPost]
+        public IActionResult UpdateNhaCungCap(NhaCungCap model)
         {
             var item = db.NhaCungCaps.SingleOrDefault(x => x.MaNhaCungCap == model.MaNhaCungCap);
             if (item != null)
             {
                 item.TenNhaCungCap = model.TenNhaCungCap;
-                item.Email = model.Email;
-                item.SoDienThoai = model.SoDienThoai;
                 item.DiaChi = model.DiaChi;
+                item.SoDienThoai = model.SoDienThoai;
+                item.Email = model.Email;
+                item.NguoiLienHe = model.NguoiLienHe;
+                item.GhiChu = model.GhiChu;
+                item.NgayTao = model.NgayTao;
+                item.DaXoa = model.DaXoa;
                 db.SaveChanges();
-                return Ok("Thành công");
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest("Không tồn tại");
+            else
+            {
+                return Ok("Mã nhà cung cấp không tồn tại");
+            }
         }
 
-        [HttpDelete("delete/{id}")]
-        public IActionResult Delete(int id)
+        [Route("delete-nhacungcap")]
+        [HttpPost]
+        public IActionResult DeleteNhaCungCap(int id)
         {
             var item = db.NhaCungCaps.SingleOrDefault(x => x.MaNhaCungCap == id);
             if (item != null)
             {
                 db.NhaCungCaps.Remove(item);
                 db.SaveChanges();
-                return Ok("Xóa thành công");
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest();
+            else
+            {
+                return Ok("Mã nhà cung cấp không tồn tại");
+            }
         }
     }
 }

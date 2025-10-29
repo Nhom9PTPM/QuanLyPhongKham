@@ -1,59 +1,103 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham.Models;
+using System.Linq;
 
 namespace QuanLyPhongKham.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class LichHensController : ControllerBase
     {
         private readonly QuanLyPhongKhamContext db = new QuanLyPhongKhamContext();
 
-        [HttpGet("get-all")]
+        [Route("get-all")]
+        [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(db.LichHens.Where(x => x.DaXoa == false));
+            return Ok(db.LichHens.ToList());
         }
 
-        [HttpGet("get-by-id/{id}")]
+        [Route("get-by-id/{id}")]
+        [HttpGet]
         public IActionResult GetById(int id)
         {
-            return Ok(db.LichHens.SingleOrDefault(x => x.MaLichHen == id));
+            try
+            {
+                var lichHen = db.LichHens
+                    .Where(x => x.MaLichHen == id)
+                    .Select(x => new
+                    {
+                        x.MaLichHen,
+                        x.MaBenhNhan,
+                        x.MaBacSi,
+                        x.NgayBatDau,
+                        x.NgayKetThuc,
+                        x.GioHen,
+                        x.TrangThai,
+                        x.GhiChu,
+                        x.NguoiTao,
+                        x.NgayTao,
+                        x.DaXoa
+                    })
+                    .SingleOrDefault();
+                return Ok(lichHen);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
-        [HttpPost("create")]
-        public IActionResult Create(LichHen model)
+        [Route("create-lichhen")]
+        [HttpPost]
+        public IActionResult CreateLichHen(LichHen model)
         {
             db.LichHens.Add(model);
             db.SaveChanges();
-            return Ok();
+            return Ok("Thực hiện thành công");
         }
 
-        [HttpPost("update")]
-        public IActionResult Update(LichHen model)
+        [Route("update-lichhen")]
+        [HttpPost]
+        public IActionResult UpdateLichHen(LichHen model)
         {
-            var item = db.LichHens.SingleOrDefault(x => x.MaLichHen == model.MaLichHen);
-            if (item != null)
+            var lichHen = db.LichHens.SingleOrDefault(x => x.MaLichHen == model.MaLichHen);
+            if (lichHen != null)
             {
-                item.TrangThai = model.TrangThai;
-                item.GhiChu = model.GhiChu;
+                lichHen.MaBenhNhan = model.MaBenhNhan;
+                lichHen.MaBacSi = model.MaBacSi;
+                lichHen.NgayBatDau = model.NgayBatDau;
+                lichHen.NgayKetThuc = model.NgayKetThuc;
+                lichHen.GioHen = model.GioHen;
+                lichHen.TrangThai = model.TrangThai;
+                lichHen.GhiChu = model.GhiChu;
+                lichHen.NguoiTao = model.NguoiTao;
+                lichHen.NgayTao = model.NgayTao;
+                lichHen.DaXoa = model.DaXoa;
                 db.SaveChanges();
-                return Ok();
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest();
+            else
+            {
+                return Ok("Mã lịch hẹn không tồn tại");
+            }
         }
 
-        [HttpDelete("delete/{id}")]
-        public IActionResult Delete(int id)
+        [Route("delete-lichhen")]
+        [HttpPost]
+        public IActionResult DeleteLichHen(int id)
         {
-            var item = db.LichHens.SingleOrDefault(x => x.MaLichHen == id);
-            if (item != null)
+            var lichHen = db.LichHens.SingleOrDefault(x => x.MaLichHen == id);
+            if (lichHen != null)
             {
-                item.DaXoa = true;
+                db.LichHens.Remove(lichHen);
                 db.SaveChanges();
-                return Ok();
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest();
+            else
+            {
+                return Ok("Mã lịch hẹn không tồn tại");
+            }
         }
     }
 }

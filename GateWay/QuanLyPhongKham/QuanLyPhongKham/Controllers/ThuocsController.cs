@@ -1,60 +1,97 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham.Models;
+using System.Linq;
 
 namespace QuanLyPhongKham.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class ThuocsController : ControllerBase
     {
         private readonly QuanLyPhongKhamContext db = new QuanLyPhongKhamContext();
 
-        [HttpGet("get-all")]
+        [Route("get-all")]
+        [HttpGet]
         public IActionResult GetAll()
         {
             return Ok(db.Thuocs.ToList());
         }
 
-        [HttpGet("get-by-id/{id}")]
+        [Route("get-by-id/{id}")]
+        [HttpGet]
         public IActionResult GetById(int id)
         {
-            return Ok(db.Thuocs.SingleOrDefault(x => x.MaThuoc == id));
+            try
+            {
+                var thuoc = db.Thuocs
+                    .Where(x => x.MaThuoc == id)
+                    .Select(x => new
+                    {
+                        x.MaThuoc,
+                        x.TenThuoc,
+                        x.MaNhaCungCap,
+                        x.DonViTinh,
+                        x.MoTa,
+                        x.Gia,
+                        x.TrangThai,
+                        x.NgayTao
+                    })
+                    .SingleOrDefault();
+
+                return Ok(thuoc);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
-        [HttpPost("create")]
-        public IActionResult Create(Thuoc model)
+        [Route("create-thuoc")]
+        [HttpPost]
+        public IActionResult CreateThuoc(Thuoc model)
         {
             db.Thuocs.Add(model);
             db.SaveChanges();
-            return Ok();
+            return Ok("Thực hiện thành công");
         }
 
-        [HttpPost("update")]
-        public IActionResult Update(Thuoc model)
+        [Route("update-thuoc")]
+        [HttpPost]
+        public IActionResult UpdateThuoc(Thuoc model)
         {
-            var item = db.Thuocs.SingleOrDefault(x => x.MaThuoc == model.MaThuoc);
-            if (item != null)
+            var thuoc = db.Thuocs.SingleOrDefault(x => x.MaThuoc == model.MaThuoc);
+            if (thuoc != null)
             {
-                item.TenThuoc = model.TenThuoc;
-                item.Gia = model.Gia;
-                item.DonViTinh = model.DonViTinh;
+                thuoc.TenThuoc = model.TenThuoc;
+                thuoc.MaNhaCungCap = model.MaNhaCungCap;
+                thuoc.DonViTinh = model.DonViTinh;
+                thuoc.MoTa = model.MoTa;
+                thuoc.Gia = model.Gia;
+                thuoc.TrangThai = model.TrangThai;
                 db.SaveChanges();
-                return Ok();
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest();
+            else
+            {
+                return Ok("Mã thuốc không tồn tại");
+            }
         }
 
-        [HttpDelete("delete/{id}")]
-        public IActionResult Delete(int id)
+        [Route("delete-thuoc")]
+        [HttpPost]
+        public IActionResult DeleteThuoc(int id)
         {
-            var item = db.Thuocs.SingleOrDefault(x => x.MaThuoc == id);
-            if (item != null)
+            var thuoc = db.Thuocs.SingleOrDefault(x => x.MaThuoc == id);
+            if (thuoc != null)
             {
-                db.Thuocs.Remove(item);
+                db.Thuocs.Remove(thuoc);
                 db.SaveChanges();
-                return Ok();
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest();
+            else
+            {
+                return Ok("Mã thuốc không tồn tại");
+            }
         }
     }
 }

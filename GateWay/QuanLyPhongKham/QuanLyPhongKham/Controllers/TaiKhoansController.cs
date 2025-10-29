@@ -1,59 +1,94 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham.Models;
+using System.Linq;
 
 namespace QuanLyPhongKham.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class TaiKhoansController : ControllerBase
     {
         private readonly QuanLyPhongKhamContext db = new QuanLyPhongKhamContext();
 
-        [HttpGet("get-all")]
+        [Route("get-all")]
+        [HttpGet]
         public IActionResult GetAll()
         {
             return Ok(db.TaiKhoans.ToList());
         }
 
-        [HttpGet("get-by-id/{id}")]
+        [Route("get-by-id/{id}")]
+        [HttpGet]
         public IActionResult GetById(int id)
         {
-            return Ok(db.TaiKhoans.SingleOrDefault(x => x.MaTaiKhoan == id));
+            var taiKhoan = db.TaiKhoans
+                .Where(x => x.MaTaiKhoan == id)
+                .Select(x => new
+                {
+                    x.MaTaiKhoan,
+                    x.TenDangNhap,
+                    x.MatKhau,
+                    x.MaNguoiDung,
+                    x.MaVaiTro,
+                    x.LoaiQuyen,
+                    x.TrangThai,
+                    x.NgayTao
+                })
+                .SingleOrDefault();
+
+            if (taiKhoan != null)
+                return Ok(taiKhoan);
+            else
+                return NotFound("Không tìm thấy tài khoản");
         }
 
-        [HttpPost("create")]
-        public IActionResult Create(TaiKhoan model)
+        [Route("create-taikhoan")]
+        [HttpPost]
+        public IActionResult CreateTaiKhoan(TaiKhoan model)
         {
             db.TaiKhoans.Add(model);
             db.SaveChanges();
             return Ok("Tạo tài khoản thành công");
         }
 
-        [HttpPost("update")]
-        public IActionResult Update(TaiKhoan model)
+        [Route("update-taikhoan")]
+        [HttpPost]
+        public IActionResult UpdateTaiKhoan(TaiKhoan model)
         {
-            var item = db.TaiKhoans.SingleOrDefault(x => x.MaTaiKhoan == model.MaTaiKhoan);
-            if (item != null)
+            var taiKhoan = db.TaiKhoans.SingleOrDefault(x => x.MaTaiKhoan == model.MaTaiKhoan);
+            if (taiKhoan != null)
             {
-                item.MatKhau = model.MatKhau;
-                item.TrangThai = model.TrangThai;
+                taiKhoan.TenDangNhap = model.TenDangNhap;
+                taiKhoan.MatKhau = model.MatKhau;
+                taiKhoan.MaNguoiDung = model.MaNguoiDung;
+                taiKhoan.MaVaiTro = model.MaVaiTro;
+                taiKhoan.LoaiQuyen = model.LoaiQuyen;
+                taiKhoan.TrangThai = model.TrangThai;
+                // NgayTao không cập nhật
                 db.SaveChanges();
-                return Ok("Cập nhật thành công");
+                return Ok("Cập nhật tài khoản thành công");
             }
-            return BadRequest();
+            else
+            {
+                return NotFound("Tài khoản không tồn tại");
+            }
         }
 
-        [HttpDelete("delete/{id}")]
-        public IActionResult Delete(int id)
+        [Route("delete-taikhoan/{id}")]
+        [HttpPost]
+        public IActionResult DeleteTaiKhoan(int id)
         {
-            var item = db.TaiKhoans.SingleOrDefault(x => x.MaTaiKhoan == id);
-            if (item != null)
+            var taiKhoan = db.TaiKhoans.SingleOrDefault(x => x.MaTaiKhoan == id);
+            if (taiKhoan != null)
             {
-                db.TaiKhoans.Remove(item);
+                db.TaiKhoans.Remove(taiKhoan);
                 db.SaveChanges();
-                return Ok("Đã xóa");
+                return Ok("Xóa tài khoản thành công");
             }
-            return BadRequest();
+            else
+            {
+                return NotFound("Tài khoản không tồn tại");
+            }
         }
     }
 }

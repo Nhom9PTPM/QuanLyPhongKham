@@ -1,58 +1,90 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham.Models;
+using System.Linq;
 
 namespace QuanLyPhongKham.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class ThongBaosController : ControllerBase
     {
         private readonly QuanLyPhongKhamContext db = new QuanLyPhongKhamContext();
 
-        [HttpGet("get-all")]
+        [Route("get-all")]
+        [HttpGet]
         public IActionResult GetAll()
         {
             return Ok(db.ThongBaos.ToList());
         }
 
-        [HttpGet("get-by-id/{id}")]
+        [Route("get-by-id/{id}")]
+        [HttpGet]
         public IActionResult GetById(int id)
         {
-            return Ok(db.ThongBaos.SingleOrDefault(x => x.MaThongBao == id));
+            var tb = db.ThongBaos
+                .Where(x => x.MaThongBao == id)
+                .Select(x => new
+                {
+                    x.MaThongBao,
+                    x.MaTaiKhoan,
+                    x.TieuDe,
+                    x.NoiDung,
+                    x.DaDoc,
+                    x.NgayTao
+                })
+                .SingleOrDefault();
+
+            if (tb != null)
+                return Ok(tb);
+            else
+                return NotFound("Không tìm thấy thông báo");
         }
 
-        [HttpPost("create")]
-        public IActionResult Create(ThongBao model)
+        [Route("create-thongbao")]
+        [HttpPost]
+        public IActionResult CreateThongBao(ThongBao model)
         {
             db.ThongBaos.Add(model);
             db.SaveChanges();
-            return Ok("Thành công");
+            return Ok("Tạo thông báo thành công");
         }
 
-        [HttpPost("update")]
-        public IActionResult Update(ThongBao model)
+        [Route("update-thongbao")]
+        [HttpPost]
+        public IActionResult UpdateThongBao(ThongBao model)
         {
-            var item = db.ThongBaos.SingleOrDefault(x => x.MaThongBao == model.MaThongBao);
-            if (item != null)
+            var tb = db.ThongBaos.SingleOrDefault(x => x.MaThongBao == model.MaThongBao);
+            if (tb != null)
             {
-                item.DaDoc = model.DaDoc;
+                tb.MaTaiKhoan = model.MaTaiKhoan;
+                tb.TieuDe = model.TieuDe;
+                tb.NoiDung = model.NoiDung;
+                tb.DaDoc = model.DaDoc;
+                // NgayTao giữ nguyên
                 db.SaveChanges();
-                return Ok("Cập nhật thành công");
+                return Ok("Cập nhật thông báo thành công");
             }
-            return BadRequest("Không tồn tại");
+            else
+            {
+                return NotFound("Thông báo không tồn tại");
+            }
         }
 
-        [HttpDelete("delete/{id}")]
-        public IActionResult Delete(int id)
+        [Route("delete-thongbao/{id}")]
+        [HttpPost]
+        public IActionResult DeleteThongBao(int id)
         {
-            var item = db.ThongBaos.SingleOrDefault(x => x.MaThongBao == id);
-            if (item != null)
+            var tb = db.ThongBaos.SingleOrDefault(x => x.MaThongBao == id);
+            if (tb != null)
             {
-                db.ThongBaos.Remove(item);
+                db.ThongBaos.Remove(tb);
                 db.SaveChanges();
-                return Ok("Đã xóa");
+                return Ok("Xóa thông báo thành công");
             }
-            return BadRequest();
+            else
+            {
+                return NotFound("Thông báo không tồn tại");
+            }
         }
     }
 }

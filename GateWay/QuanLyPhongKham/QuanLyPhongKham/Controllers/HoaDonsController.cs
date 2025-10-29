@@ -1,59 +1,97 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham.Models;
+using System.Linq;
 
 namespace QuanLyPhongKham.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class HoaDonsController : ControllerBase
     {
         private readonly QuanLyPhongKhamContext db = new QuanLyPhongKhamContext();
 
-        [HttpGet("get-all")]
+        [Route("get-all")]
+        [HttpGet]
         public IActionResult GetAll()
         {
             return Ok(db.HoaDons.ToList());
         }
 
-        [HttpGet("get-by-id/{id}")]
+        [Route("get-by-id/{id}")]
+        [HttpGet]
         public IActionResult GetById(int id)
         {
-            return Ok(db.HoaDons.SingleOrDefault(x => x.MaHoaDon == id));
+            try
+            {
+                var hoaDon = db.HoaDons
+                    .Where(x => x.MaHoaDon == id)
+                    .Select(x => new
+                    {
+                        x.MaHoaDon,
+                        x.MaBenhNhan,
+                        x.MaNguoiThu,
+                        x.NgayLap,
+                        x.TongTien,
+                        x.PhuongThucThanhToan,
+                        x.TrangThai,
+                        x.GhiChu
+                    })
+                    .SingleOrDefault();
+                return Ok(hoaDon);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
-        [HttpPost("create")]
-        public IActionResult Create(HoaDon model)
+        [Route("create-hoadon")]
+        [HttpPost]
+        public IActionResult CreateHoaDon(HoaDon model)
         {
             db.HoaDons.Add(model);
             db.SaveChanges();
-            return Ok("Tạo hóa đơn thành công");
+            return Ok("Thực hiện thành công");
         }
 
-        [HttpPost("update")]
-        public IActionResult Update(HoaDon model)
+        [Route("update-hoadon")]
+        [HttpPost]
+        public IActionResult UpdateHoaDon(HoaDon model)
         {
-            var item = db.HoaDons.SingleOrDefault(x => x.MaHoaDon == model.MaHoaDon);
-            if (item != null)
+            var hd = db.HoaDons.SingleOrDefault(x => x.MaHoaDon == model.MaHoaDon);
+            if (hd != null)
             {
-                item.TongTien = model.TongTien;
-                item.TrangThai = model.TrangThai;
+                hd.MaBenhNhan = model.MaBenhNhan;
+                hd.MaNguoiThu = model.MaNguoiThu;
+                hd.NgayLap = model.NgayLap;
+                hd.TongTien = model.TongTien;
+                hd.PhuongThucThanhToan = model.PhuongThucThanhToan;
+                hd.TrangThai = model.TrangThai;
+                hd.GhiChu = model.GhiChu;
                 db.SaveChanges();
-                return Ok("Cập nhật thành công");
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest("Không tồn tại");
+            else
+            {
+                return Ok("Mã hóa đơn không tồn tại");
+            }
         }
 
-        [HttpDelete("delete/{id}")]
-        public IActionResult Delete(int id)
+        [Route("delete-hoadon")]
+        [HttpPost]
+        public IActionResult DeleteHoaDon(int id)
         {
-            var item = db.HoaDons.SingleOrDefault(x => x.MaHoaDon == id);
-            if (item != null)
+            var hd = db.HoaDons.SingleOrDefault(x => x.MaHoaDon == id);
+            if (hd != null)
             {
-                db.HoaDons.Remove(item);
+                db.HoaDons.Remove(hd);
                 db.SaveChanges();
-                return Ok("Đã xóa hóa đơn");
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest();
+            else
+            {
+                return Ok("Mã hóa đơn không tồn tại");
+            }
         }
     }
 }

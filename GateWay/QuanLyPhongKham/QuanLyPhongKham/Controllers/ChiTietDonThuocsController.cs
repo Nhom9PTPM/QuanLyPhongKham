@@ -1,59 +1,93 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham.Models;
+using System.Linq;
 
 namespace QuanLyPhongKham.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class ChiTietDonThuocsController : ControllerBase
     {
         private readonly QuanLyPhongKhamContext db = new QuanLyPhongKhamContext();
 
-        [HttpGet("get-all")]
+        [Route("get-all")]
+        [HttpGet]
         public IActionResult GetAll()
         {
             return Ok(db.ChiTietDonThuocs.ToList());
         }
 
-        [HttpGet("get-by-id/{id}")]
+        [Route("get-by-id/{id}")]
+        [HttpGet]
         public IActionResult GetById(int id)
         {
-            return Ok(db.ChiTietDonThuocs.SingleOrDefault(x => x.MaChiTietDon == id));
+            try
+            {
+                var ct = db.ChiTietDonThuocs
+                    .Where(x => x.MaChiTietDon == id)
+                    .Select(x => new
+                    {
+                        x.MaChiTietDon,
+                        x.MaDonThuoc,
+                        x.MaThuoc,
+                        x.SoLuong,
+                        x.CachDung,
+                        x.DonGia
+                    })
+                    .SingleOrDefault();
+                return Ok(ct);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
-        [HttpPost("create")]
-        public IActionResult Create(ChiTietDonThuoc model)
+        [Route("create-chitietdonthuoc")]
+        [HttpPost]
+        public IActionResult CreateChiTietDonThuoc(ChiTietDonThuoc model)
         {
             db.ChiTietDonThuocs.Add(model);
             db.SaveChanges();
-            return Ok("Thành công");
+            return Ok("Thực hiện thành công");
         }
 
-        [HttpPost("update")]
-        public IActionResult Update(ChiTietDonThuoc model)
+        [Route("update-chitietdonthuoc")]
+        [HttpPost]
+        public IActionResult UpdateChiTietDonThuoc(ChiTietDonThuoc model)
         {
-            var item = db.ChiTietDonThuocs.SingleOrDefault(x => x.MaChiTietDon == model.MaChiTietDon);
-            if (item != null)
+            var ct = db.ChiTietDonThuocs.SingleOrDefault(x => x.MaChiTietDon == model.MaChiTietDon);
+            if (ct != null)
             {
-                item.SoLuong = model.SoLuong;
-                item.DonGia = model.DonGia;
+                ct.MaDonThuoc = model.MaDonThuoc;
+                ct.MaThuoc = model.MaThuoc;
+                ct.SoLuong = model.SoLuong;
+                ct.CachDung = model.CachDung;
+                ct.DonGia = model.DonGia;
                 db.SaveChanges();
-                return Ok("Cập nhật thành công");
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest("Không tồn tại");
+            else
+            {
+                return Ok("Mã chi tiết đơn thuốc không tồn tại");
+            }
         }
 
-        [HttpDelete("delete/{id}")]
-        public IActionResult Delete(int id)
+        [Route("delete-chitietdonthuoc")]
+        [HttpPost]
+        public IActionResult DeleteChiTietDonThuoc(int id)
         {
-            var item = db.ChiTietDonThuocs.SingleOrDefault(x => x.MaChiTietDon == id);
-            if (item != null)
+            var ct = db.ChiTietDonThuocs.SingleOrDefault(x => x.MaChiTietDon == id);
+            if (ct != null)
             {
-                db.ChiTietDonThuocs.Remove(item);
+                db.ChiTietDonThuocs.Remove(ct);
                 db.SaveChanges();
-                return Ok("Đã xóa");
+                return Ok("Thực hiện thành công");
             }
-            return BadRequest();
+            else
+            {
+                return Ok("Mã chi tiết đơn thuốc không tồn tại");
+            }
         }
     }
 }
