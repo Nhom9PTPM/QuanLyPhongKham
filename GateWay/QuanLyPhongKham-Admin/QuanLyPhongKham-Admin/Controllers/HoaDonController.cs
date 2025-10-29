@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham_Admin.BLL;
 using QuanLyPhongKham_Admin.Models;
+using QuanLyPhongKham_Admin.Models.DTOs;
 
 namespace QuanLyPhongKham_Admin.Controllers
 {
@@ -15,6 +16,7 @@ namespace QuanLyPhongKham_Admin.Controllers
             _bll = bll;
         }
 
+        // ========== 6.1 CRUD ==========
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -51,6 +53,29 @@ namespace QuanLyPhongKham_Admin.Controllers
         {
             await _bll.Xoa(id);
             return Ok(new { success = true, message = "Đã xóa hóa đơn!" });
+        }
+
+        // ========== 6.2A - Danh sách hóa đơn chưa thanh toán ==========
+        [HttpGet("ChuaThanhToan")]
+        public async Task<IActionResult> GetChuaThanhToan()
+        {
+            var data = await _bll.LayHoaDonChuaThanhToan();
+            return Ok(new { success = true, data });
+        }
+
+        // ========== 6.2B - Thu phí & cập nhật trạng thái thanh toán ==========
+        [HttpPut("ThanhToan")]
+        public async Task<IActionResult> ThanhToan([FromBody] ThanhToanRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(new { success = false, message = "Dữ liệu không hợp lệ." });
+
+            var result = await _bll.ThanhToanHoaDonAsync(request);
+
+            if (!result.Success)
+                return BadRequest(new { success = false, message = result.Message });
+
+            return Ok(new { success = true, message = result.Message, data = result.Data });
         }
     }
 }
