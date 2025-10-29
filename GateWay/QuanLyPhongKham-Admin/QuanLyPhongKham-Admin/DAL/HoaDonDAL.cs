@@ -22,7 +22,7 @@ namespace QuanLyPhongKham_Admin.DAL
                 .ToListAsync();
         }
 
-        // Lấy chi tiết hóa đơn theo ID
+        // Lấy chi tiết hóa đơn
         public async Task<HoaDon?> GetByIdAsync(int id)
         {
             return await _context.HoaDon
@@ -31,21 +31,21 @@ namespace QuanLyPhongKham_Admin.DAL
                 .FirstOrDefaultAsync(h => h.MaHoaDon == id);
         }
 
-        // Thêm mới hóa đơn
+        // Thêm mới
         public async Task AddAsync(HoaDon hoaDon)
         {
             _context.HoaDon.Add(hoaDon);
             await _context.SaveChangesAsync();
         }
 
-        // Cập nhật hóa đơn
+        // Cập nhật
         public async Task UpdateAsync(HoaDon hoaDon)
         {
             _context.HoaDon.Update(hoaDon);
             await _context.SaveChangesAsync();
         }
 
-        // Xóa hóa đơn
+        // Xóa
         public async Task DeleteAsync(int id)
         {
             var hd = await _context.HoaDon.FindAsync(id);
@@ -54,6 +54,18 @@ namespace QuanLyPhongKham_Admin.DAL
                 _context.HoaDon.Remove(hd);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        // ========== 6.2A - Lấy hóa đơn chưa thanh toán ==========
+        public async Task<List<HoaDon>> GetChuaThanhToanAsync()
+        {
+            return await _context.HoaDon
+                .Include(h => h.BenhNhan)
+                .Where(h => h.TrangThai == null ||
+                            h.TrangThai == "Chưa thanh toán" ||
+                            h.TrangThai == "Chua thanh toan")
+                .OrderByDescending(h => h.NgayLap)
+                .ToListAsync();
         }
     }
 }
