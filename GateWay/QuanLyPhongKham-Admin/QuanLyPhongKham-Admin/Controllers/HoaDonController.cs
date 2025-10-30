@@ -2,6 +2,7 @@
 using QuanLyPhongKham_Admin.BLL;
 using QuanLyPhongKham_Admin.Models;
 using QuanLyPhongKham_Admin.Models.DTOs;
+using iTextSharp.text;
 
 namespace QuanLyPhongKham_Admin.Controllers
 {
@@ -77,5 +78,22 @@ namespace QuanLyPhongKham_Admin.Controllers
 
             return Ok(new { success = true, message = result.Message, data = result.Data });
         }
+       
+
+        // ========== 6.4 - Xuất hóa đơn ra PDF ==========
+        [HttpGet("XuatPDF/{id}")]
+    public async Task<IActionResult> XuatPdf(int id)
+    {
+        try
+        {
+            var pdfBytes = await _bll.XuatHoaDonPdfAsync(id);
+            return File(pdfBytes, "application/pdf", $"HoaDon_{id}.pdf");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { success = false, message = ex.Message });
+        }
     }
+
+}
 }

@@ -67,5 +67,14 @@ namespace QuanLyPhongKham_Admin.DAL
                 .OrderByDescending(h => h.NgayLap)
                 .ToListAsync();
         }
+        public async Task<HoaDon?> GetHoaDonChiTietAsync(int id)
+        {
+            return await _context.HoaDon
+                .Include(h => h.BenhNhan)
+                .Include(h => h.ChiTietHoaDon!)
+                    .ThenInclude(ct => ct.Thuoc)
+                .FirstOrDefaultAsync(h => h.MaHoaDon == id);
+        }
+
     }
 }
