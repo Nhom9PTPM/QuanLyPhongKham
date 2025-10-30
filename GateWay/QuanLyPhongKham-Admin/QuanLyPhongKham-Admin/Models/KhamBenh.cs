@@ -45,9 +45,18 @@ namespace QuanLyPhongKham_Admin.Models
         [Column("DaXoa")]
         public bool DaXoa { get; set; }
 
+        // ===== Quan hệ =====
+
         [ForeignKey(nameof(MaHoSo))]
         public HoSoBenhAn? HoSoBenhAn { get; set; }
 
         public List<DonThuoc>? DonThuoc { get; set; }
+
+        //  Thêm 2 thuộc tính này để fix lỗi DAL
+        [ForeignKey(nameof(MaBenhNhan))]
+        public BenhNhan? BenhNhan { get; set; }
+
+        [ForeignKey(nameof(MaBacSi))]
+        public BacSi? BacSi { get; set; }
     }
 }
