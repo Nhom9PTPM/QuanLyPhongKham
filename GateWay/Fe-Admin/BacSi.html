@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Quản lý Bác sĩ - DAH</title>
+
+  <!-- Dùng chung CSS của module Lịch hẹn -->
+  <link rel="stylesheet" href="css/BacSi.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar (same style as other pages) -->
+    <aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+    <span class="brand-text">DAH Clinic</span>
+  </div>
+
+  <nav class="menu">
+    <a href="index.html"><i class="fa-solid fa-chart-line"></i><span>Tổng quan</span></a>
+    <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i><span>Tài khoản</span></a>
+    <a href="BacSi.html"><i class="fa-solid fa-user-doctor"></i><span>Bác sĩ</span></a>
+    <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i><span>Bệnh nhân</span></a>
+    <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i><span>Lịch hẹn</span></a>
+    <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i><span>Hồ sơ bệnh án</span></a>
+    <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i><span>Thuốc & kho</span></a>
+    <a href="HoaDon.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Hóa đơn</span></a>
+    <a href="ThongBao.html"><i class="fa-solid fa-bell"></i><span>Thông báo</span></a>
+    <a href="LichSu.html"><i class="fa-solid fa-book"></i><span>Nhật ký hoạt động</span></a>
+  </nav>
+</aside>
+
+
+    <!-- Main -->
+    <main class="main">
+      <header class="header">
+        <h1>Quản lý Bác sĩ</h1>
+        <div class="actions">
+          <a class="btn" href="FormBacSi.html"><i class="fa-solid fa-plus"></i> Thêm Bác sĩ</a>
+          <button class="btn neutral" id="btnRefresh"><i class="fa-solid fa-rotate"></i> Làm mới</button>
+        </div>
+      </header>
+
+      <!-- Filter / Search -->
+      <section class="filter-bar card">
+        <input id="txtSearch" class="input" placeholder="Tìm theo tên, chuyên khoa, số phòng..." />
+        <select id="selectTrangThai" class="input" style="max-width:200px">
+          <option value="">Tất cả trạng thái</option>
+          <option value="1">Đang hoạt động</option>
+          <option value="0">Ngưng hoạt động</option>
+        </select>
+      </section>
+
+      <!-- Table danh sách bác sĩ -->
+      <section class="card">
+        <h3 class="h3">Danh sách Bác sĩ</h3>
+        <div class="table-wrap" style="margin-top:12px">
+          <table id="tblBacSi">
+            <thead>
+              <tr>
+                <th>MaBacSi</th>
+                <th>Họ tên</th>
+                <th>Chuyên khoa</th>
+                <th>Bằng cấp</th>
+                <th>Số phòng</th>
+                <th>Trạng thái</th>
+                <th style="width:160px">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Dữ liệu mẫu (frontend demo). Sẽ được thay bằng API khi tích hợp -->
+              <tr>
+                <td>1</td>
+                <td>Nguyen Van A</td>
+                <td>Nhi</td>
+                <td>Bác sĩ chuyên khoa nhi</td>
+                <td>101</td>
+                <td><span class="small muted">Hoạt động</span></td>
+                <td class="table-actions">
+                  <a class="btn small neutral" href="FormBacSi.html?ma=1">Sửa</a>
+                  <button class="btn small warn btn-delete" data-id="1">Xóa</button>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Tran Thi B</td>
+                <td>Da liễu</td>
+                <td>Thạc sĩ</td>
+                <td>102</td>
+                <td><span class="small muted">Hoạt động</span></td>
+                <td class="table-actions">
+                  <a class="btn small neutral" href="FormBacSi.html?ma=2">Sửa</a>
+                  <button class="btn small warn btn-delete" data-id="2">Xóa</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Sidebar toggle (reuse shared pattern)
+    const sidebar = document.getElementById("sidebar");
+    const toggleSidebar = document.getElementById("toggleSidebar");
+    toggleSidebar.addEventListener('click', () => sidebar.classList.toggle("collapsed"));
+
+    // Search & filter (client-side demo)
+    const txtSearch = document.getElementById('txtSearch');
+    const selectTrangThai = document.getElementById('selectTrangThai');
+    const tbl = document.getElementById('tblBacSi').getElementsByTagName('tbody')[0];
+
+    function filterTable() {
+      const q = txtSearch.value.trim().toLowerCase();
+      const st = selectTrangThai.value;
+      for (let r of tbl.rows) {
+        const cells = Array.from(r.cells).slice(0,6).map(c => c.innerText.toLowerCase());
+        const matchesQuery = q === '' || cells.join(' ').includes(q);
+        const statusText = r.cells[5].innerText.toLowerCase();
+        const matchesStatus = st === '' || (st === '1' && statusText.includes('hoạt')) || (st === '0' && statusText.includes('ngưng'));
+        r.style.display = (matchesQuery && matchesStatus) ? '' : 'none';
+      }
+    }
+
+    txtSearch.addEventListener('input', filterTable);
+    selectTrangThai.addEventListener('change', filterTable);
+
+    // Refresh demo
+    document.getElementById('btnRefresh').addEventListener('click', () => {
+      txtSearch.value = ''; selectTrangThai.value = '';
+      filterTable();
+    });
+
+    // Delete demo (client-side only)
+    document.querySelectorAll('.btn-delete').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const id = btn.getAttribute('data-id');
+        if (confirm('Bạn có chắc muốn xóa bác sĩ mã ' + id + ' ? (chỉ demo - chưa gọi API)')) {
+          // client-side remove row
+          const row = btn.closest('tr');
+          row.parentNode.removeChild(row);
+          // TODO: khi tích hợp API -> gọi endpoint DELETE /api/BacSi/{id}
+        }
+      });
+    });
+  </script>
+  <script>
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
+
+  // Tự động highlight mục hiện tại
+  const currentPage = location.pathname.split("/").pop();
+  document.querySelectorAll(".menu a").forEach(link => {
+    if (link.getAttribute("href") === currentPage) link.classList.add("active");
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nhật ký hoạt động - DAH</title>
+  <link rel="stylesheet" href="css/LichHen.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+  <aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+    <span class="brand-text">DAH Clinic</span>
+  </div>
+
+  <nav class="menu">
+    <a href="index.html"><i class="fa-solid fa-chart-line"></i><span>Tổng quan</span></a>
+    <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i><span>Tài khoản</span></a>
+    <a href="BacSi.html"><i class="fa-solid fa-user-doctor"></i><span>Bác sĩ</span></a>
+    <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i><span>Bệnh nhân</span></a>
+    <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i><span>Lịch hẹn</span></a>
+    <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i><span>Hồ sơ bệnh án</span></a>
+    <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i><span>Thuốc & kho</span></a>
+    <a href="HoaDon.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Hóa đơn</span></a>
+    <a href="ThongBao.html"><i class="fa-solid fa-bell"></i><span>Thông báo</span></a>
+    <a href="LichSu.html"><i class="fa-solid fa-book"></i><span>Nhật ký hoạt động</span></a>
+  </nav>
+</aside>
+    <div id="sidebarContainer"></div>
+
+    <main class="main">
+      <header class="header">
+        <h1>Nhật ký hoạt động hệ thống</h1>
+      </header>
+
+      <section class="filter-bar card">
+        <input id="txtSearch" class="input" placeholder="Tìm theo người thực hiện hoặc hành động...">
+      </section>
+
+      <section class="card">
+        <h3>Danh sách hoạt động gần đây</h3>
+        <div class="table-wrap">
+          <table id="tblLichSu">
+            <thead>
+              <tr>
+                <th>Mã</th>
+                <th>Người thực hiện</th>
+                <th>Hành động</th>
+                <th>Đối tượng</th>
+                <th>Thời gian</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>LS001</td>
+                <td>Admin</td>
+                <td>Thêm hồ sơ bệnh án</td>
+                <td>Nguyễn Văn A</td>
+                <td>2025-10-29 10:25</td>
+              </tr>
+              <tr>
+                <td>LS002</td>
+                <td>Admin</td>
+                <td>Xóa thuốc Paracetamol</td>
+                <td>Kho thuốc</td>
+                <td>2025-10-29 14:40</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    fetch("components/sidebar.html")
+      .then(r => r.text())
+      .then(html => {
+        document.getElementById("sidebarContainer").innerHTML = html;
+        const sidebar = document.getElementById("sidebar");
+        document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
+        const current = location.pathname.split("/").pop();
+        document.querySelectorAll(".menu a").forEach(link => {
+          if (link.getAttribute("href") === current) link.classList.add("active");
+        });
+      });
+
+    const txtSearch = document.getElementById("txtSearch");
+    const tbody = document.querySelector("#tblLichSu tbody");
+
+    txtSearch.addEventListener("input", () => {
+      const q = txtSearch.value.toLowerCase();
+      for (let r of tbody.rows) {
+        r.style.display = r.innerText.toLowerCase().includes(q) ? "" : "none";
+      }
+    });
+  </script>
+    <script>
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
+
+  // Tự động highlight mục hiện tại
+  const currentPage = location.pathname.split("/").pop();
+  document.querySelectorAll(".menu a").forEach(link => {
+    if (link.getAttribute("href") === currentPage) link.classList.add("active");
+  });
+</script>
+</body>
+</html>

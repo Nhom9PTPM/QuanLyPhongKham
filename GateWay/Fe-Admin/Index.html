@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - DAH Clinic</title>
+  <link rel="stylesheet" href="css/LichHen.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+    <span class="brand-text">DAH Clinic</span>
+  </div>
+
+  <nav class="menu">
+    <a href="index.html"><i class="fa-solid fa-chart-line"></i><span>Tổng quan</span></a>
+    <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i><span>Tài khoản</span></a>
+    <a href="BacSi.html"><i class="fa-solid fa-user-doctor"></i><span>Bác sĩ</span></a>
+    <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i><span>Bệnh nhân</span></a>
+    <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i><span>Lịch hẹn</span></a>
+    <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i><span>Hồ sơ bệnh án</span></a>
+    <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i><span>Thuốc & kho</span></a>
+    <a href="HoaDon.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Hóa đơn</span></a>
+    <a href="ThongBao.html"><i class="fa-solid fa-bell"></i><span>Thông báo</span></a>
+    <a href="LichSu.html"><i class="fa-solid fa-book"></i><span>Nhật ký hoạt động</span></a>
+  </nav>
+</aside>
+    <div id="sidebarContainer"></div>
+
+    <main class="main">
+      <header class="header">
+        <h1>Bảng điều khiển tổng quan</h1>
+      </header>
+
+      <!-- Thống kê nhanh -->
+      <section class="grid-4">
+        <div class="card stat-card">
+          <i class="fa-solid fa-user-doctor icon"></i>
+          <div>
+            <p class="stat-title">Bác sĩ</p>
+            <h2>12</h2>
+          </div>
+        </div>
+
+        <div class="card stat-card">
+          <i class="fa-solid fa-user-injured icon"></i>
+          <div>
+            <p class="stat-title">Bệnh nhân</p>
+            <h2>154</h2>
+          </div>
+        </div>
+
+        <div class="card stat-card">
+          <i class="fa-solid fa-file-invoice-dollar icon"></i>
+          <div>
+            <p class="stat-title">Hóa đơn</p>
+            <h2>98</h2>
+          </div>
+        </div>
+
+        <div class="card stat-card">
+          <i class="fa-solid fa-sack-dollar icon"></i>
+          <div>
+            <p class="stat-title">Doanh thu (VNĐ)</p>
+            <h2>125,000,000</h2>
+          </div>
+        </div>
+      </section>
+
+      <!-- Biểu đồ -->
+      <section class="grid-2">
+        <div class="card">
+          <h3>Doanh thu theo tháng</h3>
+          <canvas id="chartDoanhThu"></canvas>
+        </div>
+        <div class="card">
+          <h3>Lượt khám theo tháng</h3>
+          <canvas id="chartLuotKham"></canvas>
+        </div>
+      </section>
+
+      <!-- Dữ liệu gần đây -->
+      <section class="grid-2">
+        <div class="card">
+          <h3>Hóa đơn gần nhất</h3>
+          <table class="table-compact">
+            <thead>
+              <tr><th>Mã</th><th>Bệnh nhân</th><th>Tổng tiền</th><th>Ngày lập</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>HD045</td><td>Nguyễn Văn A</td><td>450,000</td><td>2025-10-30</td></tr>
+              <tr><td>HD044</td><td>Trần Thị B</td><td>300,000</td><td>2025-10-29</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3>Thông báo mới</h3>
+          <ul class="list-simple">
+            <li><i class="fa-solid fa-bell text-blue"></i> Bảo trì hệ thống 22:00 hôm nay</li>
+            <li><i class="fa-solid fa-bell text-green"></i> Cập nhật chức năng thanh toán mới</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Load sidebar
+    fetch("components/sidebar.html")
+      .then(r => r.text())
+      .then(html => {
+        document.getElementById("sidebarContainer").innerHTML = html;
+        const sidebar = document.getElementById("sidebar");
+        document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
+        const current = location.pathname.split("/").pop();
+        document.querySelectorAll(".menu a").forEach(link => {
+          if (link.getAttribute("href") === current) link.classList.add("active");
+        });
+      });
+
+    // Chart: Doanh thu
+    const ctx1 = document.getElementById('chartDoanhThu');
+    new Chart(ctx1, {
+      type: 'bar',
+      data: {
+        labels: ['Th1', 'Th2', 'Th3', 'Th4', 'Th5', 'Th6', 'Th7', 'Th8', 'Th9', 'Th10'],
+        datasets: [{
+          label: 'Doanh thu (triệu VNĐ)',
+          data: [12, 18, 9, 15, 22, 30, 27, 34, 40, 38],
+          borderWidth: 1
+        }]
+      },
+      options: { scales: { y: { beginAtZero: true } } }
+    });
+
+    // Chart: Lượt khám
+    const ctx2 = document.getElementById('chartLuotKham');
+    new Chart(ctx2, {
+      type: 'line',
+      data: {
+        labels: ['Th1','Th2','Th3','Th4','Th5','Th6','Th7','Th8','Th9','Th10'],
+        datasets: [{
+          label: 'Lượt khám',
+          data: [85, 92, 78, 110, 130, 142, 158, 171, 188, 195],
+          fill: false,
+          borderColor: '#36A2EB',
+          tension: 0.3
+        }]
+      }
+    });
+  </script>
+    <script>
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
+
+  // Tự động highlight mục hiện tại
+  const currentPage = location.pathname.split("/").pop();
+  document.querySelectorAll(".menu a").forEach(link => {
+    if (link.getAttribute("href") === currentPage) link.classList.add("active");
+  });
+</script>
+</body>
+</html>

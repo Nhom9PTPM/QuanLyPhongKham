@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chi tiết lịch hẹn - DAH</title>
+  <link rel="stylesheet" href="css/LichHen.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+        <span class="brand-text">DAH Clinic</span>
+      </div>
+      <nav class="menu">
+        <a href="LichHen.html" class="active"><i class="fa-solid fa-calendar-days"></i><span>Lịch hẹn</span></a>
+        <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i><span>Bệnh nhân</span></a>
+        <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i><span>Thuốc</span></a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="header">
+        <h1>Thông tin chi tiết lịch hẹn</h1>
+      </header>
+
+      <section class="card">
+        <form>
+          <div class="form-grid">
+            <div><label>Mã lịch hẹn</label><input class="input" value="LH001" disabled></div>
+            <div><label>Bệnh nhân</label><input class="input" value="Nguyễn Văn A"></div>
+            <div><label>Số điện thoại</label><input class="input" value="0123456789"></div>
+            <div><label>Bác sĩ</label><input class="input" value="Bác sĩ Linh"></div>
+            <div><label>Ngày hẹn</label><input type="date" class="input" value="2025-10-30"></div>
+            <div><label>Giờ hẹn</label><input type="time" class="input" value="09:00"></div>
+            <div><label>Dự kiến (phút)</label><input type="number" class="input" value="30"></div>
+            <div><label>Dịch vụ</label><input class="input" value="Khám tổng quát"></div>
+            <div><label>Ghi chú</label><textarea class="input" rows="3">Tái khám sau 1 tuần</textarea></div>
+          </div>
+          <div class="row" style="justify-content:flex-end;margin-top:12px">
+            <button class="btn secondary" type="button" onclick="window.history.back()">Quay lại</button>
+            <button class="btn">Lưu thay đổi</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const sidebar = document.getElementById("sidebar");
+    document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
+  </script>
+</body>
+</html>

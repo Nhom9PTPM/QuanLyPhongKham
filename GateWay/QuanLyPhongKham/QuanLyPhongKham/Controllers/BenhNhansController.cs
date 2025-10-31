@@ -81,7 +81,7 @@ namespace QuanLyPhongKham.Controllers
             }
         }
 
-        [Route("delete-benhnhan")]
+        [Route("delete-benhnhan/{id}")]
         [HttpPost]
         public IActionResult DeleteBenhNhan(int id)
         {

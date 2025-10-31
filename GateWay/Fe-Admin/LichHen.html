@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý lịch hẹn - DAH</title>
+  <link rel="stylesheet" href="css/LichHen.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+    <span class="brand-text">DAH Clinic</span>
+  </div>
+
+  <nav class="menu">
+    <a href="index.html"><i class="fa-solid fa-chart-line"></i><span>Tổng quan</span></a>
+    <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i><span>Tài khoản</span></a>
+    <a href="BacSi.html"><i class="fa-solid fa-user-doctor"></i><span>Bác sĩ</span></a>
+    <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i><span>Bệnh nhân</span></a>
+    <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i><span>Lịch hẹn</span></a>
+    <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i><span>Hồ sơ bệnh án</span></a>
+    <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i><span>Thuốc & kho</span></a>
+    <a href="HoaDon.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Hóa đơn</span></a>
+    <a href="ThongBao.html"><i class="fa-solid fa-bell"></i><span>Thông báo</span></a>
+    <a href="LichSu.html"><i class="fa-solid fa-book"></i><span>Nhật ký hoạt động</span></a>
+  </nav>
+</aside>
+
+
+    <!-- Main -->
+    <main class="main">
+      <header class="header">
+        <h1>Quản lý lịch hẹn</h1>
+        <div class="actions">
+          <button class="btn" id="btnThem"><i class="fa-solid fa-plus"></i> Thêm</button>
+          <button class="btn neutral"><i class="fa-solid fa-rotate"></i> Làm mới</button>
+          <button class="btn secondary"><i class="fa-solid fa-file-export"></i> Xuất Excel</button>
+        </div>
+      </header>
+
+      <section class="filter-bar card">
+        <input class="input" placeholder="Tìm kiếm bệnh nhân, bác sĩ...">
+        <select class="input">
+          <option>Tất cả trạng thái</option>
+          <option>Đang hẹn</option>
+          <option>Đã đến</option>
+          <option>Hủy hẹn</option>
+          <option>Quá hẹn</option>
+        </select>
+      </section>
+
+      <!-- Lịch tuần -->
+      <section class="calendar card">
+        <div class="calendar-header">
+          <button class="btn small neutral"><i class="fa-solid fa-chevron-left"></i></button>
+          <h2>Tuần 30/10/2025 - 05/11/2025</h2>
+          <button class="btn small neutral"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+
+        <div class="calendar-grid">
+          <div class="day-column">
+            <div class="day-header">Thứ 2<br><span>30</span></div>
+            <div class="event dang-hen">
+              <strong>Nguyễn Văn A</strong><br>
+              09:00 - 09:30<br>
+              <small>Bác sĩ Linh</small>
+            </div>
+          </div>
+          <div class="day-column">
+            <div class="day-header">Thứ 3<br><span>31</span></div>
+            <div class="event da-den">
+              <strong>Trần Thị B</strong><br>
+              10:00 - 10:45<br>
+              <small>Bác sĩ Anh</small>
+            </div>
+          </div>
+          <div class="day-column">
+            <div class="day-header">Thứ 4<br><span>1</span></div>
+            <div class="event qua-hen">
+              <strong>Huỳnh Minh C</strong><br>
+              14:00 - 14:30<br>
+              <small>Bác sĩ Minh</small>
+            </div>
+          </div>
+          <div class="day-column"><div class="day-header">Thứ 5<br><span>2</span></div></div>
+          <div class="day-column"><div class="day-header">Thứ 6<br><span>3</span></div></div>
+          <div class="day-column"><div class="day-header">Thứ 7<br><span>4</span></div></div>
+          <div class="day-column"><div class="day-header">Chủ nhật<br><span>5</span></div></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal thêm lịch -->
+  <div class="modal" id="modalLichHen">
+    <div class="modal-content">
+      <h3>Thêm lịch hẹn</h3>
+      <form>
+        <div class="form-grid">
+          <div><label>Bệnh nhân</label><input class="input" placeholder="Nhập tên bệnh nhân"></div>
+          <div><label>SĐT</label><input class="input" placeholder="Nhập số điện thoại"></div>
+          <div><label>Bác sĩ</label><select class="input"><option>Chọn bác sĩ</option></select></div>
+          <div><label>Ngày hẹn</label><input type="date" class="input"></div>
+          <div><label>Giờ hẹn</label><input type="time" class="input"></div>
+          <div><label>Dự kiến (phút)</label><input type="number" class="input" value="30"></div>
+          <div><label>Dịch vụ</label><input class="input" placeholder="VD: Khám tổng quát"></div>
+          <div><label>Ghi chú</label><textarea class="input" rows="3"></textarea></div>
+        </div>
+        <div class="row" style="justify-content:flex-end;margin-top:12px">
+          <button type="button" class="btn secondary" id="btnClose">Đóng</button>
+          <button type="submit" class="btn">Lưu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Toggle sidebar
+    const sidebar = document.getElementById("sidebar");
+    const toggleSidebar = document.getElementById("toggleSidebar");
+    toggleSidebar.onclick = () => sidebar.classList.toggle("collapsed");
+
+    // Modal thêm lịch
+    const btnThem = document.getElementById('btnThem');
+    const modal = document.getElementById('modalLichHen');
+    const btnClose = document.getElementById('btnClose');
+
+    btnThem.onclick = () => modal.style.display = 'flex';
+    btnClose.onclick = () => modal.style.display = 'none';
+    window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+  </script>
+  <script>
+  // Sidebar toggle
+  const sidebar = document.getElementById("sidebar");
+  const toggleSidebar = document.getElementById("toggleSidebar");
+  toggleSidebar.onclick = () => sidebar.classList.toggle("collapsed");
+
+  // Modal hiệu ứng mượt
+  const btnThem = document.getElementById('btnThem');
+  const modal = document.getElementById('modalLichHen');
+  const btnClose = document.getElementById('btnClose');
+
+  btnThem.onclick = () => {
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  };
+  btnClose.onclick = closeModal;
+  window.onclick = (e) => { if (e.target === modal) closeModal(); };
+
+  function closeModal() {
+    modal.classList.add('hide');
+    setTimeout(() => {
+      modal.classList.remove('show', 'hide');
+      document.body.style.overflow = 'auto';
+    }, 200);
+  }
+</script>
+<script>
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
+
+  // Tự động highlight mục hiện tại
+  const currentPage = location.pathname.split("/").pop();
+  document.querySelectorAll(".menu a").forEach(link => {
+    if (link.getAttribute("href") === currentPage) link.classList.add("active");
+  });
+</script>
+
+</body>
+</html>
