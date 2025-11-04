@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\GateWay\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway.csproj": {}
+    "C:\\Users\\ASUS\\source\\repos\\QuanLyPhongKham_2\\QuanLyPhongKham\\GateWay\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway.csproj": {}
   },
   "projects": {
-    "D:\\GateWay\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway.csproj": {
+    "C:\\Users\\ASUS\\source\\repos\\QuanLyPhongKham_2\\QuanLyPhongKham\\GateWay\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\GateWay\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway.csproj",
+        "projectUniqueName": "C:\\Users\\ASUS\\source\\repos\\QuanLyPhongKham_2\\QuanLyPhongKham\\GateWay\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway.csproj",
         "projectName": "QuanLyPhongKham-Gateway",
-        "projectPath": "D:\\GateWay\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway.csproj",
-        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "D:\\GateWay\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway\\obj\\",
+        "projectPath": "C:\\Users\\ASUS\\source\\repos\\QuanLyPhongKham_2\\QuanLyPhongKham\\GateWay\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway.csproj",
+        "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ASUS\\source\\repos\\QuanLyPhongKham_2\\QuanLyPhongKham\\GateWay\\QuanLyPhongKham-Gateway\\QuanLyPhongKham-Gateway\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -45,6 +45,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Ocelot": {
+              "target": "Package",
+              "version": "[24.0.1, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.4.0, )"

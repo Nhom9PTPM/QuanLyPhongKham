@@ -380,3 +380,6 @@ VALUES
 GO
 
 -- (file gốc có thể còn các INSERT/seed khác; mình giữ nguyên các seed chính đã có)
+SELECT TOP 1 * FROM ChiTietHoaDon;
+SELECT TOP 1 * FROM HoaDon;
+SELECT TOP 1 * FROM Thuoc;
