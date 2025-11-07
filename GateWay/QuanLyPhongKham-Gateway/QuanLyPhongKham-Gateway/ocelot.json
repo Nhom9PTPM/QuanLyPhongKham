@@ -1,27 +1,55 @@
 {
   "Routes": [
     {
-      "UpstreamPathTemplate": "/api-admin/benhnhan/{everything}",
-      "DownstreamPathTemplate": "/api/benhnhan/{everything}",
+      "RouteId": "admin_api",
+      "DownstreamPathTemplate": "/api/admin/{everything}",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5001
+          "Port": 7001
         }
-      ]
+      ],
+      "UpstreamPathTemplate": "/api/admin/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
     },
     {
-      "UpstreamPathTemplate": "/api-nguoidung/lichhen/{everything}",
-      "DownstreamPathTemplate": "/api/lichhen/{everything}",
+      "RouteId": "nguoidung_api",
+      "DownstreamPathTemplate": "/api/nguoidung/{everything}",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5002
+          "Port": 7002
         }
-      ]
+      ],
+      "UpstreamPathTemplate": "/api/nguoidung/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "RouteId": "public_api_login",
+      "UpstreamPathTemplate": "/api/token",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/token",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7000
+        }
+      ],
+      "AuthenticationOptions": null
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:8080"
+    "BaseUrl": "https://localhost:7000"
   }
 }

@@ -110,6 +110,8 @@
   </div>
 
   <script>
+  /*
+  
     // Load sidebar
     fetch("components/sidebar.html")
       .then(r => r.text())
@@ -153,7 +155,9 @@
         }]
       }
     });
+	*/
   </script>
+  
     <script>
   const sidebar = document.getElementById("sidebar");
   document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
@@ -164,5 +168,94 @@
     if (link.getAttribute("href") === currentPage) link.classList.add("active");
   });
 </script>
+<script>
+  const apiBase = "https://localhost:7144/api/Dashboard"; // ⚠️ sửa lại cổng theo dự án bạn chạy
+
+  // Load Sidebar
+  fetch("components/sidebar.html")
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById("sidebarContainer").innerHTML = html;
+      const sidebar = document.getElementById("sidebar");
+      document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
+      const current = location.pathname.split("/").pop();
+      document.querySelectorAll(".menu a").forEach(link => {
+        if (link.getAttribute("href") === current) link.classList.add("active");
+      });
+    });
+
+  // ================== BIỂU ĐỒ ==================
+  const ctx1 = document.getElementById("chartDoanhThu");
+  const ctx2 = document.getElementById("chartLuotKham");
+
+  const chart1 = new Chart(ctx1, {
+    type: "bar",
+    data: {
+      labels: [],
+      datasets: [{
+        label: "Doanh thu (triệu VNĐ)",
+        data: [],
+        borderWidth: 1,
+        backgroundColor: "#3498db"
+      }]
+    },
+    options: { scales: { y: { beginAtZero: true } } }
+  });
+
+  const chart2 = new Chart(ctx2, {
+    type: "line",
+    data: {
+      labels: [],
+      datasets: [{
+        label: "Lượt khám",
+        data: [],
+        borderColor: "#2ecc71",
+        fill: false,
+        tension: 0.3
+      }]
+    }
+  });
+
+  // ================== GỌI API ==================
+  async function loadDashboard(year = 2025) {
+    try {
+      // 1️⃣ Thống kê tổng quan
+      const res1 = await fetch(`${apiBase}/TongQuan`);
+      const tongQuan = await res1.json();
+      document.getElementById("totalDoctor").innerText = tongQuan.tongBacSi;
+      document.getElementById("totalPatient").innerText = tongQuan.tongBenhNhan;
+      document.getElementById("totalBill").innerText = tongQuan.tongHoaDon;
+      document.getElementById("totalRevenue").innerText = Number(tongQuan.tongDoanhThu).toLocaleString("vi-VN");
+
+      // 2️⃣ Doanh thu theo tháng
+      const res2 = await fetch(`${apiBase}/DoanhThuThang?nam=${year}`);
+      const doanhThu = await res2.json();
+      chart1.data.labels = doanhThu.map(x => "Th" + x.thang);
+      chart1.data.datasets[0].data = doanhThu.map(x => x.tongDoanhThu / 1_000_000);
+      chart1.update();
+
+      // 3️⃣ Lượt khám theo tháng
+      const res3 = await fetch(`${apiBase}/LuotKhamThang?nam=${year}`);
+      const luotKham = await res3.json();
+      chart2.data.labels = luotKham.map(x => "Th" + x.thang);
+      chart2.data.datasets[0].data = luotKham.map(x => x.soLuotKham);
+      chart2.update();
+
+    } catch (err) {
+      console.error("Lỗi tải Dashboard:", err);
+      alert("Không thể tải dữ liệu Dashboard. Kiểm tra API backend!");
+    }
+  }
+
+  // Gọi khi load trang
+  loadDashboard(2025);
+
+  // ================== LỌC THEO NĂM ==================
+  document.getElementById("selectYear").addEventListener("change", e => {
+    const year = e.target.value || 2025;
+    loadDashboard(year);
+  });
+</script>
+
 </body>
 </html>

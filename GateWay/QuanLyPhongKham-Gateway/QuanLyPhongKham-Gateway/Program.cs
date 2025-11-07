@@ -1,10 +1,9 @@
 using QuanLyPhongKham_Gateway;
-using QuanLyPhongKham_Gateway.Helpers;
+using QuanLyPhongKham_Gateway.Helper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
-using QuanLyPhongKham_Gateway;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);

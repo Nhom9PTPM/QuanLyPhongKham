@@ -79,7 +79,7 @@ namespace QuanLyPhongKham_Admin.Controllers
         {
             try
             {
-                // Check tồn tại account
+                
                 var exists = db.TaiKhoans.SingleOrDefault(x => x.TenDangNhap == model.taikhoan.TenDangNhap);
                 if (exists != null) return Ok("Tên đăng nhập đã tồn tại!");
 
@@ -195,5 +195,44 @@ namespace QuanLyPhongKham_Admin.Controllers
 
             return res;
         }
+        [Route("login")]
+        [HttpPost]
+        public IActionResult Login([FromBody] LoginModel model)
+        {
+            try
+            {
+                var tk = db.TaiKhoans.FirstOrDefault(x => x.TenDangNhap == model.TenDangNhap && x.TrangThai == true);
+                if (tk == null)
+                    return Ok(new { status = false, message = "Tài khoản không tồn tại hoặc đã bị khóa" });
+
+                if (tk.MatKhau != model.MatKhau)
+                    return Ok(new { status = false, message = "Sai mật khẩu" });
+
+                var nguoiDung = db.NguoiDungs.FirstOrDefault(x => x.MaNguoiDung == tk.MaNguoiDung);
+                var vaiTro = db.VaiTros.FirstOrDefault(x => x.MaVaiTro == tk.MaVaiTro);
+
+                return Ok(new
+                {
+                    status = true,
+                    message = "Đăng nhập thành công",
+                    data = new
+                    {
+                        tk.MaTaiKhoan,
+                        tk.TenDangNhap,
+                        tk.MaVaiTro,
+                        VaiTro = vaiTro?.TenVaiTro,
+                        nguoiDung?.HoTen,
+                        nguoiDung?.Email,
+                        nguoiDung?.AnhDaiDien,
+                        tk.LoaiQuyen
+                    }
+                });
+            }
+            catch
+            {
+                return StatusCode(500, "Đăng nhập lỗi!");
+            }
+        }
+
     }
 }

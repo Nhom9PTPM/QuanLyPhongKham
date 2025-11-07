@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using QuanLyPhongKham_NguoiDung.Models;
+﻿using System.Collections.Generic;
+using System.Reflection.Emit;
+using Microsoft.EntityFrameworkCore;
 
-namespace QuanLyPhongKham_NguoiDung.Models
+
+namespace QuanLyPhongKham_Gateway.Models
 {
     public partial class QuanLyPhongKhamContext : DbContext
     {
@@ -14,7 +15,7 @@ namespace QuanLyPhongKham_NguoiDung.Models
         }
 
         public QuanLyPhongKhamContext(DbContextOptions<QuanLyPhongKhamContext> options)
-            : base(options)
+        : base(options)
         {
         }
 
@@ -212,7 +213,7 @@ namespace QuanLyPhongKham_NguoiDung.Models
 
                 entity.HasOne(d => d.MaHoSoNavigation)
                     .WithMany(p => p.TapTins)
-                    .HasForeignKey(d => d.MaHoSo);
+                .HasForeignKey(d => d.MaHoSo);
             });
         }
 

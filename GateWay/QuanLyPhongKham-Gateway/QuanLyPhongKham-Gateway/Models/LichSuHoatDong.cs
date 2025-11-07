@@ -1,9 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace QuanLyPhongKham_NguoiDung.Models
+namespace QuanLyPhongKham_Gateway.Models
 {
-    [Table("LichSuHoatDong")]
     public partial class LichSuHoatDong
     {
         [Key]
