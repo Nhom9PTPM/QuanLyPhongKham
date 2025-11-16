@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("QuanLyPhongKham-Gateway")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7aa5a5975a9e8ca586b8336e8454901d97d7b57a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+061698d5b6b1c70814cb6c75a8047e507e59e27f")]
 [assembly: System.Reflection.AssemblyProductAttribute("QuanLyPhongKham-Gateway")]
 [assembly: System.Reflection.AssemblyTitleAttribute("QuanLyPhongKham-Gateway")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

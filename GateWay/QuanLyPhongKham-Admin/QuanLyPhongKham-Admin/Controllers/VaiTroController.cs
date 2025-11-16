@@ -6,12 +6,13 @@ namespace QuanLyPhongKham_Admin.Controllers
 {
     public class VaiTroController : Controller
     {
-        private QuanLyPhongKhamContext db = null;
+        private readonly QuanLyPhongKhamContext db;
 
-        public VaiTroController(IConfiguration configuration)
+        public VaiTroController(QuanLyPhongKhamContext context)
         {
-            db = new QuanLyPhongKhamContext(configuration);
+            db = context;
         }
+
 
         public IActionResult Index()
         {

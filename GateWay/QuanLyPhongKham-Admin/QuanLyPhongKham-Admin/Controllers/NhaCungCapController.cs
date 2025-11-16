@@ -1,19 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham_Admin.Models;
 using QuanLyPhongKham_Admin.Code;
+using Microsoft.AspNetCore.Authorization;
 
 namespace QuanLyPhongKham_Admin.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class NhaCungCapController : ControllerBase
     {
-        private QuanLyPhongKhamContext db = null;
+        private readonly QuanLyPhongKhamContext db;
 
-        public NhaCungCapController(IConfiguration configuration)
+        public NhaCungCapController(QuanLyPhongKhamContext context)
         {
-            db = new QuanLyPhongKhamContext(configuration);
+            db = context;
         }
+
 
         [Route("create")]
         [HttpPost]

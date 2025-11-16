@@ -2,20 +2,22 @@
 using QuanLyPhongKham_Admin.Models;
 using QuanLyPhongKham_Admin.Code;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace QuanLyPhongKham_Admin.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class BacSiController : ControllerBase
     {
-        private readonly QuanLyPhongKhamContext db;
+        private readonly QuanLyPhongKhamContext _db;
         private readonly ITools _tools;
 
-        public BacSiController(ITools tools, IConfiguration config)
+        public BacSiController(ITools tools, QuanLyPhongKhamContext db)
         {
             _tools = tools;
-            db = new QuanLyPhongKhamContext(config);
+            _db = db;
         }
 
         [HttpGet("get-by-id/{id}")]
@@ -23,7 +25,7 @@ namespace QuanLyPhongKham_Admin.Controllers
         {
             try
             {
-                var bs = db.BacSis
+                var bs = _db.BacSis
                     .Where(x => x.MaBacSi == id)
                     .Select(x => new
                     {
@@ -61,8 +63,8 @@ namespace QuanLyPhongKham_Admin.Controllers
                 model.NgayTao = DateTime.Now;
                 model.TrangThai = true;
 
-                db.BacSis.Add(model);
-                db.SaveChanges();
+                _db.BacSis.Add(model);
+                _db.SaveChanges();
 
                 return Ok(new { message = "Thêm bác sĩ thành công.", maBacSi = model.MaBacSi });
             }
@@ -80,7 +82,7 @@ namespace QuanLyPhongKham_Admin.Controllers
                 if (model == null || model.MaBacSi <= 0)
                     return BadRequest(new { message = "Dữ liệu cập nhật không hợp lệ." });
 
-                var bs = db.BacSis.SingleOrDefault(x => x.MaBacSi == model.MaBacSi);
+                var bs = _db.BacSis.SingleOrDefault(x => x.MaBacSi == model.MaBacSi);
                 if (bs == null)
                     return NotFound(new { message = "Không tìm thấy bác sĩ cần cập nhật." });
 
@@ -90,7 +92,7 @@ namespace QuanLyPhongKham_Admin.Controllers
                 bs.SoPhong = model.SoPhong ?? bs.SoPhong;
                 bs.TrangThai = model.TrangThai;
 
-                db.SaveChanges();
+                _db.SaveChanges();
                 return Ok(new { message = "Cập nhật thông tin bác sĩ thành công." });
             }
             catch (Exception ex)
@@ -104,12 +106,12 @@ namespace QuanLyPhongKham_Admin.Controllers
         {
             try
             {
-                var bs = db.BacSis.SingleOrDefault(x => x.MaBacSi == id);
+                var bs = _db.BacSis.SingleOrDefault(x => x.MaBacSi == id);
                 if (bs == null)
                     return NotFound(new { message = "Không tìm thấy bác sĩ cần xoá." });
 
-                db.BacSis.Remove(bs);
-                db.SaveChanges();
+                _db.BacSis.Remove(bs);
+                _db.SaveChanges();
 
                 return Ok(new { message = "Xoá bác sĩ thành công." });
             }
@@ -132,7 +134,7 @@ namespace QuanLyPhongKham_Admin.Controllers
                 if (formData.ContainsKey("ChuyenKhoa"))
                     CK = formData["ChuyenKhoa"].ToString();
 
-                var q = db.BacSis
+                var q = _db.BacSis
                     .Where(x => CK == "" || x.ChuyenKhoa.Contains(CK))
                     .Select(x => new
                     {

@@ -1,20 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham_Admin.Code;
 using QuanLyPhongKham_Admin.Models;
 
 namespace QuanLyPhongKham_Admin.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly QuanLyPhongKhamContext db;
+        private readonly QuanLyPhongKhamContext _db;
         private readonly ITools _tools;
 
-        public UsersController(ITools tools, IConfiguration config)
+        public UsersController(ITools tools, QuanLyPhongKhamContext db)
         {
             _tools = tools;
-            db = new QuanLyPhongKhamContext(config);
+            _db = db;
         }
 
         [Route("get-by-id/{id}")]
@@ -23,8 +25,8 @@ namespace QuanLyPhongKham_Admin.Controllers
         {
             try
             {
-                var data = (from n in db.NguoiDungs
-                            join t in db.TaiKhoans on n.MaNguoiDung equals t.MaNguoiDung
+                var data = (from n in _db.NguoiDungs
+                            join t in _db.TaiKhoans on n.MaNguoiDung equals t.MaNguoiDung
                             where n.MaNguoiDung == id
                             select new
                             {
@@ -80,15 +82,15 @@ namespace QuanLyPhongKham_Admin.Controllers
             try
             {
                 
-                var exists = db.TaiKhoans.SingleOrDefault(x => x.TenDangNhap == model.taikhoan.TenDangNhap);
+                var exists = _db.TaiKhoans.SingleOrDefault(x => x.TenDangNhap == model.taikhoan.TenDangNhap);
                 if (exists != null) return Ok("Tên đăng nhập đã tồn tại!");
 
-                db.NguoiDungs.Add(model.nguoidung);
-                db.SaveChanges();
+                _db.NguoiDungs.Add(model.nguoidung);
+                _db.SaveChanges();
 
                 model.taikhoan.MaNguoiDung = model.nguoidung.MaNguoiDung;
-                db.TaiKhoans.Add(model.taikhoan);
-                db.SaveChanges();
+                _db.TaiKhoans.Add(model.taikhoan);
+                _db.SaveChanges();
 
                 return Ok("OK");
             }
@@ -104,8 +106,8 @@ namespace QuanLyPhongKham_Admin.Controllers
         {
             try
             {
-                var n = db.NguoiDungs.SingleOrDefault(x => x.MaNguoiDung == model.MaNguoiDung);
-                var t = db.TaiKhoans.SingleOrDefault(x => x.MaNguoiDung == model.MaNguoiDung);
+                var n = _db.NguoiDungs.SingleOrDefault(x => x.MaNguoiDung == model.MaNguoiDung);
+                var t = _db.TaiKhoans.SingleOrDefault(x => x.MaNguoiDung == model.MaNguoiDung);
 
                 if (n == null || t == null) return BadRequest();
 
@@ -126,7 +128,7 @@ namespace QuanLyPhongKham_Admin.Controllers
                 t.MaVaiTro = model.MaVaiTro ?? t.MaVaiTro;
                 t.TrangThai = model.TrangThai ?? t.TrangThai;
 
-                db.SaveChanges();
+                _db.SaveChanges();
                 return Ok("OK");
             }
             catch
@@ -141,15 +143,15 @@ namespace QuanLyPhongKham_Admin.Controllers
         {
             try
             {
-                var n = db.NguoiDungs.SingleOrDefault(x => x.MaNguoiDung == MaNguoiDung);
-                var t = db.TaiKhoans.SingleOrDefault(x => x.MaNguoiDung == MaNguoiDung);
+                var n = _db.NguoiDungs.SingleOrDefault(x => x.MaNguoiDung == MaNguoiDung);
+                var t = _db.TaiKhoans.SingleOrDefault(x => x.MaNguoiDung == MaNguoiDung);
 
                 if (n == null || t == null) return BadRequest();
 
                 n.DaXoa = true;
                 t.TrangThai = false;
 
-                db.SaveChanges();
+                _db.SaveChanges();
                 return Ok("OK");
             }
             catch
@@ -158,6 +160,7 @@ namespace QuanLyPhongKham_Admin.Controllers
             }
         }
 
+       
         [Route("search")]
         [HttpPost]
         public ResponseModel Search([FromBody] Dictionary<string, object> form)
@@ -172,8 +175,8 @@ namespace QuanLyPhongKham_Admin.Controllers
                 if (form.Keys.Contains("HoTen"))
                     HoTen = form["HoTen"].ToString();
 
-                var q = from n in db.NguoiDungs
-                        join t in db.TaiKhoans on n.MaNguoiDung equals t.MaNguoiDung
+                var q = from n in _db.NguoiDungs
+                        join t in _db.TaiKhoans on n.MaNguoiDung equals t.MaNguoiDung
                         where n.DaXoa == false
                         select new
                         {
@@ -195,44 +198,5 @@ namespace QuanLyPhongKham_Admin.Controllers
 
             return res;
         }
-        [Route("login")]
-        [HttpPost]
-        public IActionResult Login([FromBody] LoginModel model)
-        {
-            try
-            {
-                var tk = db.TaiKhoans.FirstOrDefault(x => x.TenDangNhap == model.TenDangNhap && x.TrangThai == true);
-                if (tk == null)
-                    return Ok(new { status = false, message = "Tài khoản không tồn tại hoặc đã bị khóa" });
-
-                if (tk.MatKhau != model.MatKhau)
-                    return Ok(new { status = false, message = "Sai mật khẩu" });
-
-                var nguoiDung = db.NguoiDungs.FirstOrDefault(x => x.MaNguoiDung == tk.MaNguoiDung);
-                var vaiTro = db.VaiTros.FirstOrDefault(x => x.MaVaiTro == tk.MaVaiTro);
-
-                return Ok(new
-                {
-                    status = true,
-                    message = "Đăng nhập thành công",
-                    data = new
-                    {
-                        tk.MaTaiKhoan,
-                        tk.TenDangNhap,
-                        tk.MaVaiTro,
-                        VaiTro = vaiTro?.TenVaiTro,
-                        nguoiDung?.HoTen,
-                        nguoiDung?.Email,
-                        nguoiDung?.AnhDaiDien,
-                        tk.LoaiQuyen
-                    }
-                });
-            }
-            catch
-            {
-                return StatusCode(500, "Đăng nhập lỗi!");
-            }
-        }
-
     }
 }

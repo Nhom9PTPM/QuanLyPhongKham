@@ -1,19 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham_Admin.Models;
 using QuanLyPhongKham_Admin.Code;
+using Microsoft.AspNetCore.Authorization;
 
 namespace QuanLyPhongKham_Admin.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class HoaDonController : ControllerBase
     {
-        private QuanLyPhongKhamContext db = null;
+        private readonly QuanLyPhongKhamContext db;
 
-        public HoaDonController(IConfiguration configuration)
+        public HoaDonController(QuanLyPhongKhamContext context)
         {
-            db = new QuanLyPhongKhamContext(configuration);
+            db = context;
         }
+
 
         [Route("get-by-id/{id}")]
         [HttpGet]

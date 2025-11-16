@@ -1,18 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham_Admin.Models;
 
 namespace QuanLyPhongKham_Admin.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class LichSuHoatDongController : ControllerBase
     {
-        private QuanLyPhongKhamContext db = null;
+        private readonly QuanLyPhongKhamContext db;
 
-        public LichSuHoatDongController(IConfiguration configuration)
+        public LichSuHoatDongController(QuanLyPhongKhamContext context)
         {
-            db = new QuanLyPhongKhamContext(configuration);
+            db = context;
         }
+
 
         [Route("get-all")]
         [HttpGet]

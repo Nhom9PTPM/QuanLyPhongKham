@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham_Admin.Code;
 using QuanLyPhongKham_Admin.Models;
 
 namespace QuanLyPhongKham_Admin.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class BenhNhanController : ControllerBase
@@ -11,10 +13,10 @@ namespace QuanLyPhongKham_Admin.Controllers
         private readonly QuanLyPhongKhamContext _db;
         private readonly ITools _tools;
 
-        public BenhNhanController(ITools tools, IConfiguration configuration)
+        public BenhNhanController(ITools tools, QuanLyPhongKhamContext db)
         {
             _tools = tools;
-            _db = new QuanLyPhongKhamContext(configuration);
+            _db = db;
         }
 
         [HttpGet("get-by-id/{id}")]

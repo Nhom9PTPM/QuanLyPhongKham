@@ -1,0 +1,48 @@
+﻿{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/LoginAdmin/login",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44356
+        }
+      ],
+      "UpstreamPathTemplate": "/api-admin/login",
+      "UpstreamHttpMethod": [ "POST" ]
+      
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44356
+        }
+      ],
+      "UpstreamPathTemplate": "/api-admin/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44387
+        }
+      ],
+      "UpstreamPathTemplate": "/api-nguoidung/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:44340"
+  }
+}

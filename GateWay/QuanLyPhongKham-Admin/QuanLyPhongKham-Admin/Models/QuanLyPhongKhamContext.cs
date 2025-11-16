@@ -7,10 +7,7 @@ namespace QuanLyPhongKham_Admin.Models
     {
         private string connectstring;
 
-        public QuanLyPhongKhamContext(IConfiguration configuration)
-        {
-            connectstring = configuration["ConnectionStrings:DefaultConnection"].ToString();
-        }
+        
 
         public QuanLyPhongKhamContext(DbContextOptions<QuanLyPhongKhamContext> options)
             : base(options)

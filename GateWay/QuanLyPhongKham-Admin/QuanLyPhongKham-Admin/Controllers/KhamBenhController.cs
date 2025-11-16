@@ -1,17 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham_Admin.Models;
 using QuanLyPhongKham_Admin.Code;
+using Microsoft.AspNetCore.Authorization;
 
 namespace QuanLyPhongKham_Admin.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class KhamBenhController : ControllerBase
     {
-        private QuanLyPhongKhamContext db = null;
-        public KhamBenhController(IConfiguration configuration)
+        private readonly QuanLyPhongKhamContext db;
+
+        public KhamBenhController(QuanLyPhongKhamContext context)
         {
-            db = new QuanLyPhongKhamContext(configuration);
+            db = context;
         }
 
         [Route("get-by-id/{id}")]

@@ -1,19 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham_Admin.Models;
 using System;
 using System.Linq;
 
 namespace QuanLyPhongKham_Admin.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DashboardController : ControllerBase
     {
-        private QuanLyPhongKhamContext db = null;
+        private readonly QuanLyPhongKhamContext db;
 
-        public DashboardController(IConfiguration configuration)
+        public DashboardController(QuanLyPhongKhamContext context)
         {
-            db = new QuanLyPhongKhamContext(configuration);
+            db = context;
         }
 
         [Route("get-tong-quan")]
@@ -111,5 +113,6 @@ namespace QuanLyPhongKham_Admin.Controllers
                 return BadRequest();
             }
         }
+
     }
 }

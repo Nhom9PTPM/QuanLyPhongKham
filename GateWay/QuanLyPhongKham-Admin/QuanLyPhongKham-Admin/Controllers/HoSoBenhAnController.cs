@@ -1,19 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham_Admin.Code;
 using QuanLyPhongKham_Admin.Models;
 
 namespace QuanLyPhongKham_Admin.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class HoSoBenhAnController : ControllerBase
     {
-        private QuanLyPhongKhamContext db = null;
-        private ITools _tools;
-        public HoSoBenhAnController(ITools tools, IConfiguration configuration)
+        private readonly QuanLyPhongKhamContext db;
+        private readonly ITools _tools;
+
+        public HoSoBenhAnController(ITools tools, QuanLyPhongKhamContext context)
         {
             _tools = tools;
-            db = new QuanLyPhongKhamContext(configuration);
+            db = context;
         }
 
         [Route("get-by-id/{id}")]

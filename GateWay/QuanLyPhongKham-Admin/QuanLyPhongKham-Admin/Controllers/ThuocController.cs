@@ -1,21 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuanLyPhongKham_Admin.Models;
 using QuanLyPhongKham_Admin.Code;
+using Microsoft.AspNetCore.Authorization;
 
 namespace QuanLyPhongKham_Admin.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ThuocController : ControllerBase
     {
-        private QuanLyPhongKhamContext db = null;
-        private ITools _tools;
+        private readonly QuanLyPhongKhamContext db;
+        private readonly ITools _tools;
 
-        public ThuocController(ITools tools, IConfiguration configuration)
+        public ThuocController(ITools tools, QuanLyPhongKhamContext context)
         {
             _tools = tools;
-            db = new QuanLyPhongKhamContext(configuration);
+            db = context;
         }
+
 
         [Route("get-by-id/{id}")]
         [HttpGet]
