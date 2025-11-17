@@ -37,6 +37,14 @@ namespace QuanLyPhongKham_Admin.BLL
             await _benhNhanDAL.DeleteAsync(id);
         }
 
+        // ⭐⭐⭐ HÀM TÌM KIẾM MỚI THÊM ⭐⭐⭐
+        public async Task<List<BenhNhan>> TimKiem(string keyword)
+        {
+            return await _benhNhanDAL.SearchAsync(keyword);
+        }
+        // ⭐⭐⭐ HẾT PHẦN MỚI ⭐⭐⭐
+
+
         //  Hàm tổng hợp
         public async Task<object?> LayThongTinDayDu(int maBenhNhan)
         {
