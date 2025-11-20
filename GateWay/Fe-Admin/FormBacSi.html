@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Bác sĩ - DAH</title>
+  <link rel="stylesheet" href="css/LichHen.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+<div class="container">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+      <span class="brand-text">DAH Clinic</span>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="header">
+      <h1 id="formTitle">Thêm bác sĩ</h1>
+      <div class="actions">
+        <a href="BacSi.html" class="btn neutral"><i class="fa-solid fa-arrow-left"></i> Quay lại</a>
+      </div>
+    </header>
+
+    <section class="card">
+      <form id="formBacSi">
+        <div class="form-group">
+          <label>Họ tên</label>
+          <input type="text" id="txtHoTen" class="input" required>
+        </div>
+        <div class="form-group">
+          <label>Chuyên khoa</label>
+          <input type="text" id="txtChuyenKhoa" class="input">
+        </div>
+        <div class="form-group">
+          <label>Bằng cấp</label>
+          <input type="text" id="txtBangCap" class="input">
+        </div>
+        <div class="form-group">
+          <label>Kinh nghiệm</label>
+          <input type="text" id="txtKinhNghiem" class="input">
+        </div>
+        <div class="form-group">
+          <label>Số phòng</label>
+          <input type="text" id="txtSoPhong" class="input">
+        </div>
+        <div class="form-group">
+          <label>Trạng thái</label>
+          <select id="selectTrangThai" class="input">
+            <option value="true">Hoạt động</option>
+            <option value="false">Khóa</option>
+          </select>
+        </div>
+        <button type="submit" class="btn"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+      </form>
+    </section>
+  </main>
+</div>
+
+<script>
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Vui lòng đăng nhập!");
+    location.href = "Login.html";
+  }
+
+  const baseUrl = "https://localhost:44340";
+  const params = new URLSearchParams(window.location.search);
+  const bacsiId = params.get("id");
+
+  const txtHoTen = document.getElementById("txtHoTen");
+  const txtChuyenKhoa = document.getElementById("txtChuyenKhoa");
+  const txtBangCap = document.getElementById("txtBangCap");
+  const txtKinhNghiem = document.getElementById("txtKinhNghiem");
+  const txtSoPhong = document.getElementById("txtSoPhong");
+  const selectTrangThai = document.getElementById("selectTrangThai");
+  const formTitle = document.getElementById("formTitle");
+
+  async function fetchAuth(url, method="GET", body=null) {
+    const res = await fetch(url, {
+      method,
+      headers: { 
+        "Authorization": "Bearer " + token,
+        "Content-Type": "application/json"
+      },
+      body: body ? JSON.stringify(body) : null
+    });
+    if (res.status === 401) {
+      localStorage.removeItem("token");
+      alert("Hết hạn đăng nhập!");
+      location.href = "Login.html";
+      return;
+    }
+    return res.json();
+  }
+
+  async function loadBacSi() {
+    if (!bacsiId) return;
+    formTitle.innerText = "Sửa bác sĩ";
+    const data = await fetchAuth(baseUrl + "/api-admin/bacsi/get-by-id/" + bacsiId);
+    txtHoTen.value = data.hoTen;
+    txtChuyenKhoa.value = data.chuyenKhoa;
+    txtBangCap.value = data.bangCap;
+    txtKinhNghiem.value = data.kinhNghiem;
+    txtSoPhong.value = data.soPhong || "";
+    selectTrangThai.value = data.trangThai;
+  }
+
+  document.getElementById("formBacSi").addEventListener("submit", async e => {
+    e.preventDefault();
+    const model = {
+      maBacSi: bacsiId ? parseInt(bacsiId) : 0,
+      chuyenKhoa: txtChuyenKhoa.value,
+      bangCap: txtBangCap.value,
+      kinhNghiem: txtKinhNghiem.value,
+      soPhong: txtSoPhong.value,
+      trangThai: selectTrangThai.value === "true"
+    };
+
+    const url = bacsiId ? baseUrl + "/api-admin/bacsi/update-bacsi" : baseUrl + "/api-admin/bacsi/create-bacsi";
+    const res = await fetchAuth(url, "POST", model);
+    alert(res.message);
+    window.location.href = "BacSi.html";
+  });
+
+  loadBacSi();
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
+</script>
+</body>
+</html>

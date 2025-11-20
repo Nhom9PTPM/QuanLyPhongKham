@@ -1,99 +1,133 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Quản lý Bác sĩ - Phòng Khám</title>
-
-  <link rel="stylesheet" href="css/BacSi.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý Bác sĩ - DAH</title>
+  <link rel="stylesheet" href="css/LichHen.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
+<body>
+<div class="container">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+      <span class="brand-text">DAH Clinic</span>
+    </div>
+    <nav class="menu">
+      <a href="index.html"><i class="fa-solid fa-chart-line"></i><span>Tổng quan</span></a>
+      <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i><span>Tài khoản</span></a>
+      <a href="BacSi.html" class="active"><i class="fa-solid fa-user-doctor"></i><span>Bác sĩ</span></a>
+      <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i><span>Bệnh nhân</span></a>
+      <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i><span>Lịch hẹn</span></a>
+      <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i><span>Hồ sơ bệnh án</span></a>
+      <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i><span>Thuốc & kho</span></a>
+      <a href="HoaDon.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Hóa đơn</span></a>
+      <a href="ThongBao.html"><i class="fa-solid fa-bell"></i><span>Thông báo</span></a>
+      <a href="LichSu.html"><i class="fa-solid fa-book"></i><span>Nhật ký hoạt động</span></a>
+    </nav>
+  </aside>
 
-<body ng-app="AppPhongKham" ng-controller="BacSiCtrl">
-  <div class="container">
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
-        <span class="brand-text">DAH Clinic</span>
+  <main class="main">
+    <header class="header">
+      <h1>Quản lý Bác sĩ</h1>
+      <div class="actions">
+        <a href="FormBacSi.html" class="btn"><i class="fa-solid fa-plus"></i> Thêm mới</a>
+        <button class="btn neutral" id="btnRefresh"><i class="fa-solid fa-rotate"></i> Làm mới</button>
       </div>
+    </header>
 
-      <nav class="menu">
-        <a href="index.html"><i class="fa-solid fa-chart-line"></i><span>Tổng quan</span></a>
-        <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i><span>Tài khoản</span></a>
-        <a href="BacSi.html" class="active"><i class="fa-solid fa-user-doctor"></i><span>Bác sĩ</span></a>
-        <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i><span>Bệnh nhân</span></a>
-        <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i><span>Lịch hẹn</span></a>
-        <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i><span>Hồ sơ bệnh án</span></a>
-        <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i><span>Thuốc & kho</span></a>
-        <a href="HoaDon.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Hóa đơn</span></a>
-      </nav>
-    </aside>
+    <section class="filter-bar card">
+      <input id="txtChuyenKhoa" class="input" placeholder="Tìm theo chuyên khoa...">
+    </section>
 
-    <!-- Main -->
-    <main class="main">
-      <header class="header">
-        <h1>Quản lý Bác sĩ</h1>
-        <div class="actions">
-          <a class="btn" href="FormBacSi.html"><i class="fa-solid fa-plus"></i> Thêm Bác sĩ</a>
-          <button class="btn neutral" ng-click="LoadBacSi()"><i class="fa-solid fa-rotate"></i> Làm mới</button>
-        </div>
-      </header>
+    <section class="card">
+      <h3>Danh sách bác sĩ</h3>
+      <div class="table-wrap" style="margin-top:12px;">
+        <table id="tblBacSi">
+          <thead>
+            <tr>
+              <th>Họ tên</th>
+              <th>Chuyên khoa</th>
+              <th>Số phòng</th>
+              <th>Trạng thái</th>
+              <th style="width:180px;">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
 
-      <!-- Filter / Search -->
-      <section class="filter-bar card">
-        <input ng-model="TuKhoa" class="input" placeholder="Tìm theo tên, chuyên khoa, số phòng..." />
-      </section>
+<script>
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Vui lòng đăng nhập!");
+    location.href = "Login.html";
+  }
 
-      <!-- Table -->
-      <section class="card">
-        <h3 class="h3">Danh sách Bác sĩ</h3>
-        <div class="table-wrap" style="margin-top:12px">
-          <table id="tblBacSi">
-            <thead>
-              <tr>
-                <th>Mã</th>
-                <th>Họ tên</th>
-                <th>Chuyên khoa</th>
-                <th>Bằng cấp</th>
-                <th>Số phòng</th>
-                <th>Trạng thái</th>
-                <th style="width:160px">Thao tác</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="x in listBacSi | filter:TuKhoa">
-                <td>{{x.maBacSi}}</td>
-                <td>{{x.hoTen}}</td>
-                <td>{{x.chuyenKhoa}}</td>
-                <td>{{x.bangCap}}</td>
-                <td>{{x.soPhong}}</td>
-                <td>
-                  <span class="small muted" ng-if="x.trangThai">Hoạt động</span>
-                  <span class="small muted" ng-if="!x.trangThai">Ngưng hoạt động</span>
-                </td>
-                <td class="table-actions">
-                  <button class="btn small neutral" ng-click="Sua(x.maBacSi)">Sửa</button>
-                  <button class="btn small warn" ng-click="Xoa(x.maBacSi)">Xóa</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-    </main>
-  </div>
+  const baseUrl = "https://localhost:44340";
 
-  <!-- Script Angular -->
-  <script src="angular/angular.min.js"></script>
-  <script src="angular/global.js"></script>
-  <script src="js/BacSi.js"></script>
+  async function fetchAuth(url, method="GET", body=null) {
+    const res = await fetch(url, {
+      method,
+      headers: {
+        "Authorization": "Bearer " + token,
+        "Content-Type": "application/json"
+      },
+      body: body ? JSON.stringify(body) : null
+    });
 
-  <!-- Sidebar Toggle -->
-  <script>
-    const sidebar = document.getElementById("sidebar");
-    document.getElementById("toggleSidebar").onclick = () =>
-      sidebar.classList.toggle("collapsed");
-  </script>
+    if (res.status === 401) {
+      localStorage.removeItem("token");
+      alert("Hết hạn đăng nhập!");
+      location.href = "Login.html";
+      return;
+    }
+    return res.json();
+  }
+
+  async function loadBacSi() {
+    const body = { page: 1, pageSize: 999, ChuyenKhoa: document.getElementById("txtChuyenKhoa").value || "" };
+    const data = await fetchAuth(baseUrl + "/api-admin/bacsi/search", "POST", body);
+    const tbody = document.querySelector("#tblBacSi tbody");
+    tbody.innerHTML = "";
+
+    data.data.forEach(bs => {
+      const row = `
+        <tr>
+          <td>${bs.hoTen}</td>
+          <td>${bs.chuyenKhoa}</td>
+          <td>${bs.soPhong || ""}</td>
+          <td>${bs.trangThai ? "Hoạt động" : "Khóa"}</td>
+          <td>
+            <a class="btn small neutral" href="FormBacSi.html?id=${bs.maBacSi}">Sửa</a>
+            <button class="btn small warn" onclick="deleteBacSi(${bs.maBacSi})">Xóa</button>
+          </td>
+        </tr>
+      `;
+      tbody.innerHTML += row;
+    });
+  }
+
+  async function deleteBacSi(id) {
+    if (!confirm("Bạn có chắc chắn muốn xoá bác sĩ này?")) return;
+    const res = await fetchAuth(baseUrl + "/api-admin/bacsi/delete-bacsi/" + id, "GET");
+    alert(res.message);
+    loadBacSi();
+  }
+
+  document.getElementById("txtChuyenKhoa").addEventListener("input", loadBacSi);
+  document.getElementById("btnRefresh").addEventListener("click", loadBacSi);
+
+  loadBacSi();
+</script>
+
+<script>
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
+</script>
 </body>
 </html>

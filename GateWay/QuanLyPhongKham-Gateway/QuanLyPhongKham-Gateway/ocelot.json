@@ -6,7 +6,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44356
+          "Port": 44355
         }
       ],
       "UpstreamPathTemplate": "/api-admin/login",
@@ -19,7 +19,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44356
+          "Port": 44355
         }
       ],
       "UpstreamPathTemplate": "/api-admin/{everything}",

@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
+builder.Configuration
+    .AddJsonFile("appsettings.json")
+    .AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
 
 // CORS
 builder.Services.AddCors(options =>
@@ -14,11 +15,13 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll",
         p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 });
-// JWT validate chung
-var secret = "THIS IS MY SUPER SECRET KEY";
+
+// JWT secret lấy từ appsettings
+var secret = builder.Configuration["AppSettings:Secret"];
 var key = Encoding.ASCII.GetBytes(secret);
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+// Authentication
+builder.Services.AddAuthentication()
     .AddJwtBearer("Bearer", options =>
     {
         options.RequireHttpsMetadata = false;
@@ -28,13 +31,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(key),
             ValidateIssuer = false,
-            ValidateAudience = false
+            ValidateAudience = false,
+            ClockSkew = TimeSpan.Zero
         };
     });
+
 builder.Services.AddOcelot(builder.Configuration);
+
 var app = builder.Build();
+
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
+
 await app.UseOcelot();
 app.Run();

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Tài khoản - DAH</title>
+  <link rel="stylesheet" href="css/LichHen.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+        <span class="brand-text">DAH Clinic</span>
+      </div>
+      <nav class="menu">
+        <a href="index.html"><i class="fa-solid fa-chart-line"></i><span>Tổng quan</span></a>
+        <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i><span>Tài khoản</span></a>
+        <a href="BacSi.html"><i class="fa-solid fa-user-doctor"></i><span>Bác sĩ</span></a>
+        <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i><span>Bệnh nhân</span></a>
+        <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i><span>Lịch hẹn</span></a>
+        <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i><span>Hồ sơ bệnh án</span></a>
+        <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i><span>Thuốc & kho</span></a>
+        <a href="HoaDon.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Hóa đơn</span></a>
+        <a href="ThongBao.html"><i class="fa-solid fa-bell"></i><span>Thông báo</span></a>
+        <a href="LichSu.html"><i class="fa-solid fa-book"></i><span>Nhật ký hoạt động</span></a>
+      </nav>
+    </aside>
+    <div id="sidebarContainer"></div>
+
+    <!-- Nội dung chính -->
+    <main class="main">
+      <header class="header">
+        <h1 id="formTitle">Thêm tài khoản</h1>
+        <div class="actions">
+          <a href="TaiKhoan.html" class="btn neutral"><i class="fa-solid fa-arrow-left"></i> Quay lại</a>
+        </div>
+      </header>
+
+      <section class="card">
+        <form id="userForm">
+          <div class="form-group">
+            <label>Tên đăng nhập</label>
+            <input type="text" id="txtTenDangNhap" required class="input">
+          </div>
+          <div class="form-group">
+            <label>Mật khẩu</label>
+            <input type="password" id="txtMatKhau" required class="input">
+          </div>
+          <div class="form-group">
+            <label>Họ tên</label>
+            <input type="text" id="txtHoTen" required class="input">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="txtEmail" class="input">
+          </div>
+          <div class="form-group">
+            <label>Số điện thoại</label>
+            <input type="text" id="txtSDT" class="input">
+          </div>
+          <div class="form-group">
+            <label>Giới tính</label>
+            <select id="selectGioiTinh" class="input">
+              <option value="">Chọn</option>
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+              <option value="Khác">Khác</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Vai trò / Quyền</label>
+            <select id="selectQuyen" class="input">
+              <option value="Admin">Quản trị viên</option>
+              <option value="KeToan">Kế toán</option>
+              <option value="BacSi">Bác sĩ</option>
+              <option value="NhanVien">Nhân viên</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Trạng thái</label>
+            <select id="selectTrangThai" class="input">
+              <option value="true">Hoạt động</option>
+              <option value="false">Khóa</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Ảnh đại diện</label>
+            <input type="file" id="fileAnh" class="input">
+            <img id="imgPreview" src="" style="max-width:150px; margin-top:10px; display:none;">
+          </div>
+          <button type="submit" class="btn"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+        </form>
+      </section>
+    </main>
+  </div>
+
+<script>
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Vui lòng đăng nhập!");
+    window.location.href = "Login.html";
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const userId = params.get("id");
+
+  const formTitle = document.getElementById("formTitle");
+  const txtTenDangNhap = document.getElementById("txtTenDangNhap");
+  const txtMatKhau = document.getElementById("txtMatKhau");
+  const txtHoTen = document.getElementById("txtHoTen");
+  const txtEmail = document.getElementById("txtEmail");
+  const txtSDT = document.getElementById("txtSDT");
+  const selectGioiTinh = document.getElementById("selectGioiTinh");
+  const selectQuyen = document.getElementById("selectQuyen");
+  const selectTrangThai = document.getElementById("selectTrangThai");
+  const fileAnh = document.getElementById("fileAnh");
+  const imgPreview = document.getElementById("imgPreview");
+
+  // Nếu sửa, load dữ liệu user
+  async function loadUser() {
+    if (!userId) return;
+    formTitle.innerText = "Sửa tài khoản";
+    try {
+      const res = await fetch(`http://localhost:5000/api-admin/users/get-by-id/${userId}`, {
+        headers: { "Authorization": "Bearer " + token }
+      });
+      if (!res.ok) throw new Error("Không thể lấy thông tin người dùng");
+      const data = await res.json();
+      txtTenDangNhap.value = data.tenDangNhap;
+      txtMatKhau.value = data.matKhau || "";
+      txtHoTen.value = data.hoTen;
+      txtEmail.value = data.email;
+      txtSDT.value = data.soDienThoai;
+      selectGioiTinh.value = data.gioiTinh || "";
+      selectQuyen.value = data.loaiQuyen || "NhanVien";
+      selectTrangThai.value = data.trangThai;
+      if (data.anhDaiDien) {
+        imgPreview.src = `http://localhost:5000/${data.anhDaiDien}`;
+        imgPreview.style.display = "block";
+      }
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
+  fileAnh.addEventListener("change", async () => {
+    const f = fileAnh.files[0];
+    if (!f) return;
+    const formData = new FormData();
+    formData.append("file", f);
+    try {
+      const res = await fetch("http://localhost:5000/api-admin/users/upload", {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + token },
+        body: formData
+      });
+      const data = await res.json();
+      imgPreview.src = `http://localhost:5000/${data.path}`;
+      imgPreview.style.display = "block";
+      imgPreview.dataset.path = data.path; // lưu path để gửi lên BE
+    } catch {
+      alert("Upload ảnh lỗi");
+    }
+  });
+
+  document.getElementById("userForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const model = {
+      nguoidung: {
+        hoTen: txtHoTen.value,
+        email: txtEmail.value,
+        soDienThoai: txtSDT.value,
+        gioiTinh: selectGioiTinh.value,
+        anhDaiDien: imgPreview.dataset.path || null,
+        daXoa: false
+      },
+      taikhoan: {
+        tenDangNhap: txtTenDangNhap.value,
+        matKhau: txtMatKhau.value,
+        loaiQuyen: selectQuyen.value,
+        trangThai: selectTrangThai.value === "true"
+      }
+    };
+    if (userId) model.nguoidung.maNguoiDung = parseInt(userId);
+
+    try {
+      const url = userId ? "http://localhost:5000/api-admin/users/update-user" : "http://localhost:5000/api-admin/users/create-user";
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { 
+          "Authorization": "Bearer " + token,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(model)
+      });
+      if (!res.ok) throw new Error("Lưu thất bại");
+      const data = await res.text();
+      alert(data === "OK" ? "Lưu thành công" : data);
+      window.location.href = "TaiKhoan.html";
+    } catch (err) {
+      alert(err.message);
+    }
+  });
+
+  loadUser();
+
+  // Sidebar toggle & highlight current
+  fetch("components/sidebar.html")
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById("sidebarContainer").innerHTML = html;
+      const sidebar = document.getElementById("sidebar");
+      document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
+      const currentPage = location.pathname.split("/").pop();
+      document.querySelectorAll(".menu a").forEach(link => {
+        if (link.getAttribute("href") === currentPage) link.classList.add("active");
+      });
+    });
+</script>
+</body>
+</html>

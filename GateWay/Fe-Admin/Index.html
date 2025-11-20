@@ -7,31 +7,27 @@
   <link rel="stylesheet" href="css/LichHen.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="angular/dashboard.js"></script>
-
 </head>
 <body>
   <div class="container">
     <aside class="sidebar" id="sidebar">
-  <div class="sidebar-header">
-    <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
-    <span class="brand-text">DAH Clinic</span>
-  </div>
-
-  <nav class="menu">
-    <a href="index.html"><i class="fa-solid fa-chart-line"></i><span>Tổng quan</span></a>
-    <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i><span>Tài khoản</span></a>
-    <a href="BacSi.html"><i class="fa-solid fa-user-doctor"></i><span>Bác sĩ</span></a>
-    <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i><span>Bệnh nhân</span></a>
-    <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i><span>Lịch hẹn</span></a>
-    <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i><span>Hồ sơ bệnh án</span></a>
-    <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i><span>Thuốc & kho</span></a>
-    <a href="HoaDon.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Hóa đơn</span></a>
-    <a href="ThongBao.html"><i class="fa-solid fa-bell"></i><span>Thông báo</span></a>
-    <a href="LichSu.html"><i class="fa-solid fa-book"></i><span>Nhật ký hoạt động</span></a>
-  </nav>
-</aside>
-    <div id="sidebarContainer"></div>
+      <div class="sidebar-header">
+        <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+        <span class="brand-text">DAH Clinic</span>
+      </div>
+      <nav class="menu">
+        <a href="index.html"><i class="fa-solid fa-chart-line"></i><span>Tổng quan</span></a>
+        <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i><span>Tài khoản</span></a>
+        <a href="BacSi.html"><i class="fa-solid fa-user-doctor"></i><span>Bác sĩ</span></a>
+        <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i><span>Bệnh nhân</span></a>
+        <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i><span>Lịch hẹn</span></a>
+        <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i><span>Hồ sơ bệnh án</span></a>
+        <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i><span>Thuốc & kho</span></a>
+        <a href="HoaDon.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Hóa đơn</span></a>
+        <a href="ThongBao.html"><i class="fa-solid fa-bell"></i><span>Thông báo</span></a>
+        <a href="LichSu.html"><i class="fa-solid fa-book"></i><span>Nhật ký hoạt động</span></a>
+      </nav>
+    </aside>
 
     <main class="main">
       <header class="header">
@@ -44,31 +40,28 @@
           <i class="fa-solid fa-user-doctor icon"></i>
           <div>
             <p class="stat-title">Bác sĩ</p>
-            <h2>12</h2>
+            <h2 id="totalDoctors">0</h2>
           </div>
         </div>
-
         <div class="card stat-card">
           <i class="fa-solid fa-user-injured icon"></i>
           <div>
             <p class="stat-title">Bệnh nhân</p>
-            <h2>154</h2>
+            <h2 id="totalPatients">0</h2>
           </div>
         </div>
-
         <div class="card stat-card">
           <i class="fa-solid fa-file-invoice-dollar icon"></i>
           <div>
             <p class="stat-title">Hóa đơn</p>
-            <h2>98</h2>
+            <h2 id="totalInvoices">0</h2>
           </div>
         </div>
-
         <div class="card stat-card">
           <i class="fa-solid fa-sack-dollar icon"></i>
           <div>
             <p class="stat-title">Doanh thu (VNĐ)</p>
-            <h2>125,000,000</h2>
+            <h2 id="totalRevenue">0</h2>
           </div>
         </div>
       </section>
@@ -84,182 +77,81 @@
           <canvas id="chartLuotKham"></canvas>
         </div>
       </section>
-
-      <!-- Dữ liệu gần đây -->
-      <section class="grid-2">
-        <div class="card">
-          <h3>Hóa đơn gần nhất</h3>
-          <table class="table-compact">
-            <thead>
-              <tr><th>Mã</th><th>Bệnh nhân</th><th>Tổng tiền</th><th>Ngày lập</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>HD045</td><td>Nguyễn Văn A</td><td>450,000</td><td>2025-10-30</td></tr>
-              <tr><td>HD044</td><td>Trần Thị B</td><td>300,000</td><td>2025-10-29</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="card">
-          <h3>Thông báo mới</h3>
-          <ul class="list-simple">
-            <li><i class="fa-solid fa-bell text-blue"></i> Bảo trì hệ thống 22:00 hôm nay</li>
-            <li><i class="fa-solid fa-bell text-green"></i> Cập nhật chức năng thanh toán mới</li>
-          </ul>
-        </div>
-      </section>
     </main>
   </div>
 
   <script>
-  /*
-  
-    // Load sidebar
-    fetch("components/sidebar.html")
-      .then(r => r.text())
-      .then(html => {
-        document.getElementById("sidebarContainer").innerHTML = html;
-        const sidebar = document.getElementById("sidebar");
-        document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
-        const current = location.pathname.split("/").pop();
-        document.querySelectorAll(".menu a").forEach(link => {
-          if (link.getAttribute("href") === current) link.classList.add("active");
-        });
+  // Lấy token từ localStorage
+  const token = localStorage.getItem('token');
+  if (!token) {
+    alert('Vui lòng đăng nhập!');
+    window.location.href = 'Login.html'; // dùng đường dẫn tương đối
+  } else {
+    console.log('Token hiện tại:', token);
+
+    // Hàm kiểm tra lỗi response
+    async function fetchWithAuth(url) {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
       });
-
-    // Chart: Doanh thu
-    const ctx1 = document.getElementById('chartDoanhThu');
-    new Chart(ctx1, {
-      type: 'bar',
-      data: {
-        labels: ['Th1', 'Th2', 'Th3', 'Th4', 'Th5', 'Th6', 'Th7', 'Th8', 'Th9', 'Th10'],
-        datasets: [{
-          label: 'Doanh thu (triệu VNĐ)',
-          data: [12, 18, 9, 15, 22, 30, 27, 34, 40, 38],
-          borderWidth: 1
-        }]
-      },
-      options: { scales: { y: { beginAtZero: true } } }
-    });
-
-    // Chart: Lượt khám
-    const ctx2 = document.getElementById('chartLuotKham');
-    new Chart(ctx2, {
-      type: 'line',
-      data: {
-        labels: ['Th1','Th2','Th3','Th4','Th5','Th6','Th7','Th8','Th9','Th10'],
-        datasets: [{
-          label: 'Lượt khám',
-          data: [85, 92, 78, 110, 130, 142, 158, 171, 188, 195],
-          fill: false,
-          borderColor: '#36A2EB',
-          tension: 0.3
-        }]
+      if (!response.ok) {
+        if (response.status === 401) {
+          alert('Token không hợp lệ hoặc đã hết hạn. Vui lòng đăng nhập lại.');
+          localStorage.removeItem('token');
+          window.location.href = 'Login.html';
+        } else {
+          throw new Error('Lỗi từ server: ' + response.status);
+        }
       }
-    });
-	*/
-  </script>
-  
-    <script>
-	/*
-  const sidebar = document.getElementById("sidebar");
-  document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
-
-  // Tự động highlight mục hiện tại
-  const currentPage = location.pathname.split("/").pop();
-  document.querySelectorAll(".menu a").forEach(link => {
-    if (link.getAttribute("href") === currentPage) link.classList.add("active");
-  });
-</script>
-<script>
-  const apiBase = "https://localhost:5958/api/Dashboard"; // 
-
-  // Load Sidebar
-  fetch("components/sidebar.html")
-    .then(r => r.text())
-    .then(html => {
-      document.getElementById("sidebarContainer").innerHTML = html;
-      const sidebar = document.getElementById("sidebar");
-      document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
-      const current = location.pathname.split("/").pop();
-      document.querySelectorAll(".menu a").forEach(link => {
-        if (link.getAttribute("href") === current) link.classList.add("active");
-      });
-    });
-
-  // ================== BIỂU ĐỒ ==================
-  const ctx1 = document.getElementById("chartDoanhThu");
-  const ctx2 = document.getElementById("chartLuotKham");
-
-  const chart1 = new Chart(ctx1, {
-    type: "bar",
-    data: {
-      labels: [],
-      datasets: [{
-        label: "Doanh thu (triệu VNĐ)",
-        data: [],
-        borderWidth: 1,
-        backgroundColor: "#3498db"
-      }]
-    },
-    options: { scales: { y: { beginAtZero: true } } }
-  });
-
-  const chart2 = new Chart(ctx2, {
-    type: "line",
-    data: {
-      labels: [],
-      datasets: [{
-        label: "Lượt khám",
-        data: [],
-        borderColor: "#2ecc71",
-        fill: false,
-        tension: 0.3
-      }]
+      return response.json();
     }
-  });
 
-  // ================== GỌI API ==================
-  async function loadDashboard(year = 2025) {
-    try {
-      // 1️⃣ Thống kê tổng quan
-      const res1 = await fetch(`${apiBase}/TongQuan`);
-      const tongQuan = await res1.json();
-      document.getElementById("totalDoctor").innerText = tongQuan.tongBacSi;
-      document.getElementById("totalPatient").innerText = tongQuan.tongBenhNhan;
-      document.getElementById("totalBill").innerText = tongQuan.tongHoaDon;
-      document.getElementById("totalRevenue").innerText = Number(tongQuan.tongDoanhThu).toLocaleString("vi-VN");
+    // Lấy tổng quan
+    fetchWithAuth('https://localhost:44340/api-admin/dashboard/get-tong-quan')
+      .then(data => {
+        document.getElementById('totalDoctors').textContent = data.tongBacSi;
+		document.getElementById('totalPatients').textContent = data.tongBenhNhan;
+		document.getElementById('totalInvoices').textContent = data.tongHoaDon;
+		document.getElementById('totalRevenue').textContent = data.tongDoanhThu;
 
-      // 2️⃣ Doanh thu theo tháng
-      const res2 = await fetch(`${apiBase}/DoanhThuThang?nam=${year}`);
-      const doanhThu = await res2.json();
-      chart1.data.labels = doanhThu.map(x => "Th" + x.thang);
-      chart1.data.datasets[0].data = doanhThu.map(x => x.tongDoanhThu / 1_000_000);
-      chart1.update();
+      })
+      .catch(console.error);
 
-      // 3️⃣ Lượt khám theo tháng
-      const res3 = await fetch(`${apiBase}/LuotKhamThang?nam=${year}`);
-      const luotKham = await res3.json();
-      chart2.data.labels = luotKham.map(x => "Th" + x.thang);
-      chart2.data.datasets[0].data = luotKham.map(x => x.soLuotKham);
-      chart2.update();
+    const year = 2025;
 
-    } catch (err) {
-      console.error("Lỗi tải Dashboard:", err);
-      alert("Không thể tải dữ liệu Dashboard. Kiểm tra API backend!");
-    }
+    // Doanh thu theo tháng
+    fetchWithAuth(`https://localhost:44340/api-admin/dashboard/get-doanhthu-thang/${year}`)
+      .then(data => {
+        console.log('Doanh thu theo tháng:', data);
+        const months = data.map(item => `Th${item.thang}`);
+        const revenue = data.map(item => item.tongDoanhThu);
+        const ctx1 = document.getElementById('chartDoanhThu').getContext('2d');
+        new Chart(ctx1, {
+          type: 'bar',
+          data: { labels: months, datasets: [{ label: 'Doanh thu (triệu VNĐ)', data: revenue, borderWidth: 1 }] },
+          options: { scales: { y: { beginAtZero: true } } }
+        });
+      })
+      .catch(console.error);
+
+    // Lượt khám theo tháng
+    fetchWithAuth(`https://localhost:44340/api-admin/dashboard/get-luotkham-thang/${year}`)
+      .then(data => {
+        console.log('Lượt khám theo tháng:', data);
+        const months = data.map(item => `Th${item.thang}`);
+        const visits = data.map(item => item.soLuotKham);
+        const ctx2 = document.getElementById('chartLuotKham').getContext('2d');
+        new Chart(ctx2, {
+          type: 'line',
+          data: { labels: months, datasets: [{ label: 'Lượt khám', data: visits, fill: false, borderColor: '#36A2EB', tension: 0.3 }] }
+        });
+      })
+      .catch(console.error);
   }
-
-  // Gọi khi load trang
-  loadDashboard(2025);
-
-  // ================== LỌC THEO NĂM ==================
-  document.getElementById("selectYear").addEventListener("change", e => {
-    const year = e.target.value || 2025;
-    loadDashboard(year);
-  });*/
-  
-  
 </script>
 
 </body>
