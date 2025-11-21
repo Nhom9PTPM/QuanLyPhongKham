@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thêm / Sửa Tồn kho - DAH Clinic</title>
+  <link rel="stylesheet" href="css/LichHen.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+<div class="container">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+      <span class="brand-text">DAH Clinic</span>
+    </div>
+    <nav class="menu">
+      <a href="index.html"><i class="fa-solid fa-chart-line"></i>Tổng quan</a>
+      <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i>Tài khoản</a>
+      <a href="BacSi.html"><i class="fa-solid fa-user-doctor"></i>Bác sĩ</a>
+      <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i>Bệnh nhân</a>
+      <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i>Lịch hẹn</a>
+      <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i>Hồ sơ bệnh án</a>
+      <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i>Thuốc</a>
+      <a href="TonKho.html" class="active"><i class="fa-solid fa-warehouse"></i>Tồn kho thuốc</a>
+      <a href="HoaDon.html"><i class="fa-solid fa-file-invoice-dollar"></i>Hóa đơn</a>
+      <a href="ThongBao.html"><i class="fa-solid fa-bell"></i>Thông báo</a>
+      <a href="LichSu.html"><i class="fa-solid fa-book"></i>Nhật ký hoạt động</a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <header class="header">
+      <h1 id="formTitle">Thêm Tồn kho</h1>
+      <div class="actions">
+        <a href="TonKho.html" class="btn neutral"><i class="fa-solid fa-arrow-left"></i> Quay lại</a>
+      </div>
+    </header>
+
+    <section class="card">
+      <form id="frmTonKho">
+        <input type="hidden" id="idTonKho">
+        <div class="form-group">
+          <label for="selectThuoc">Thuốc:</label>
+          <select id="selectThuoc" required></select>
+        </div>
+        <div class="form-group">
+          <label for="txtSoLuong">Số lượng:</label>
+          <input type="number" id="txtSoLuong" min="0" required>
+        </div>
+        <div class="form-group">
+          <label for="txtMaKho">Mã kho:</label>
+          <input type="text" id="txtMaKho" required>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn primary" id="btnSave"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+        </div>
+      </form>
+    </section>
+  </main>
+</div>
+
+<script>
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Vui lòng đăng nhập!");
+    location.href = "Login.html";
+  }
+
+  const baseUrl = "https://localhost:44340";
+
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
+
+  async function fetchAuth(url, method="GET", body=null) {
+    const res = await fetch(url, {
+      method,
+      headers: {
+        "Authorization": "Bearer " + token,
+        "Content-Type": "application/json"
+      },
+      body: body ? JSON.stringify(body) : null
+    });
+
+    if (res.status === 401) {
+      localStorage.removeItem("token");
+      alert("Hết hạn đăng nhập!");
+      location.href = "Login.html";
+      return;
+    }
+
+    return res.json();
+  }
+
+  async function loadThuocOptions() {
+    const data = await fetchAuth(baseUrl + "/api/Thuoc/search", "POST", { page: 1, pageSize: 999 });
+    const select = document.getElementById("selectThuoc");
+    select.innerHTML = "";
+    data.data.forEach(t => {
+      const option = document.createElement("option");
+      option.value = t.maThuoc;
+      option.textContent = t.tenThuoc;
+      select.appendChild(option);
+    });
+  }
+
+  async function loadTonKho(id) {
+    if (!id) return;
+    const data = await fetchAuth(baseUrl + "/api/TonKhoThuoc/get-by-id/" + id);
+    if (!data) return;
+    document.getElementById("formTitle").textContent = "Sửa Tồn kho";
+    document.getElementById("idTonKho").value = data.maTonKho;
+    document.getElementById("selectThuoc").value = data.maThuoc;
+    document.getElementById("txtSoLuong").value = data.soLuong;
+    document.getElementById("txtMaKho").value = data.maKho;
+  }
+
+  document.getElementById("frmTonKho").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const id = document.getElementById("idTonKho").value;
+    const payload = {
+      MaTonKho: id ? parseInt(id) : 0,
+      MaThuoc: parseInt(document.getElementById("selectThuoc").value),
+      SoLuong: parseInt(document.getElementById("txtSoLuong").value),
+      MaKho: document.getElementById("txtMaKho").value
+    };
+    
+    let url = id ? "/api/TonKhoThuoc/update-tonkho" : "/api/TonKhoThuoc/create-tonkho";
+    const res = await fetchAuth(baseUrl + url, "POST", payload);
+    alert(res);
+    if (res === "OK") window.location.href = "TonKho.html";
+  });
+
+  // Load
+  loadThuocOptions().then(() => {
+    const id = getQueryParam("id");
+    if (id) loadTonKho(id);
+  });
+
+  document.getElementById("toggleSidebar").onclick = () =>
+    document.getElementById("sidebar").classList.toggle("collapsed");
+</script>
+</body>
+</html>

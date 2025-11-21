@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Bệnh nhân - DAH</title>
+  <link rel="stylesheet" href="css/LichHen.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+<div class="container">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+      <span class="brand-text">DAH Clinic</span>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="header">
+      <h1 id="formTitle">Thêm bệnh nhân</h1>
+      <div class="actions">
+        <a href="BenhNhan.html" class="btn neutral"><i class="fa-solid fa-arrow-left"></i> Quay lại</a>
+      </div>
+    </header>
+
+    <section class="card">
+      <form id="formBenhNhan">
+        <div class="form-group">
+          <label>Họ tên</label>
+          <input type="text" id="txtHoTen" class="input" required>
+        </div>
+        <div class="form-group">
+          <label>Ngày sinh</label>
+          <input type="date" id="txtNgaySinh" class="input">
+        </div>
+        <div class="form-group">
+          <label>Giới tính</label>
+          <select id="selectGioiTinh" class="input">
+            <option value="">Chọn</option>
+            <option value="Nam">Nam</option>
+            <option value="Nữ">Nữ</option>
+            <option value="Khác">Khác</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Số điện thoại</label>
+          <input type="text" id="txtSDT" class="input">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="txtEmail" class="input">
+        </div>
+        <div class="form-group">
+          <label>Địa chỉ</label>
+          <input type="text" id="txtDiaChi" class="input">
+        </div>
+        <div class="form-group">
+          <label>CMTND/CCCD</label>
+          <input type="text" id="txtCMT" class="input">
+        </div>
+        <button type="submit" class="btn"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+      </form>
+    </section>
+  </main>
+</div>
+
+<script>
+  const token = localStorage.getItem("token");
+  if(!token){ alert("Vui lòng đăng nhập!"); location.href="Login.html"; }
+
+  const baseUrl = "https://localhost:44340";
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
+  const txtHoTen = document.getElementById("txtHoTen");
+  const txtNgaySinh = document.getElementById("txtNgaySinh");
+  const selectGioiTinh = document.getElementById("selectGioiTinh");
+  const txtSDT = document.getElementById("txtSDT");
+  const txtEmail = document.getElementById("txtEmail");
+  const txtDiaChi = document.getElementById("txtDiaChi");
+  const txtCMT = document.getElementById("txtCMT");
+  const formTitle = document.getElementById("formTitle");
+
+  async function fetchAuth(url, method="GET", body=null){
+    const res = await fetch(url,{
+      method,
+      headers:{
+        "Authorization":"Bearer "+token,
+        "Content-Type":"application/json"
+      },
+      body: body ? JSON.stringify(body) : null
+    });
+    if(res.status===401){ localStorage.removeItem("token"); alert("Hết hạn đăng nhập!"); location.href="Login.html"; return; }
+    return res.json();
+  }
+
+  async function loadBenhNhan(){
+    if(!id) return;
+    formTitle.innerText="Sửa bệnh nhân";
+    const data = await fetchAuth(baseUrl+"/api-admin/benhnhan/get-by-id/"+id);
+    txtHoTen.value=data.hoTen;
+    txtNgaySinh.value=data.ngaySinh ? new Date(data.ngaySinh).toISOString().split("T")[0] : "";
+    selectGioiTinh.value=data.gioiTinh || "";
+    txtSDT.value=data.soDienThoai;
+    txtEmail.value=data.email;
+    txtDiaChi.value=data.diaChi;
+    txtCMT.value=data.cMTND_NV;
+  }
+
+  document.getElementById("formBenhNhan").addEventListener("submit", async e=>{
+    e.preventDefault();
+    const model = id ? {
+      MaBenhNhan: parseInt(id),
+      HoTen: txtHoTen.value,
+      NgaySinh: txtNgaySinh.value ? new Date(txtNgaySinh.value) : null,
+      GioiTinh: selectGioiTinh.value,
+      SoDienThoai: txtSDT.value,
+      Email: txtEmail.value,
+      DiaChi: txtDiaChi.value,
+      CMTND_NV: txtCMT.value
+    } : {
+      benhnhan:{
+        HoTen: txtHoTen.value,
+        NgaySinh: txtNgaySinh.value ? new Date(txtNgaySinh.value) : null,
+        GioiTinh: selectGioiTinh.value,
+        SoDienThoai: txtSDT.value,
+        Email: txtEmail.value,
+        DiaChi: txtDiaChi.value,
+        CMTND_NV: txtCMT.value
+      }
+    };
+
+    const url = id ? baseUrl+"/api-admin/benhnhan/update" : baseUrl+"/api-admin/benhnhan/create";
+    const res = await fetchAuth(url,"POST",model);
+    alert(res.message || "Lưu thành công!");
+    window.location.href="BenhNhan.html";
+  });
+
+  loadBenhNhan();
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("toggleSidebar").onclick = ()=> sidebar.classList.toggle("collapsed");
+</script>
+</body>
+</html>

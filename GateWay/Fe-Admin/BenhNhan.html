@@ -8,140 +8,129 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
-  <div class="container">
-    <aside class="sidebar" id="sidebar">
-  <div class="sidebar-header">
-    <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
-    <span class="brand-text">DAH Clinic</span>
-  </div>
+<div class="container">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+      <span class="brand-text">DAH Clinic</span>
+    </div>
+    <nav class="menu">
+			<a href="index.html"><i class="fa-solid fa-chart-line"></i><span>Tổng quan</span></a>
+            <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i><span>Tài khoản</span></a>
+            <a href="BacSi.html"><i class="fa-solid fa-user-doctor"></i><span>Bác sĩ</span></a>
+            <a href="NhaCungCap.html"><i class="fa-solid fa-truck"></i><span>Nhà cung cấp</span></a>
+            <a href="BenhNhan.html" class="active"><i class="fa-solid fa-user-injured"></i><span>Bệnh nhân</span></a>
+            <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i><span>Lịch hẹn</span></a>
+            <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i><span>Hồ sơ bệnh án</span></a>
+			<a href="KhamBenh.html"><i class="fa-solid fa-stethoscope"></i><span>Khám bệnh</span></a>
+            <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i><span>Thuốc</span></a>
+            <a href="DonThuoc.html"><i class="fa-solid fa-prescription-bottle-medical"></i><span>Đơn thuốc</span></a>
+            <a href="TonKho.html"><i class="fa-solid fa-warehouse"></i><span>Tồn kho thuốc</span></a>
+            <a href="HoaDon.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Hóa đơn</span></a>
+    </nav>
+  </aside>
 
-  <nav class="menu">
-    <a href="index.html"><i class="fa-solid fa-chart-line"></i><span>Tổng quan</span></a>
-    <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i><span>Tài khoản</span></a>
-    <a href="BacSi.html"><i class="fa-solid fa-user-doctor"></i><span>Bác sĩ</span></a>
-    <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i><span>Bệnh nhân</span></a>
-    <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i><span>Lịch hẹn</span></a>
-    <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i><span>Hồ sơ bệnh án</span></a>
-    <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i><span>Thuốc & kho</span></a>
-    <a href="HoaDon.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Hóa đơn</span></a>
-    <a href="ThongBao.html"><i class="fa-solid fa-bell"></i><span>Thông báo</span></a>
-    <a href="LichSu.html"><i class="fa-solid fa-book"></i><span>Nhật ký hoạt động</span></a>
-  </nav>
-</aside>
-    <div id="sidebarContainer"></div>
+  <main class="main">
+    <header class="header">
+      <h1>Quản lý Bệnh nhân</h1>
+      <div class="actions">
+        <a href="FormBenhNhan.html" class="btn"><i class="fa-solid fa-plus"></i> Thêm mới</a>
+        <button class="btn neutral" id="btnRefresh"><i class="fa-solid fa-rotate"></i> Làm mới</button>
+      </div>
+    </header>
 
-    <!-- Nội dung chính -->
-    <main class="main">
-      <header class="header">
-        <h1>Quản lý Bệnh nhân</h1>
-        <div class="actions">
-          <a href="FormBenhNhan.html" class="btn"><i class="fa-solid fa-plus"></i> Thêm mới</a>
-          <button class="btn neutral" id="btnRefresh"><i class="fa-solid fa-rotate"></i> Làm mới</button>
-        </div>
-      </header>
+    <section class="filter-bar card">
+      <input id="txtHoTen" class="input" placeholder="Tìm theo họ tên...">
+      <input id="txtSDT" class="input" placeholder="Tìm theo số điện thoại...">
+    </section>
 
-      <!-- Thanh tìm kiếm -->
-      <section class="filter-bar card">
-        <input id="txtSearch" class="input" placeholder="Tìm theo tên, số điện thoại hoặc CCCD...">
-        <select id="selectTrangThai" class="input" style="max-width:200px">
-          <option value="">Tất cả trạng thái</option>
-          <option value="1">Hoạt động</option>
-          <option value="0">Ngưng</option>
-        </select>
-      </section>
+    <section class="card">
+      <h3>Danh sách bệnh nhân</h3>
+      <div class="table-wrap" style="margin-top:12px;">
+        <table id="tblBenhNhan">
+          <thead>
+            <tr>
+              <th>Họ tên</th>
+              <th>Ngày sinh</th>
+              <th>Giới tính</th>
+              <th>SĐT</th>
+              <th>Email</th>
+              <th>Địa chỉ</th>
+              <th>CMTND/CCCD</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
 
-      <!-- Bảng danh sách -->
-      <section class="card">
-        <h3>Danh sách bệnh nhân</h3>
-        <div class="table-wrap" style="margin-top:12px;">
-          <table id="tblBenhNhan">
-            <thead>
-              <tr>
-                <th>Mã BN</th>
-                <th>Họ tên</th>
-                <th>Giới tính</th>
-                <th>Ngày sinh</th>
-                <th>SĐT</th>
-                <th>Địa chỉ</th>
-                <th>Trạng thái</th>
-                <th style="width:180px;">Thao tác</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>BN001</td>
-                <td>Nguyễn Văn A</td>
-                <td>Nam</td>
-                <td>1990-02-15</td>
-                <td>0901234567</td>
-                <td>TP.HCM</td>
-                <td><span class="small muted">Hoạt động</span></td>
-                <td>
-                  <a class="btn small neutral" href="FormBenhNhan.html?ma=BN001">Sửa</a>
-                  <button class="btn small warn btn-delete" data-id="BN001">Xóa</button>
-                </td>
-              </tr>
-              <tr>
-                <td>BN002</td>
-                <td>Trần Thị B</td>
-                <td>Nữ</td>
-                <td>1995-06-20</td>
-                <td>0912345678</td>
-                <td>Đồng Nai</td>
-                <td><span class="small muted">Ngưng</span></td>
-                <td>
-                  <a class="btn small neutral" href="FormBenhNhan.html?ma=BN002">Sửa</a>
-                  <button class="btn small warn btn-delete" data-id="BN002">Xóa</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-    </main>
-  </div>
+<script>
+  const token = localStorage.getItem("token");
+  if(!token){ alert("Vui lòng đăng nhập!"); location.href="Login.html"; }
 
-  <script>
-    // Load sidebar
-    fetch("components/sidebar.html")
-      .then(r => r.text())
-      .then(html => {
-        document.getElementById("sidebarContainer").innerHTML = html;
-        const sidebar = document.getElementById("sidebar");
-        document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
-        const current = location.pathname.split("/").pop();
-        document.querySelectorAll(".menu a").forEach(link => {
-          if (link.getAttribute("href") === current) link.classList.add("active");
-        });
-      });
+  const baseUrl = "https://localhost:44340";
 
-    // Tìm kiếm và lọc
-    const txtSearch = document.getElementById("txtSearch");
-    const selectTrangThai = document.getElementById("selectTrangThai");
+  async function fetchAuth(url, method="GET", body=null){
+    const res = await fetch(url,{
+      method,
+      headers:{
+        "Authorization":"Bearer "+token,
+        "Content-Type":"application/json"
+      },
+      body: body ? JSON.stringify(body) : null
+    });
+    if(res.status === 401){ localStorage.removeItem("token"); alert("Hết hạn đăng nhập!"); location.href="Login.html"; return; }
+    return res.json();
+  }
+
+  async function loadBenhNhan(){
+    const body = { 
+      page:1, 
+      pageSize:999, 
+      HoTen: document.getElementById("txtHoTen").value || "", 
+      SoDienThoai: document.getElementById("txtSDT").value || "" 
+    };
+    const data = await fetchAuth(baseUrl + "/api-admin/benhnhan/search","POST", body);
     const tbody = document.querySelector("#tblBenhNhan tbody");
+    tbody.innerHTML="";
+    data.data.forEach(bn=>{
+      const row = `
+        <tr>
+          <td>${bn.hoTen}</td>
+          <td>${bn.ngaySinh ? new Date(bn.ngaySinh).toLocaleDateString() : ""}</td>
+          <td>${bn.gioiTinh}</td>
+          <td>${bn.soDienThoai}</td>
+          <td>${bn.email}</td>
+          <td>${bn.diaChi}</td>
+          <td>${bn.cMTND_NV}</td>
+          <td>
+            <a class="btn small neutral" href="FormBenhNhan.html?id=${bn.maBenhNhan}">Sửa</a>
+            <button class="btn small warn" onclick="deleteBenhNhan(${bn.maBenhNhan})">Xóa</button>
+          </td>
+        </tr>
+      `;
+      tbody.innerHTML += row;
+    });
+  }
 
-    function filter() {
-      const q = txtSearch.value.toLowerCase();
-      const st = selectTrangThai.value;
-      for (let r of tbody.rows) {
-        const text = r.innerText.toLowerCase();
-        const stText = r.cells[6].innerText.toLowerCase();
-        const matchSt = !st || (st === "1" && stText.includes("hoạt")) || (st === "0" && stText.includes("ngưng"));
-        r.style.display = (text.includes(q) && matchSt) ? "" : "none";
-      }
-    }
-    txtSearch.addEventListener("input", filter);
-    selectTrangThai.addEventListener("change", filter);
-  </script>
-    <script>
+  async function deleteBenhNhan(id){
+    if(!confirm("Bạn có chắc chắn muốn xoá bệnh nhân này?")) return;
+    const res = await fetchAuth(baseUrl+"/api-admin/benhnhan/delete/"+id,"DELETE");
+    alert(res.message || "Xóa thành công!");
+    loadBenhNhan();
+  }
+
+  document.getElementById("txtHoTen").addEventListener("input",loadBenhNhan);
+  document.getElementById("txtSDT").addEventListener("input",loadBenhNhan);
+  document.getElementById("btnRefresh").addEventListener("click",loadBenhNhan);
+
+  loadBenhNhan();
+
   const sidebar = document.getElementById("sidebar");
-  document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
-
-  // Tự động highlight mục hiện tại
-  const currentPage = location.pathname.split("/").pop();
-  document.querySelectorAll(".menu a").forEach(link => {
-    if (link.getAttribute("href") === currentPage) link.classList.add("active");
-  });
+  document.getElementById("toggleSidebar").onclick = ()=> sidebar.classList.toggle("collapsed");
 </script>
 </body>
 </html>

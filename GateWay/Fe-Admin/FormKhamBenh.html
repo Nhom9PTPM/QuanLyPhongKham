@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khám bệnh - DAH</title>
+  <link rel="stylesheet" href="css/LichHen.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+
+<div class="container">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+      <span class="brand-text">DAH Clinic</span>
+    </div>
+    <nav class="menu">
+      <a href="index.html"><i class="fa-solid fa-chart-line"></i>Tổng quan</a>
+      <a href="KhamBenh.html" class="active"><i class="fa-solid fa-stethoscope"></i>Khám bệnh</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <header class="header">
+      <h1>Phiếu khám bệnh</h1>
+      <a href="KhamBenh.html" class="btn neutral"><i class="fa-solid fa-arrow-left"></i> Quay lại</a>
+    </header>
+
+    <section class="card">
+      <div class="form-row">
+        <label>Bệnh nhân</label>
+        <select id="slBenhNhan" class="input"></select>
+      </div>
+
+      <div class="form-row">
+        <label>Bác sĩ</label>
+        <select id="slBacSi" class="input"></select>
+      </div>
+
+      <div class="form-row">
+        <label>Chẩn đoán</label>
+        <textarea id="txtChanDoan" class="input"></textarea>
+      </div>
+
+      <div class="form-row">
+        <label>Chỉ định xét nghiệm</label>
+        <textarea id="txtXN" class="input"></textarea>
+      </div>
+
+      <div class="form-row">
+        <label>Chỉ định CLS</label>
+        <textarea id="txtCLS" class="input"></textarea>
+      </div>
+
+      <div class="form-row">
+        <label>Ghi chú</label>
+        <textarea id="txtGhiChu" class="input"></textarea>
+      </div>
+
+      <button id="btnSave" class="btn primary"><i class="fa-solid fa-save"></i> Lưu</button>
+    </section>
+
+  </main>
+</div>
+
+<script>
+const token = localStorage.getItem("token");
+if (!token) location.href = "Login.html";
+
+const baseUrl = "https://localhost:44340";
+const id = new URLSearchParams(location.search).get("id");
+
+async function fetchAuth(url, method="GET", body=null) {
+  const res = await fetch(url, {
+    method,
+    headers: {
+      "Authorization": "Bearer " + token,
+      "Content-Type": "application/json"
+    },
+    body: body ? JSON.stringify(body) : null
+  });
+  return res.json();
+}
+
+async function loadSelects() {
+  const bn = await fetchAuth(baseUrl + "/api-admin/BenhNhan/search", "POST", {page:1,pageSize:999});
+  const bs = await fetchAuth(baseUrl + "/api-admin/BacSi/search", "POST", {page:1,pageSize:999});
+
+  let slBN = document.getElementById("slBenhNhan");
+  bn.data.forEach(x => slBN.innerHTML += `<option value="${x.maBenhNhan}">${x.hoTen}</option>`);
+
+  let slBS = document.getElementById("slBacSi");
+  bs.data.forEach(x => slBS.innerHTML += `<option value="${x.maBacSi}">${x.hoTen}</option>`);
+}
+
+async function loadData() {
+  if (!id) return;
+
+  const obj = await fetchAuth(baseUrl + "/api-admin/KhamBenh/get-by-id/" + id);
+
+  document.getElementById("slBenhNhan").value = obj.maBenhNhan;
+  document.getElementById("slBacSi").value = obj.maBacSi;
+  document.getElementById("txtChanDoan").value = obj.chanDoan || "";
+  document.getElementById("txtXN").value = obj.chiDinhXN || "";
+  document.getElementById("txtCLS").value = obj.chiDinhCLS || "";
+  document.getElementById("txtGhiChu").value = obj.ghiChu || "";
+}
+
+document.getElementById("btnSave").onclick = async () => {
+  const model = {
+    maKham: id ? Number(id) : 0,
+    maBenhNhan: Number(document.getElementById("slBenhNhan").value),
+    maBacSi: Number(document.getElementById("slBacSi").value),
+    chanDoan: document.getElementById("txtChanDoan").value,
+    chiDinhXN: document.getElementById("txtXN").value,
+    chiDinhCLS: document.getElementById("txtCLS").value,
+    ghiChu: document.getElementById("txtGhiChu").value,
+    nguoiThucHien: "Admin"
+  };
+
+  const url = id ? "/api-admin/KhamBenh/update" : "/api-admin/KhamBenh/create";
+  const res = await fetchAuth(baseUrl + url, "POST", model);
+
+  alert(res);
+  location.href = "KhamBenh.html";
+};
+
+loadSelects().then(loadData);
+
+document.getElementById("toggleSidebar").onclick = () =>
+  document.getElementById("sidebar").classList.toggle("collapsed");
+
+</script>
+
+</body>
+</html>

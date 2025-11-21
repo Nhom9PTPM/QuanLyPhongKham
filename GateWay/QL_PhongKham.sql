@@ -379,4 +379,3 @@ VALUES
 (1,2,14,3000);
 GO
 
--- (file gốc có thể còn các INSERT/seed khác; mình giữ nguyên các seed chính đã có)

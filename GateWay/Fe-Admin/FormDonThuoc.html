@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đơn thuốc - DAH Clinic</title>
+    <link rel="stylesheet" href="css/LichHen.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <style>
+        .table-mini input, .table-mini select { width: 100%; padding: 4px; }
+        .btn-add { background: #28a745; color: #fff; padding: 6px 10px; border-radius: 4px; cursor: pointer; }
+        .btn-del { background: #dc3545; color:#fff; padding: 6px 10px; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+            <span class="brand-text">DAH Clinic</span>
+        </div>
+        <nav class="menu">
+            <a href="index.html"><i class="fa-solid fa-chart-line"></i>Tổng quan</a>
+            <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i>Tài khoản</a>
+            <a href="BacSi.html"><i class="fa-solid fa-user-doctor"></i>Bác sĩ</a>
+			<a href="NhaCungCap.html"><i class="fa-solid fa-truck"></i>Nhà cung cấp</a>
+            <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i>Bệnh nhân</a>
+            <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i>Lịch hẹn</a>
+            <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i>Hồ sơ bệnh án</a>
+            <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i>Thuốc</a>
+            <a href="DonThuoc.html" class="active"><i class="fa-solid fa-prescription-bottle-medical"></i>Đơn thuốc</a>
+            <a href="TonKho.html"><i class="fa-solid fa-warehouse"></i>Tồn kho thuốc</a>
+            <a href="HoaDon.html"><i class="fa-solid fa-file-invoice-dollar"></i>Hóa đơn</a>
+            <a href="ThongBao.html"><i class="fa-solid fa-bell"></i>Thông báo</a>
+            <a href="LichSu.html"><i class="fa-solid fa-book"></i>Nhật ký hoạt động</a>
+            <a href="NhaCungCap.html"><i class="fa-solid fa-truck"></i>Nhà cung cấp</a>
+        </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+        <header class="header">
+            <h1>Thông tin Đơn thuốc</h1>
+            <div class="actions">
+                <button class="btn" onclick="saveDonThuoc()"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+                <a class="btn neutral" href="DonThuoc.html"><i class="fa-solid fa-arrow-left"></i> Quay lại</a>
+            </div>
+        </header>
+
+        <!-- Form -->
+        <section class="card">
+
+            <div class="row">
+                <div class="col">
+                    <label>Bác sĩ kê đơn</label>
+                    <select id="slBacSi" class="input"></select>
+                </div>
+
+                <div class="col">
+                    <label>Người kê</label>
+                    <input id="txtNguoiKe" class="input" placeholder="Nhập người kê...">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <label>Ghi chú</label>
+                    <textarea id="txtGhiChu" class="input" rows="3"></textarea>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Chi tiết đơn thuốc -->
+        <section class="card">
+            <h3>Chi tiết đơn thuốc</h3>
+
+            <button class="btn-add" onclick="addRow()"><i class="fa-solid fa-plus"></i> Thêm thuốc</button>
+
+            <table class="table-mini" id="tblCT" style="margin-top:14px; width:100%;">
+                <thead>
+                    <tr>
+                        <th style="width:30%">Thuốc</th>
+                        <th>SL</th>
+                        <th>Đơn giá</th>
+                        <th>Cách dùng</th>
+                        <th style="width:80px;">Xóa</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <h3 style="margin-top:15px;">Tổng tiền: 
+                <span id="lblTongTien" style="color:red; font-weight:bold;">0</span> đ
+            </h3>
+
+        </section>
+
+    </main>
+</div>
+
+<script>
+const token = localStorage.getItem("token");
+if (!token) { alert("Vui lòng đăng nhập!"); location.href = "Login.html"; }
+
+const baseUrl = "https://localhost:44340";
+let id = new URLSearchParams(location.search).get("id");
+let danhsachThuoc = [];
+
+async function fetchAuth(url, method="GET", body=null) {
+    const res = await fetch(url, {
+        method,
+        headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+        body: body ? JSON.stringify(body) : null
+    });
+    if (res.status === 401) {
+        alert("Hết hạn đăng nhập!"); localStorage.removeItem("token"); location.href = "Login.html";
+    }
+    return res.json();
+}
+
+async function loadBacSi() {
+    const body = { page: 1, pageSize: 999 };
+    const res = await fetchAuth(baseUrl + "/api-admin/BacSi/search", "POST", body);
+    
+    const sl = document.getElementById("slBacSi");
+    sl.innerHTML = "<option value=''>-- Chọn --</option>";
+
+    res.data.forEach(b => {
+        sl.innerHTML += `<option value="${b.maBacSi}">${b.hoTen}</option>`;
+    });
+}
+
+async function loadThuoc() {
+    const body = { page: 1, pageSize: 999 };
+    const res = await fetchAuth(baseUrl + "/api-admin/Thuoc/search", "POST", body);
+    danhsachThuoc = res.data;
+}
+
+function addRow(item = null) {
+    const tbody = document.querySelector("#tblCT tbody");
+
+    let html = `
+        <tr>
+            <td>
+                <select class="input slThuoc">
+                    <option value="">--Chọn thuốc--</option>
+                    ${danhsachThuoc.map(t => `<option value="${t.maThuoc}" ${item && item.maThuoc==t.maThuoc?'selected':''}>${t.tenThuoc}</option>`)}
+                </select>
+            </td>
+
+            <td><input class="input sl" type="number" value="${item ? item.soLuong : 1}"></td>
+            <td><input class="input gia" type="number" value="${item ? item.donGia : 0}"></td>
+            <td><input class="input cd" value="${item ? item.cachDung : ''}"></td>
+
+            <td><button class="btn-del" onclick="this.parentNode.parentNode.remove(); tinhTien()">X</button></td>
+        </tr>
+    `;
+
+    tbody.insertAdjacentHTML("beforeend", html);
+}
+
+function tinhTien() {
+    let sum = 0;
+    document.querySelectorAll("#tblCT tbody tr").forEach(tr => {
+        const sl = parseInt(tr.querySelector(".sl").value || 0);
+        const gia = parseInt(tr.querySelector(".gia").value || 0);
+        sum += sl * gia;
+    });
+    document.getElementById("lblTongTien").innerText = sum.toLocaleString();
+}
+
+async function loadDonThuoc() {
+    if (!id) return;
+
+    const res = await fetchAuth(baseUrl + "/api-admin/DonThuoc/get-by-id/" + id);
+
+    const dt = res.dt;
+    const ct = res.chitiet;
+
+    document.getElementById("slBacSi").value = dt.maBacSi;
+    document.getElementById("txtNguoiKe").value = dt.nguoiKe;
+    document.getElementById("txtGhiChu").value = dt.ghiChu;
+
+    ct.forEach(x => addRow(x));
+
+    tinhTien();
+}
+
+async function saveDonThuoc() {
+    const model = {
+        donthuoc: {
+            MaDonThuoc: id ? Number(id) : 0,
+            MaBacSi: Number(document.getElementById("slBacSi").value),
+            NguoiKe: document.getElementById("txtNguoiKe").value,
+            GhiChu: document.getElementById("txtGhiChu").value
+        },
+        listchitiet: []
+    };
+
+    document.querySelectorAll("#tblCT tbody tr").forEach(tr => {
+        model.listchitiet.push({
+            MaChiTietDon: 0,
+            MaThuoc: Number(tr.querySelector(".slThuoc").value),
+            SoLuong: Number(tr.querySelector(".sl").value),
+            DonGia: Number(tr.querySelector(".gia").value),
+            CachDung: tr.querySelector(".cd").value
+        });
+    });
+
+    let url = baseUrl + (id ? "/api-admin/DonThuoc/update-donthuoc" : "/api-admin/DonThuoc/create-donthuoc");
+
+    const rs = await fetchAuth(url, "POST", model);
+
+    alert("Lưu thành công!");
+    location.href = "DonThuoc.html";
+}
+
+document.getElementById("toggleSidebar").onclick = () =>
+    document.getElementById("sidebar").classList.toggle("collapsed");
+
+(async () => {
+    await loadBacSi();
+    await loadThuoc();
+    await loadDonThuoc();
+})();
+</script>
+
+</body>
+</html>

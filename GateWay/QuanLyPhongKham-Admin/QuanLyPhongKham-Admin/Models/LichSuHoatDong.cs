@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuanLyPhongKham_Admin.Models
 {
+    [Table("LichSuHoatDong")]
     public partial class LichSuHoatDong
     {
         [Key]

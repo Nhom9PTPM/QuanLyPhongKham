@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản lý Bác sĩ - DAH</title>
+  <title>Tồn kho thuốc - DAH Clinic</title>
   <link rel="stylesheet" href="css/LichHen.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
 <div class="container">
+
+  <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
@@ -17,7 +19,7 @@
     <nav class="menu">
 			<a href="index.html"><i class="fa-solid fa-chart-line"></i><span>Tổng quan</span></a>
             <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i><span>Tài khoản</span></a>
-            <a href="BacSi.html" class="active"><i class="fa-solid fa-user-doctor"></i><span>Bác sĩ</span></a>
+            <a href="BacSi.html"><i class="fa-solid fa-user-doctor"></i><span>Bác sĩ</span></a>
             <a href="NhaCungCap.html"><i class="fa-solid fa-truck"></i><span>Nhà cung cấp</span></a>
             <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i><span>Bệnh nhân</span></a>
             <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i><span>Lịch hẹn</span></a>
@@ -25,34 +27,37 @@
 			<a href="KhamBenh.html"><i class="fa-solid fa-stethoscope"></i><span>Khám bệnh</span></a>
             <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i><span>Thuốc</span></a>
             <a href="DonThuoc.html"><i class="fa-solid fa-prescription-bottle-medical"></i><span>Đơn thuốc</span></a>
-            <a href="TonKho.html"><i class="fa-solid fa-warehouse"></i><span>Tồn kho thuốc</span></a>
+            <a href="TonKho.html" class="active"><i class="fa-solid fa-warehouse"></i><span>Tồn kho thuốc</span></a>
             <a href="HoaDon.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Hóa đơn</span></a>
     </nav>
   </aside>
 
+  <!-- Main -->
   <main class="main">
     <header class="header">
-      <h1>Quản lý Bác sĩ</h1>
+      <h1>Tồn kho thuốc</h1>
       <div class="actions">
-        <a href="FormBacSi.html" class="btn"><i class="fa-solid fa-plus"></i> Thêm mới</a>
+        <a href="FormTonKho.html" class="btn"><i class="fa-solid fa-plus"></i> Thêm mới</a>
         <button class="btn neutral" id="btnRefresh"><i class="fa-solid fa-rotate"></i> Làm mới</button>
       </div>
     </header>
 
+    <!-- Filter -->
     <section class="filter-bar card">
-      <input id="txtChuyenKhoa" class="input" placeholder="Tìm theo chuyên khoa...">
+      <input id="txtTenThuoc" class="input" placeholder="Tìm theo tên thuốc...">
     </section>
 
+    <!-- Table -->
     <section class="card">
-      <h3>Danh sách bác sĩ</h3>
+      <h3>Danh sách tồn kho</h3>
       <div class="table-wrap" style="margin-top:12px;">
-        <table id="tblBacSi">
+        <table id="tblTonKho">
           <thead>
             <tr>
-              <th>Họ tên</th>
-              <th>Chuyên khoa</th>
-              <th>Số phòng</th>
-              <th>Trạng thái</th>
+              <th>Tên thuốc</th>
+              <th>Số lượng</th>
+              <th>Mã kho</th>
+              <th>Ngày cập nhật</th>
               <th style="width:180px;">Thao tác</th>
             </tr>
           </thead>
@@ -72,6 +77,12 @@
 
   const baseUrl = "https://localhost:44340";
 
+  function formatDate(dateStr) {
+    if (!dateStr) return "";
+    const d = new Date(dateStr);
+    return isNaN(d) ? "" : d.toLocaleDateString("vi-VN");
+  }
+
   async function fetchAuth(url, method="GET", body=null) {
     const res = await fetch(url, {
       method,
@@ -88,25 +99,31 @@
       location.href = "Login.html";
       return;
     }
+
     return res.json();
   }
 
-  async function loadBacSi() {
-    const body = { page: 1, pageSize: 999, ChuyenKhoa: document.getElementById("txtChuyenKhoa").value || "" };
-    const data = await fetchAuth(baseUrl + "/api-admin/bacsi/search", "POST", body);
-    const tbody = document.querySelector("#tblBacSi tbody");
+  async function loadTonKho() {
+    const body = {
+      page: 1,
+      pageSize: 999,
+      TenThuoc: document.getElementById("txtTenThuoc").value || ""
+    };
+
+    const data = await fetchAuth(baseUrl + "/api-admin/TonKhoThuoc/search", "POST", body);
+    const tbody = document.querySelector("#tblTonKho tbody");
     tbody.innerHTML = "";
 
-    data.data.forEach(bs => {
+    data.data.forEach(tk => {
       const row = `
         <tr>
-          <td>${bs.hoTen}</td>
-          <td>${bs.chuyenKhoa}</td>
-          <td>${bs.soPhong || ""}</td>
-          <td>${bs.trangThai ? "Hoạt động" : "Khóa"}</td>
+          <td>${tk.tenThuoc || ""}</td>
+          <td>${tk.soLuong || 0}</td>
+          <td>${tk.maKho || ""}</td>
+          <td>${formatDate(tk.ngayCapNhat)}</td>
           <td>
-            <a class="btn small neutral" href="FormBacSi.html?id=${bs.maBacSi}">Sửa</a>
-            <button class="btn small warn" onclick="deleteBacSi(${bs.maBacSi})">Xóa</button>
+            <a class="btn small neutral" href="FormTonKho.html?id=${tk.maTonKho}">Sửa</a>
+            <button class="btn small warn" onclick="deleteTonKho(${tk.maTonKho})">Xóa</button>
           </td>
         </tr>
       `;
@@ -114,22 +131,20 @@
     });
   }
 
-  async function deleteBacSi(id) {
-    if (!confirm("Bạn có chắc chắn muốn xoá bác sĩ này?")) return;
-    const res = await fetchAuth(baseUrl + "/api-admin/bacsi/delete-bacsi/" + id, "GET");
-    alert(res.message);
-    loadBacSi();
+  async function deleteTonKho(id) {
+    if (!confirm("Bạn có chắc chắn muốn xoá tồn kho này?")) return;
+    const res = await fetchAuth(baseUrl + "/api/TonKhoThuoc/delete-tonkho/" + id, "GET");
+    alert(res);
+    loadTonKho();
   }
 
-  document.getElementById("txtChuyenKhoa").addEventListener("input", loadBacSi);
-  document.getElementById("btnRefresh").addEventListener("click", loadBacSi);
+  document.getElementById("txtTenThuoc").addEventListener("input", loadTonKho);
+  document.getElementById("btnRefresh").addEventListener("click", loadTonKho);
 
-  loadBacSi();
-</script>
+  loadTonKho();
 
-<script>
-  const sidebar = document.getElementById("sidebar");
-  document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
+  document.getElementById("toggleSidebar").onclick = () =>
+    document.getElementById("sidebar").classList.toggle("collapsed");
 </script>
 </body>
 </html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thêm / Sửa Thuốc - DAH Clinic</title>
+  <link rel="stylesheet" href="css/LichHen.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+<div class="container">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+      <span class="brand-text">DAH Clinic</span>
+    </div>
+    <nav class="menu">
+      <a href="index.html"><i class="fa-solid fa-chart-line"></i>Tổng quan</a>
+      <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i>Tài khoản</a>
+      <a href="BacSi.html"><i class="fa-solid fa-user-doctor"></i>Bác sĩ</a>
+      <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i>Bệnh nhân</a>
+      <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i>Lịch hẹn</a>
+      <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i>Hồ sơ bệnh án</a>
+      <a href="Thuoc.html" class="active"><i class="fa-solid fa-capsules"></i>Thuốc</a>
+      <a href="TonKho.html"><i class="fa-solid fa-warehouse"></i>Tồn kho thuốc</a>
+      <a href="HoaDon.html"><i class="fa-solid fa-file-invoice-dollar"></i>Hóa đơn</a>
+      <a href="ThongBao.html"><i class="fa-solid fa-bell"></i>Thông báo</a>
+      <a href="LichSu.html"><i class="fa-solid fa-book"></i>Nhật ký hoạt động</a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <header class="header">
+      <h1 id="formTitle">Thêm Thuốc</h1>
+      <div class="actions">
+        <a href="Thuoc.html" class="btn neutral"><i class="fa-solid fa-arrow-left"></i> Quay lại</a>
+      </div>
+    </header>
+
+    <section class="card">
+      <form id="frmThuoc">
+        <input type="hidden" id="idThuoc">
+        <div class="form-group">
+          <label for="txtTenThuoc">Tên thuốc:</label>
+          <input type="text" id="txtTenThuoc" required>
+        </div>
+        <div class="form-group">
+          <label for="txtMoTa">Mô tả:</label>
+          <textarea id="txtMoTa" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="txtDonViTinh">Đơn vị tính:</label>
+          <input type="text" id="txtDonViTinh" required>
+        </div>
+        <div class="form-group">
+          <label for="txtGia">Giá:</label>
+          <input type="number" id="txtGia" min="0" required>
+        </div>
+        <div class="form-group">
+          <label for="txtMaNCC">Mã nhà cung cấp:</label>
+          <input type="number" id="txtMaNCC">
+        </div>
+        <div class="form-group">
+          <label for="chkTrangThai">Trạng thái:</label>
+          <input type="checkbox" id="chkTrangThai" checked>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn primary" id="btnSave"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+        </div>
+      </form>
+    </section>
+  </main>
+</div>
+
+<script>
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Vui lòng đăng nhập!");
+    location.href = "Login.html";
+  }
+
+  const baseUrl = "https://localhost:44340";
+
+  function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
+
+  async function fetchAuth(url, method="GET", body=null) {
+    const res = await fetch(url, {
+      method,
+      headers: {
+        "Authorization": "Bearer " + token,
+        "Content-Type": "application/json"
+      },
+      body: body ? JSON.stringify(body) : null
+    });
+
+    if (res.status === 401) {
+      localStorage.removeItem("token");
+      alert("Hết hạn đăng nhập!");
+      location.href = "Login.html";
+      return;
+    }
+
+    return res.json();
+  }
+
+  async function loadThuoc(id) {
+    if (!id) return;
+    const data = await fetchAuth(baseUrl + "/api/Thuoc/get-by-id/" + id);
+    if (!data) return;
+    document.getElementById("formTitle").textContent = "Sửa Thuốc";
+    document.getElementById("idThuoc").value = data.maThuoc;
+    document.getElementById("txtTenThuoc").value = data.tenThuoc;
+    document.getElementById("txtMoTa").value = data.moTa;
+    document.getElementById("txtDonViTinh").value = data.donViTinh;
+    document.getElementById("txtGia").value = data.gia;
+    document.getElementById("txtMaNCC").value = data.maNhaCungCap;
+    document.getElementById("chkTrangThai").checked = data.trangThai;
+  }
+
+  document.getElementById("frmThuoc").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const id = document.getElementById("idThuoc").value;
+    const payload = {
+      thuoc: {
+        MaThuoc: id ? parseInt(id) : 0,
+        TenThuoc: document.getElementById("txtTenThuoc").value,
+        MoTa: document.getElementById("txtMoTa").value,
+        DonViTinh: document.getElementById("txtDonViTinh").value,
+        Gia: parseInt(document.getElementById("txtGia").value),
+        MaNhaCungCap: parseInt(document.getElementById("txtMaNCC").value) || null,
+        TrangThai: document.getElementById("chkTrangThai").checked
+      }
+    };
+
+    let url = id ? "/api/Thuoc/update-thuoc" : "/api/Thuoc/create-thuoc";
+    const res = await fetchAuth(baseUrl + url, "POST", payload);
+    alert(res);
+    if (res === "OK") window.location.href = "Thuoc.html";
+  });
+
+  document.getElementById("toggleSidebar").onclick = () =>
+    document.getElementById("sidebar").classList.toggle("collapsed");
+
+  // Load dữ liệu nếu có id
+  const id = getQueryParam("id");
+  if (id) loadThuoc(id);
+
+</script>
+</body>
+</html>

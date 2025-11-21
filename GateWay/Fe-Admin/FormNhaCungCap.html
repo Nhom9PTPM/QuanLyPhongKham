@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thêm/Sửa Nhà cung cấp - DAH Clinic</title>
+  <link rel="stylesheet" href="css/LichHen.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+<div class="container">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+      <span class="brand-text">DAH Clinic</span>
+    </div>
+    <nav class="menu">
+      <a href="index.html"><i class="fa-solid fa-chart-line"></i>Tổng quan</a>
+      <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i>Tài khoản</a>
+      <a href="BacSi.html"><i class="fa-solid fa-user-doctor"></i>Bác sĩ</a>
+      <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i>Bệnh nhân</a>
+      <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i>Lịch hẹn</a>
+      <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i>Hồ sơ bệnh án</a>
+      <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i>Thuốc</a>
+      <a href="TonKho.html"><i class="fa-solid fa-warehouse"></i>Tồn kho thuốc</a>
+      <a href="HoaDon.html"><i class="fa-solid fa-file-invoice-dollar"></i>Hóa đơn</a>
+      <a href="ThongBao.html"><i class="fa-solid fa-bell"></i>Thông báo</a>
+      <a href="LichSu.html"><i class="fa-solid fa-book"></i>Nhật ký hoạt động</a>
+      <a href="NhaCungCap.html" class="active"><i class="fa-solid fa-truck"></i>Nhà cung cấp</a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <header class="header">
+      <h1 id="formTitle">Thêm Nhà cung cấp</h1>
+    </header>
+
+    <section class="card">
+      <div class="form-group">
+        <label for="txtTenNCC">Tên nhà cung cấp</label>
+        <input type="text" id="txtTenNCC" class="input" placeholder="Nhập tên nhà cung cấp">
+      </div>
+      <div class="form-group">
+        <label for="txtDiaChi">Địa chỉ</label>
+        <input type="text" id="txtDiaChi" class="input" placeholder="Nhập địa chỉ">
+      </div>
+      <div class="form-group">
+        <label for="txtSoDienThoai">Số điện thoại</label>
+        <input type="text" id="txtSoDienThoai" class="input" placeholder="Nhập số điện thoại">
+      </div>
+      <div class="form-actions">
+        <button id="btnSave" class="btn"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+        <a href="NhaCungCap.html" class="btn neutral"><i class="fa-solid fa-arrow-left"></i> Quay lại</a>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Vui lòng đăng nhập!");
+    location.href = "Login.html";
+  }
+
+  const baseUrl = "https://localhost:44340";
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get("id");
+
+  async function fetchAuth(url, method="GET", body=null) {
+    const res = await fetch(url, {
+      method,
+      headers: {
+        "Authorization": "Bearer " + token,
+        "Content-Type": "application/json"
+      },
+      body: body ? JSON.stringify(body) : null
+    });
+    if (res.status === 401) {
+      localStorage.removeItem("token");
+      alert("Hết hạn đăng nhập!");
+      location.href = "Login.html";
+      return;
+    }
+    return res.json();
+  }
+
+  async function loadNCC() {
+    if (!id) return;
+    try {
+      const data = await fetchAuth(baseUrl + "/api-admin/NhaCungCap/get-by-id/" + id);
+      document.getElementById("formTitle").innerText = "Sửa Nhà cung cấp";
+      document.getElementById("txtTenNCC").value = data.tenNhaCungCap || "";
+      document.getElementById("txtDiaChi").value = data.diaChi || "";
+      document.getElementById("txtSoDienThoai").value = data.soDienThoai || "";
+    } catch (err) {
+      console.error(err);
+      alert("Không tải được dữ liệu nhà cung cấp!");
+    }
+  }
+
+  async function saveNCC() {
+    const model = {
+      maNhaCungCap: id ? parseInt(id) : 0,
+      tenNhaCungCap: document.getElementById("txtTenNCC").value.trim(),
+      diaChi: document.getElementById("txtDiaChi").value.trim(),
+      soDienThoai: document.getElementById("txtSoDienThoai").value.trim()
+    };
+
+    try {
+      let res;
+      if (id) {
+        res = await fetchAuth(baseUrl + "/api-admin/NhaCungCap/update", "POST", model);
+      } else {
+        res = await fetchAuth(baseUrl + "/api/NhaCungCap-admin/create", "POST", model);
+      }
+      alert("Lưu thành công!");
+      window.location.href = "NhaCungCap.html";
+    } catch (err) {
+      console.error(err);
+      alert("Lưu thất bại!");
+    }
+  }
+
+  document.getElementById("btnSave").addEventListener("click", saveNCC);
+
+  loadNCC();
+
+  document.getElementById("toggleSidebar").onclick = () =>
+    document.getElementById("sidebar").classList.toggle("collapsed");
+
+</script>
+</body>
+</html>

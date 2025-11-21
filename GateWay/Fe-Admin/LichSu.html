@@ -3,109 +3,124 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nhật ký hoạt động - DAH</title>
+  <title>Nhật ký hoạt động - DAH Clinic</title>
+
   <link rel="stylesheet" href="css/LichHen.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
-  <div class="container">
+
+<div class="container">
+
+  <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
-  <div class="sidebar-header">
-    <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
-    <span class="brand-text">DAH Clinic</span>
-  </div>
+    <div class="sidebar-header">
+      <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+      <span class="brand-text">DAH Clinic</span>
+    </div>
 
-  <nav class="menu">
-    <a href="index.html"><i class="fa-solid fa-chart-line"></i><span>Tổng quan</span></a>
-    <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i><span>Tài khoản</span></a>
-    <a href="BacSi.html"><i class="fa-solid fa-user-doctor"></i><span>Bác sĩ</span></a>
-    <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i><span>Bệnh nhân</span></a>
-    <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i><span>Lịch hẹn</span></a>
-    <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i><span>Hồ sơ bệnh án</span></a>
-    <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i><span>Thuốc & kho</span></a>
-    <a href="HoaDon.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Hóa đơn</span></a>
-    <a href="ThongBao.html"><i class="fa-solid fa-bell"></i><span>Thông báo</span></a>
-    <a href="LichSu.html"><i class="fa-solid fa-book"></i><span>Nhật ký hoạt động</span></a>
-  </nav>
-</aside>
-    <div id="sidebarContainer"></div>
+    <nav class="menu">
+      <a href="index.html"><i class="fa-solid fa-chart-line"></i>Tổng quan</a>
+      <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i>Tài khoản</a>
+      <a href="BacSi.html"><i class="fa-solid fa-user-doctor"></i>Bác sĩ</a>
+      <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i>Bệnh nhân</a>
+      <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i>Lịch hẹn</a>
+      <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i>Hồ sơ bệnh án</a>
+      <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i>Thuốc</a>
+      <a href="TonKho.html"><i class="fa-solid fa-warehouse"></i>Tồn kho thuốc</a>
+      <a href="NhaCungCap.html"><i class="fa-solid fa-truck-field"></i>Nhà cung cấp</a>
+      <a href="DonThuoc.html"><i class="fa-solid fa-file-medical-prescription"></i>Đơn thuốc</a>
+      <a href="HoaDon.html"><i class="fa-solid fa-file-invoice-dollar"></i>Hóa đơn</a>
+      <a class="active" href="LichSu.html"><i class="fa-solid fa-book"></i>Nhật ký hoạt động</a>
+      <a href="ThongBao.html"><i class="fa-solid fa-bell"></i>Thông báo</a>
+    </nav>
+  </aside>
 
-    <main class="main">
-      <header class="header">
-        <h1>Nhật ký hoạt động hệ thống</h1>
-      </header>
+  <!-- Main -->
+  <main class="main">
+    <header class="header">
+      <h1>Nhật ký hoạt động</h1>
+      <div class="actions">
+        <button class="btn neutral" id="btnRefresh">
+          <i class="fa-solid fa-rotate"></i> Làm mới
+        </button>
+      </div>
+    </header>
 
-      <section class="filter-bar card">
-        <input id="txtSearch" class="input" placeholder="Tìm theo người thực hiện hoặc hành động...">
-      </section>
+    <section class="card" style="margin-top:20px;">
+      <h3>Danh sách hoạt động gần đây</h3>
+      <div class="table-wrap" style="margin-top:12px;">
+        <table id="tblLichSu">
+          <thead>
+            <tr>
+              <th>Người thực hiện</th>
+              <th>Hành động</th>
+              <th>Thời gian</th>
+              <th>Ghi chú</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
 
-      <section class="card">
-        <h3>Danh sách hoạt động gần đây</h3>
-        <div class="table-wrap">
-          <table id="tblLichSu">
-            <thead>
-              <tr>
-                <th>Mã</th>
-                <th>Người thực hiện</th>
-                <th>Hành động</th>
-                <th>Đối tượng</th>
-                <th>Thời gian</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>LS001</td>
-                <td>Admin</td>
-                <td>Thêm hồ sơ bệnh án</td>
-                <td>Nguyễn Văn A</td>
-                <td>2025-10-29 10:25</td>
-              </tr>
-              <tr>
-                <td>LS002</td>
-                <td>Admin</td>
-                <td>Xóa thuốc Paracetamol</td>
-                <td>Kho thuốc</td>
-                <td>2025-10-29 14:40</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-    </main>
-  </div>
+  </main>
+</div>
 
-  <script>
-    fetch("components/sidebar.html")
-      .then(r => r.text())
-      .then(html => {
-        document.getElementById("sidebarContainer").innerHTML = html;
-        const sidebar = document.getElementById("sidebar");
-        document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
-        const current = location.pathname.split("/").pop();
-        document.querySelectorAll(".menu a").forEach(link => {
-          if (link.getAttribute("href") === current) link.classList.add("active");
-        });
-      });
+<script>
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Vui lòng đăng nhập!");
+    location.href = "Login.html";
+  }
 
-    const txtSearch = document.getElementById("txtSearch");
-    const tbody = document.querySelector("#tblLichSu tbody");
+  const baseUrl = "https://localhost:44340";
 
-    txtSearch.addEventListener("input", () => {
-      const q = txtSearch.value.toLowerCase();
-      for (let r of tbody.rows) {
-        r.style.display = r.innerText.toLowerCase().includes(q) ? "" : "none";
+  async function fetchAuth(url, method = "GET") {
+    const res = await fetch(url, {
+      method,
+      headers: {
+        "Authorization": "Bearer " + token
       }
     });
-  </script>
-    <script>
-  const sidebar = document.getElementById("sidebar");
-  document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
 
-  // Tự động highlight mục hiện tại
-  const currentPage = location.pathname.split("/").pop();
-  document.querySelectorAll(".menu a").forEach(link => {
-    if (link.getAttribute("href") === currentPage) link.classList.add("active");
-  });
+    if (res.status === 401) {
+      localStorage.removeItem("token");
+      alert("Phiên đăng nhập hết hạn!");
+      location.href = "Login.html";
+      return;
+    }
+
+    return res.json();
+  }
+
+  async function loadLichSu() {
+    const data = await fetchAuth(baseUrl + "/api-admin/LichSuHoatDong/get-all");
+
+    const tbody = document.querySelector("#tblLichSu tbody");
+    tbody.innerHTML = "";
+
+    data.forEach(item => {
+      tbody.innerHTML += `
+        <tr>
+          <td>${item.nguoiThucHien || ""}</td>
+          <td>${item.hanhDong || ""}</td>
+          <td>${item.thoiGian ? new Date(item.thoiGian).toLocaleString() : ""}</td>
+          <td>${item.ghiChu || ""}</td>
+        </tr>
+      `;
+    });
+  }
+
+  document.getElementById("btnRefresh").addEventListener("click", loadLichSu);
+
+  // Toggle sidebar
+  document.getElementById("toggleSidebar").onclick = () =>
+    document.getElementById("sidebar").classList.toggle("collapsed");
+
+  // Load data
+  loadLichSu();
 </script>
+
 </body>
 </html>

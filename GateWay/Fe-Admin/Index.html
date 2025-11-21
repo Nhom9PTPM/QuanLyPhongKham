@@ -16,16 +16,18 @@
         <span class="brand-text">DAH Clinic</span>
       </div>
       <nav class="menu">
-        <a href="index.html"><i class="fa-solid fa-chart-line"></i><span>Tổng quan</span></a>
-        <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i><span>Tài khoản</span></a>
-        <a href="BacSi.html"><i class="fa-solid fa-user-doctor"></i><span>Bác sĩ</span></a>
-        <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i><span>Bệnh nhân</span></a>
-        <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i><span>Lịch hẹn</span></a>
-        <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i><span>Hồ sơ bệnh án</span></a>
-        <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i><span>Thuốc & kho</span></a>
-        <a href="HoaDon.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Hóa đơn</span></a>
-        <a href="ThongBao.html"><i class="fa-solid fa-bell"></i><span>Thông báo</span></a>
-        <a href="LichSu.html"><i class="fa-solid fa-book"></i><span>Nhật ký hoạt động</span></a>
+			<a href="index.html" class="active"><i class="fa-solid fa-chart-line"></i><span>Tổng quan</span></a>
+            <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i><span>Tài khoản</span></a>
+            <a href="BacSi.html"><i class="fa-solid fa-user-doctor"></i><span>Bác sĩ</span></a>
+            <a href="NhaCungCap.html"><i class="fa-solid fa-truck"></i><span>Nhà cung cấp</span></a>
+            <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i><span>Bệnh nhân</span></a>
+            <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i><span>Lịch hẹn</span></a>
+            <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i><span>Hồ sơ bệnh án</span></a>
+			<a href="KhamBenh.html"><i class="fa-solid fa-stethoscope"></i><span>Khám bệnh</span></a>
+            <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i><span>Thuốc</span></a>
+            <a href="DonThuoc.html"><i class="fa-solid fa-prescription-bottle-medical"></i><span>Đơn thuốc</span></a>
+            <a href="TonKho.html"><i class="fa-solid fa-warehouse"></i><span>Tồn kho thuốc</span></a>
+            <a href="HoaDon.html"><i class="fa-solid fa-file-invoice-dollar"></i><span>Hóa đơn</span></a>
       </nav>
     </aside>
 
@@ -153,6 +155,15 @@
       .catch(console.error);
   }
 </script>
+<script>
+  const toggleBtn = document.getElementById('toggleSidebar');
+  const sidebar = document.getElementById('sidebar');
+
+  toggleBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('collapsed');
+  });
+</script>
+
 
 </body>
 </html>

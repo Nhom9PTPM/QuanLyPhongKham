@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản lý Bác sĩ - DAH</title>
+  <title>Quản lý Nhà cung cấp - DAH Clinic</title>
   <link rel="stylesheet" href="css/LichHen.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
 <div class="container">
+
+  <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
@@ -17,8 +19,8 @@
     <nav class="menu">
 			<a href="index.html"><i class="fa-solid fa-chart-line"></i><span>Tổng quan</span></a>
             <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i><span>Tài khoản</span></a>
-            <a href="BacSi.html" class="active"><i class="fa-solid fa-user-doctor"></i><span>Bác sĩ</span></a>
-            <a href="NhaCungCap.html"><i class="fa-solid fa-truck"></i><span>Nhà cung cấp</span></a>
+            <a href="BacSi.html"><i class="fa-solid fa-user-doctor"></i><span>Bác sĩ</span></a>
+            <a href="NhaCungCap.html" class="active"><i class="fa-solid fa-truck"></i><span>Nhà cung cấp</span></a>
             <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i><span>Bệnh nhân</span></a>
             <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i><span>Lịch hẹn</span></a>
             <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i><span>Hồ sơ bệnh án</span></a>
@@ -30,29 +32,31 @@
     </nav>
   </aside>
 
+  <!-- Main -->
   <main class="main">
     <header class="header">
-      <h1>Quản lý Bác sĩ</h1>
+      <h1>Quản lý Nhà cung cấp</h1>
       <div class="actions">
-        <a href="FormBacSi.html" class="btn"><i class="fa-solid fa-plus"></i> Thêm mới</a>
+        <a href="FormNhaCungCap.html" class="btn"><i class="fa-solid fa-plus"></i> Thêm mới</a>
         <button class="btn neutral" id="btnRefresh"><i class="fa-solid fa-rotate"></i> Làm mới</button>
       </div>
     </header>
 
+    <!-- Filter -->
     <section class="filter-bar card">
-      <input id="txtChuyenKhoa" class="input" placeholder="Tìm theo chuyên khoa...">
+      <input id="txtTenNCC" class="input" placeholder="Tìm theo tên nhà cung cấp...">
     </section>
 
+    <!-- Table -->
     <section class="card">
-      <h3>Danh sách bác sĩ</h3>
+      <h3>Danh sách Nhà cung cấp</h3>
       <div class="table-wrap" style="margin-top:12px;">
-        <table id="tblBacSi">
+        <table id="tblNhaCungCap">
           <thead>
             <tr>
-              <th>Họ tên</th>
-              <th>Chuyên khoa</th>
-              <th>Số phòng</th>
-              <th>Trạng thái</th>
+              <th>Tên nhà cung cấp</th>
+              <th>Địa chỉ</th>
+              <th>Số điện thoại</th>
               <th style="width:180px;">Thao tác</th>
             </tr>
           </thead>
@@ -81,7 +85,6 @@
       },
       body: body ? JSON.stringify(body) : null
     });
-
     if (res.status === 401) {
       localStorage.removeItem("token");
       alert("Hết hạn đăng nhập!");
@@ -91,22 +94,25 @@
     return res.json();
   }
 
-  async function loadBacSi() {
-    const body = { page: 1, pageSize: 999, ChuyenKhoa: document.getElementById("txtChuyenKhoa").value || "" };
-    const data = await fetchAuth(baseUrl + "/api-admin/bacsi/search", "POST", body);
-    const tbody = document.querySelector("#tblBacSi tbody");
+  async function loadNhaCungCap() {
+    const body = {
+      page: 1,
+      pageSize: 999,
+      TenNhaCungCap: document.getElementById("txtTenNCC").value || ""
+    };
+    const data = await fetchAuth(baseUrl + "/api-admin/NhaCungCap/search", "POST", body);
+    const tbody = document.querySelector("#tblNhaCungCap tbody");
     tbody.innerHTML = "";
 
-    data.data.forEach(bs => {
+    data.data.forEach(ncc => {
       const row = `
         <tr>
-          <td>${bs.hoTen}</td>
-          <td>${bs.chuyenKhoa}</td>
-          <td>${bs.soPhong || ""}</td>
-          <td>${bs.trangThai ? "Hoạt động" : "Khóa"}</td>
+          <td>${ncc.tenNhaCungCap || ""}</td>
+          <td>${ncc.diaChi || ""}</td>
+          <td>${ncc.soDienThoai || ""}</td>
           <td>
-            <a class="btn small neutral" href="FormBacSi.html?id=${bs.maBacSi}">Sửa</a>
-            <button class="btn small warn" onclick="deleteBacSi(${bs.maBacSi})">Xóa</button>
+            <a class="btn small neutral" href="FormNhaCungCap.html?id=${ncc.maNhaCungCap}">Sửa</a>
+            <button class="btn small warn" onclick="deleteNCC(${ncc.maNhaCungCap})">Xóa</button>
           </td>
         </tr>
       `;
@@ -114,22 +120,21 @@
     });
   }
 
-  async function deleteBacSi(id) {
-    if (!confirm("Bạn có chắc chắn muốn xoá bác sĩ này?")) return;
-    const res = await fetchAuth(baseUrl + "/api-admin/bacsi/delete-bacsi/" + id, "GET");
-    alert(res.message);
-    loadBacSi();
+  async function deleteNCC(id) {
+    if (!confirm("Bạn có chắc muốn xoá nhà cung cấp này?")) return;
+    const res = await fetchAuth(baseUrl + "/api-admin/NhaCungCap/delete/" + id, "GET");
+    alert(res);
+    loadNhaCungCap();
   }
 
-  document.getElementById("txtChuyenKhoa").addEventListener("input", loadBacSi);
-  document.getElementById("btnRefresh").addEventListener("click", loadBacSi);
+  document.getElementById("txtTenNCC").addEventListener("input", loadNhaCungCap);
+  document.getElementById("btnRefresh").addEventListener("click", loadNhaCungCap);
 
-  loadBacSi();
-</script>
+  loadNhaCungCap();
 
-<script>
-  const sidebar = document.getElementById("sidebar");
-  document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
+  document.getElementById("toggleSidebar").onclick = () =>
+    document.getElementById("sidebar").classList.toggle("collapsed");
+
 </script>
 </body>
 </html>

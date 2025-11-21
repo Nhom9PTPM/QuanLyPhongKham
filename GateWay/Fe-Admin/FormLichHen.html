@@ -3,54 +3,145 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chi tiết lịch hẹn - DAH</title>
+  <title>Form Lịch hẹn - DAH</title>
   <link rel="stylesheet" href="css/LichHen.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
-  <div class="container">
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
-        <span class="brand-text">DAH Clinic</span>
+<div class="container">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+      <span class="brand-text">DAH Clinic</span>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="header">
+      <h1 id="formTitle">Thêm Lịch hẹn</h1>
+      <div class="actions">
+        <a href="LichHen.html" class="btn neutral"><i class="fa-solid fa-arrow-left"></i> Quay lại</a>
       </div>
-      <nav class="menu">
-        <a href="LichHen.html" class="active"><i class="fa-solid fa-calendar-days"></i><span>Lịch hẹn</span></a>
-        <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i><span>Bệnh nhân</span></a>
-        <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i><span>Thuốc</span></a>
-      </nav>
-    </aside>
+    </header>
 
-    <main class="main">
-      <header class="header">
-        <h1>Thông tin chi tiết lịch hẹn</h1>
-      </header>
+    <section class="card">
+      <form id="formLichHen">
+        <div class="form-group">
+          <label>Bệnh nhân</label>
+          <input type="number" id="txtMaBenhNhan" class="input" required>
+        </div>
+        <div class="form-group">
+          <label>Bác sĩ</label>
+          <input type="number" id="txtMaBacSi" class="input" required>
+        </div>
+        <div class="form-group">
+          <label>Ngày bắt đầu</label>
+          <input type="date" id="txtNgayBatDau" class="input" required>
+        </div>
+        <div class="form-group">
+          <label>Ngày kết thúc</label>
+          <input type="date" id="txtNgayKetThuc" class="input">
+        </div>
+        <div class="form-group">
+          <label>Giờ hẹn</label>
+          <input type="time" id="txtGioHen" class="input" required>
+        </div>
+        <div class="form-group">
+          <label>Trạng thái</label>
+          <select id="selectTrangThai" class="input">
+            <option value="true">Hoạt động</option>
+            <option value="false">Hủy / Khóa</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Ghi chú</label>
+          <input type="text" id="txtGhiChu" class="input">
+        </div>
+        <button type="submit" class="btn"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+      </form>
+    </section>
+  </main>
+</div>
 
-      <section class="card">
-        <form>
-          <div class="form-grid">
-            <div><label>Mã lịch hẹn</label><input class="input" value="LH001" disabled></div>
-            <div><label>Bệnh nhân</label><input class="input" value="Nguyễn Văn A"></div>
-            <div><label>Số điện thoại</label><input class="input" value="0123456789"></div>
-            <div><label>Bác sĩ</label><input class="input" value="Bác sĩ Linh"></div>
-            <div><label>Ngày hẹn</label><input type="date" class="input" value="2025-10-30"></div>
-            <div><label>Giờ hẹn</label><input type="time" class="input" value="09:00"></div>
-            <div><label>Dự kiến (phút)</label><input type="number" class="input" value="30"></div>
-            <div><label>Dịch vụ</label><input class="input" value="Khám tổng quát"></div>
-            <div><label>Ghi chú</label><textarea class="input" rows="3">Tái khám sau 1 tuần</textarea></div>
-          </div>
-          <div class="row" style="justify-content:flex-end;margin-top:12px">
-            <button class="btn secondary" type="button" onclick="window.history.back()">Quay lại</button>
-            <button class="btn">Lưu thay đổi</button>
-          </div>
-        </form>
-      </section>
-    </main>
-  </div>
+<script>
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Vui lòng đăng nhập!");
+    location.href = "Login.html";
+  }
 
-  <script>
-    const sidebar = document.getElementById("sidebar");
-    document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
-  </script>
+  const baseUrl = "https://localhost:44340/api-admin/lichhen";
+  const params = new URLSearchParams(window.location.search);
+  const lichHenId = params.get("id");
+
+  const txtMaBenhNhan = document.getElementById("txtMaBenhNhan");
+  const txtMaBacSi = document.getElementById("txtMaBacSi");
+  const txtNgayBatDau = document.getElementById("txtNgayBatDau");
+  const txtNgayKetThuc = document.getElementById("txtNgayKetThuc");
+  const txtGioHen = document.getElementById("txtGioHen");
+  const selectTrangThai = document.getElementById("selectTrangThai");
+  const txtGhiChu = document.getElementById("txtGhiChu");
+  const formTitle = document.getElementById("formTitle");
+
+  async function fetchAuth(url, method="GET", body=null) {
+    const res = await fetch(url, {
+      method,
+      headers: { 
+        "Authorization": "Bearer " + token,
+        "Content-Type": "application/json"
+      },
+      body: body ? JSON.stringify(body) : null
+    });
+    if (res.status === 401) {
+      localStorage.removeItem("token");
+      alert("Hết hạn đăng nhập!");
+      location.href = "Login.html";
+      return;
+    }
+    if (!res.ok) throw new Error("Fetch lỗi: " + res.status);
+    return res.json();
+  }
+
+  async function loadLichHen() {
+    if (!lichHenId) return;
+    formTitle.innerText = "Sửa Lịch hẹn";
+    const data = await fetchAuth(baseUrl + "/get-by-id/" + lichHenId);
+    txtMaBenhNhan.value = data.maBenhNhan;
+    txtMaBacSi.value = data.maBacSi;
+    txtNgayBatDau.value = data.ngayBatDau ? new Date(data.ngayBatDau).toISOString().split('T')[0] : "";
+    txtNgayKetThuc.value = data.ngayKetThuc ? new Date(data.ngayKetThuc).toISOString().split('T')[0] : "";
+    txtGioHen.value = data.gioHen || "";
+    selectTrangThai.value = data.trangThai;
+    txtGhiChu.value = data.ghiChu || "";
+  }
+
+  document.getElementById("formLichHen").addEventListener("submit", async e => {
+    e.preventDefault();
+    const model = {
+      maLichHen: lichHenId ? parseInt(lichHenId) : 0,
+      maBenhNhan: parseInt(txtMaBenhNhan.value),
+      maBacSi: parseInt(txtMaBacSi.value),
+      ngayBatDau: txtNgayBatDau.value,
+      ngayKetThuc: txtNgayKetThuc.value,
+      gioHen: txtGioHen.value,
+      trangThai: selectTrangThai.value === "true",
+      ghiChu: txtGhiChu.value
+    };
+
+    const url = lichHenId ? baseUrl + "/update" : baseUrl + "/create";
+    try {
+      const res = await fetchAuth(url, "POST", model);
+      alert("Lưu thành công!");
+      window.location.href = "LichHen.html";
+    } catch(err) {
+      alert("Lỗi: " + err.message);
+    }
+  });
+
+  loadLichHen();
+
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
+</script>
 </body>
 </html>
