@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="./img/logohinh.png" rel="icon" type="image/png">
+  <title>Đặt lịch khám</title>
+  <link rel="stylesheet" href="./css/reset.css">
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="https:cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+  <div class="top-bar">
+    <div class="top-links">
+      <a href="./bacsi.html">Tìm bác sĩ</a>
+      <a href="#">Khóa học trực tuyến</a>
+      <a href="#">Chăm sóc khách hàng</a>
+    </div>
+  </div>
+
+  <header class="main-header">
+    <img src="./img/logo.png" alt="HeartCare Logo" class="logo">
+    <div class="search-section">
+      <!-- <i class="fa-solid fa-magnifying-glass search-icon"></i> -->
+      <input type="text" placeholder="Tìm kiếm...">
+      
+    </div>
+   <div class="tools">
+      <i class="fa-regular fa-calendar-days calendar-icon"></i>
+      <!-- <i class="fa-solid fa-pen edit-icon"></i> -->
+      <img src="https://flagcdn.com/w40/vn.png" alt="Vietnam Flag" class="flag-icon">
+      <!-- <i class="fa-solid fa-chevron-down dropdown-icon"></i> -->
+    </div> 
+  </header>
+
+  <nav class="menu-bar">
+     <a href="./index.html" class="active">Trang chủ</a>
+          <a href="./about-us.html">Giới thiệu</a>
+          <a href="./dichvu.html">Dịch vụ</a>
+          <a href="./datlich.html">Đặt lịch</a>
+          <a href="./lienhe.html">Liên hệ</a>
+                    <a href="./blog.html">Tin tức</a>
+
+  </nav>
+ 
+  <section class="banner">
+    <div class="container banner-content">
+      <h1>ĐĂNG KÝ KHÁM<br /></h1>
+      <!-- <a href="#" class="btn-primary">Đặt lịch khám</a> -->
+    </div>
+  </section>
+
+
+ 
+  <div class="form-wrapper">
+    <h2>Nội dung chi tiết đặt hẹn</h2>
+
+    <form>
+      <div class="form-section">
+        <label for="service">Dịch vụ *</label>
+        <select id="service" required>
+          <option value="">Chọn dịch vụ</option>
+          <option value="1">Khám nội tổng quát</option>
+          <option value="2">Khám nhi</option>
+        </select>
+      </div>
+
+      <div class="form-section">
+        <label for="doctor">Bác sĩ</label>
+        <select id="doctor">
+          <option value="">Chọn Bác sĩ muốn khám</option>
+          <option value="bs1">BS Nguyễn Văn A</option>
+          <option value="bs2">BS Trần Thị B</option>
+          <option value="bs2">BS Lê Thị Mận</option>
+          <option value="bs2">BS Trần Văn Xoài</option>
+          <option value="bs2">BS Trần Thị Sầu Riêng</option>
+        </select>
+      </div>
+
+      <div class="form-section">
+        <label>Thời gian khám *</label>
+        <div class="time-options">
+          <button type="button">11/06<br>Thứ 2</button>
+          <button type="button">12/06<br>Thứ 3</button>
+          <button type="button">13/06<br>Thứ 4</button>
+          <button type="button">14/06<br>Thứ 5</button>
+          <button type="button">Ngày khác</button>
+        </div>
+      </div>
+
+      <h2>Thông tin khách hàng</h2>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fullname">Họ và tên *</label>
+          <input type="text" id="fullname" required placeholder="Họ và tên">
+        </div>
+        <div class="form-group">
+          <label>Giới tính</label>
+          <div class="gender-group">
+            <label><input type="radio" name="gender" value="Nam"> Nam</label>
+            <label><input type="radio" name="gender" value="Nữ"> Nữ</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="dob">Ngày tháng năm sinh *</label>
+          <input type="date" id="dob" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="Nhập email">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="phone">Số điện thoại *</label>
+          <input type="tel" id="phone" required placeholder="Nhập số điện thoại">
+        </div>
+        <div class="form-group">
+          <label for="reason">Lý do khám *</label>
+          <!-- <input type="text" id="reason" required placeholder="Triệu chứng của bạn" class="reason-input"> -->
+          <textarea id="reason" placeholder="Triệu chứng của bạn" rows="7" class="input_book" aria-placeholder="Triệu chứng của bạn"></textarea>
+        </div>
+      </div>
+
+      <div class="form-section checkbox">
+        <label>
+          <input type="checkbox" required>
+          Tôi đã đọc và đồng ý với <a href="#">chính sách bảo vệ dữ liệu cá nhân</a>.
+        </label>
+      </div>
+
+      <div class="submit-section">
+        <button type="submit" class="submit-btn">Gửi thông tin</button>
+      </div>
+    </form>
+  </div>
+</body>
+    <!-- Footer -->
+   <footer class="modern-footer">
+  <div class="footer-container">
+    <!-- Cột 1: Liên hệ -->
+    <div class="footer-column">
+      <h3>Trung tâm hỗ trợ</h3>
+      <p class="footer-hotline">📞 1900 8686</p>
+      <p><strong>HeartCare Plus Clinic</strong></p>
+      <p><i class="fa-solid fa-location-dot"></i> 45 Nguyễn Trãi, P. An Cư, Ninh Kiều, Cần Thơ</p>
+      <p><i class="fa-solid fa-envelope"></i> contact@heartcare.vn</p>
+      <p><i class="fa-solid fa-phone"></i> 0292 1234 567</p>
+    </div>
+
+    <!-- Cột 2: Giới thiệu -->
+    <div class="footer-column">
+      <h3>Về HeartCare</h3>
+      <ul>
+        <li><a href="./about-us.html">Về chúng tôi</a></li>
+        <li><a href="./doctors.html">Đội ngũ bác sĩ</a></li>
+        <li><a href="./services.html">Dịch vụ</a></li>
+        <li><a href="./blog.html">Tin tức y khoa</a></li>
+      </ul>
+    </div>
+
+    <!-- Cột 3: Hỗ trợ -->
+    <div class="footer-column">
+      <h3>Hướng dẫn & Hỗ trợ</h3>
+      <ul>
+        <li><a href="./datlich.html">Đặt lịch khám</a></li>
+        <li><a href="./guide.html">Hướng dẫn sử dụng</a></li>
+        <li><a href="./faq.html">Câu hỏi thường gặp</a></li>
+        <li><a href="./terms.html">Chính sách & Điều khoản</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 HeartCare Plus. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>

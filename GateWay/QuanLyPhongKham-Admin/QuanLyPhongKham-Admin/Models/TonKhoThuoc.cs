@@ -11,6 +11,7 @@ namespace QuanLyPhongKham_Admin.Models
         public string? MaKho { get; set; }
         public DateTime NgayCapNhat { get; set; }
 
-        public virtual Thuoc MaThuocNavigation { get; set; } = null!;
+        [ForeignKey("MaThuoc")]
+        public virtual Thuoc? MaThuocNavigation { get; set; } = null!;
     }
 }

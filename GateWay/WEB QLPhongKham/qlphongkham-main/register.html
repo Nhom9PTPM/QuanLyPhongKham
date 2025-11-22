@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đăng ký - HeartCare</title>
+  <link rel="stylesheet" href="./css/style.css" />
+  <style>
+
+
+  </style>
+</head>
+<body class="register-page">
+  <div class="auth-wrapper">
+    <div class="auth-info">
+      <img src="./img/logohinh.png" alt="HeartCare Logo" />
+      <h1>HeartCare Clinic</h1>
+      <p>Lắng nghe trái tim bạn - Phòng khám chuyên tim mạch</p>
+    </div>
+    <div class="auth-container">
+      <h2>Tạo tài khoản mới</h2>
+      <form action="register.php" method="post">
+        <input type="text" name="fullname" placeholder="Họ và tên" required />
+        <input type="text" name="username" placeholder="Tên đăng nhập" required />
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="password" name="password" placeholder="Mật khẩu" required />
+        <input type="password" name="confirm_password" placeholder="Xác nhận mật khẩu" required />
+        <button type="submit">Đăng ký</button>
+      </form>
+      <div class="alt-link">
+        Đã có tài khoản? <a href="login.html">Đăng nhập</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

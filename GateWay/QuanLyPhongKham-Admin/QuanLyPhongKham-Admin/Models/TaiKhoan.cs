@@ -19,7 +19,7 @@ namespace QuanLyPhongKham_Admin.Models
         public bool TrangThai { get; set; }
         public DateTime NgayTao { get; set; }
 
-        public virtual NguoiDung MaNguoiDungNavigation { get; set; } = null!;
+        public virtual NguoiDung? MaNguoiDungNavigation { get; set; }
         public virtual VaiTro? MaVaiTroNavigation { get; set; }
 
         public virtual ICollection<ThongBao> ThongBaos { get; set; }

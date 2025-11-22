@@ -77,28 +77,63 @@ namespace QuanLyPhongKham_Admin.Controllers
 
         [Route("create-user")]
         [HttpPost]
-        public IActionResult Create(UserModels model)
+        public IActionResult Create([FromBody] UserModels model)
         {
+            if (model == null || model.nguoidung == null || model.taikhoan == null)
+                return BadRequest(new { Message = "Dữ liệu không hợp lệ." });
+
             try
             {
-                
+                // Kiểm tra tên đăng nhập đã tồn tại chưa
                 var exists = _db.TaiKhoans.SingleOrDefault(x => x.TenDangNhap == model.taikhoan.TenDangNhap);
-                if (exists != null) return Ok("Tên đăng nhập đã tồn tại!");
+                if (exists != null)
+                    return BadRequest(new { Message = "Tên đăng nhập đã tồn tại!" });
 
-                _db.NguoiDungs.Add(model.nguoidung);
+                // Kiểm tra người dùng trùng tên + email (tuỳ nhu cầu)
+                var nguoiDungExists = _db.NguoiDungs
+                    .FirstOrDefault(x => x.HoTen == model.nguoidung.HoTen && x.Email == model.nguoidung.Email);
+                if (nguoiDungExists != null)
+                    return BadRequest(new { Message = "Người dùng đã tồn tại!" });
+
+                // Tạo NguoiDung
+                var newNguoiDung = new NguoiDung
+                {
+                    HoTen = model.nguoidung.HoTen,
+                    GioiTinh = model.nguoidung.GioiTinh,
+                    NgaySinh = model.nguoidung.NgaySinh,
+                    SoDienThoai = model.nguoidung.SoDienThoai,
+                    Email = model.nguoidung.Email,
+                    DiaChi = model.nguoidung.DiaChi,
+                    LoaiNguoiDung = model.nguoidung.LoaiNguoiDung,
+                    NgayTao = DateTime.Now,
+                    DaXoa = false
+                };
+
+                _db.NguoiDungs.Add(newNguoiDung);
+                _db.SaveChanges(); 
+
+                var newTaiKhoan = new TaiKhoan
+                {
+                    TenDangNhap = model.taikhoan.TenDangNhap,
+                    MatKhau = model.taikhoan.MatKhau,
+                    LoaiQuyen = model.taikhoan.LoaiQuyen,
+                    MaVaiTro = model.taikhoan.MaVaiTro,
+                    TrangThai = model.taikhoan.TrangThai,
+                    NgayTao = DateTime.Now,
+                    MaNguoiDung = newNguoiDung.MaNguoiDung
+                };
+
+                _db.TaiKhoans.Add(newTaiKhoan);
                 _db.SaveChanges();
 
-                model.taikhoan.MaNguoiDung = model.nguoidung.MaNguoiDung;
-                _db.TaiKhoans.Add(model.taikhoan);
-                _db.SaveChanges();
-
-                return Ok("OK");
+                return Ok(new { Message = "Tạo người dùng và tài khoản thành công." });
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return StatusCode(500, new { Message = "Có lỗi xảy ra khi tạo người dùng.", Details = ex.Message });
             }
         }
+
 
         [Route("update-user")]
         [HttpPost]
@@ -160,7 +195,7 @@ namespace QuanLyPhongKham_Admin.Controllers
             }
         }
 
-       
+
         [Route("search")]
         [HttpPost]
         public ResponseModel Search([FromBody] Dictionary<string, object> form)
@@ -180,11 +215,13 @@ namespace QuanLyPhongKham_Admin.Controllers
                         where n.DaXoa == false
                         select new
                         {
+                            n.MaNguoiDung,      // thêm dòng này
                             n.HoTen,
                             n.GioiTinh,
                             n.SoDienThoai,
                             t.TenDangNhap,
-                            t.LoaiQuyen
+                            t.LoaiQuyen,
+                            t.TrangThai
                         };
 
                 var data = q.Where(x => HoTen == "" || x.HoTen.Contains(HoTen)).ToList();
@@ -198,5 +235,6 @@ namespace QuanLyPhongKham_Admin.Controllers
 
             return res;
         }
+
     }
 }

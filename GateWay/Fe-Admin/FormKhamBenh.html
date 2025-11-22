@@ -1,28 +1,41 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Khám bệnh - DAH</title>
-  <link rel="stylesheet" href="css/LichHen.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phiếu Khám Bệnh - DAH</title>
+<link rel="stylesheet" href="css/LichHen.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+/* CSS giống FormHoSoBenhAn */
+.container { display: flex; min-height: 100vh; font-family: Arial, sans-serif; }
+.sidebar { width: 220px; background:#2c3e50; color:#ecf0f1; transition: width 0.3s; }
+.sidebar.collapsed { width: 60px; }
+.sidebar .sidebar-header { display:flex; align-items:center; padding:15px; }
+.sidebar .menu a { display:block; padding:12px 20px; color:#ecf0f1; text-decoration:none; }
+.sidebar .menu a.active { background:#34495e; }
+.main { flex:1; padding:20px; background:#f4f4f4; }
+.header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+.card { background:#fff; padding:20px; border-radius:5px; box-shadow:0 0 10px rgba(0,0,0,0.1); }
+.form-row { margin-bottom:15px; display:flex; flex-direction:column; }
+.form-row label { font-weight:bold; margin-bottom:5px; }
+.input, select, textarea { padding:8px; border:1px solid #ccc; border-radius:4px; width:100%; }
+textarea { resize:vertical; min-height:60px; }
+.btn { display:inline-flex; align-items:center; gap:5px; padding:8px 15px; border:none; border-radius:4px; cursor:pointer; }
+.btn.primary { background:#3498db; color:#fff; }
+.btn.neutral { background:#bdc3c7; color:#2c3e50; }
+</style>
 </head>
 <body>
 
 <div class="container">
-  <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
       <span class="brand-text">DAH Clinic</span>
     </div>
-    <nav class="menu">
-      <a href="index.html"><i class="fa-solid fa-chart-line"></i>Tổng quan</a>
-      <a href="KhamBenh.html" class="active"><i class="fa-solid fa-stethoscope"></i>Khám bệnh</a>
-    </nav>
   </aside>
 
-  <!-- MAIN -->
   <main class="main">
     <header class="header">
       <h1>Phiếu khám bệnh</h1>
@@ -62,7 +75,6 @@
 
       <button id="btnSave" class="btn primary"><i class="fa-solid fa-save"></i> Lưu</button>
     </section>
-
   </main>
 </div>
 
@@ -74,66 +86,61 @@ const baseUrl = "https://localhost:44340";
 const id = new URLSearchParams(location.search).get("id");
 
 async function fetchAuth(url, method="GET", body=null) {
-  const res = await fetch(url, {
-    method,
-    headers: {
-      "Authorization": "Bearer " + token,
-      "Content-Type": "application/json"
-    },
-    body: body ? JSON.stringify(body) : null
-  });
-  return res.json();
+    const res = await fetch(url, {
+        method,
+        headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+        body: body ? JSON.stringify(body) : null
+    });
+    return res.json();
 }
 
 async function loadSelects() {
-  const bn = await fetchAuth(baseUrl + "/api-admin/BenhNhan/search", "POST", {page:1,pageSize:999});
-  const bs = await fetchAuth(baseUrl + "/api-admin/BacSi/search", "POST", {page:1,pageSize:999});
+    const bn = await fetchAuth(baseUrl + "/api-admin/BenhNhan/search", "POST", {page:1,pageSize:999});
+    const bs = await fetchAuth(baseUrl + "/api-admin/BacSi/search", "POST", {page:1,pageSize:999});
 
-  let slBN = document.getElementById("slBenhNhan");
-  bn.data.forEach(x => slBN.innerHTML += `<option value="${x.maBenhNhan}">${x.hoTen}</option>`);
+    const slBN = document.getElementById("slBenhNhan");
+    bn.data.forEach(x => slBN.innerHTML += `<option value="${x.maBenhNhan}">${x.hoTen}</option>`);
 
-  let slBS = document.getElementById("slBacSi");
-  bs.data.forEach(x => slBS.innerHTML += `<option value="${x.maBacSi}">${x.hoTen}</option>`);
+    const slBS = document.getElementById("slBacSi");
+    bs.data.forEach(x => slBS.innerHTML += `<option value="${x.maBacSi}">${x.hoTen}</option>`);
 }
 
 async function loadData() {
-  if (!id) return;
+    if (!id) return;
+    const obj = await fetchAuth(baseUrl + "/api-admin/KhamBenh/get-by-id/" + id);
 
-  const obj = await fetchAuth(baseUrl + "/api-admin/KhamBenh/get-by-id/" + id);
-
-  document.getElementById("slBenhNhan").value = obj.maBenhNhan;
-  document.getElementById("slBacSi").value = obj.maBacSi;
-  document.getElementById("txtChanDoan").value = obj.chanDoan || "";
-  document.getElementById("txtXN").value = obj.chiDinhXN || "";
-  document.getElementById("txtCLS").value = obj.chiDinhCLS || "";
-  document.getElementById("txtGhiChu").value = obj.ghiChu || "";
+    document.getElementById("slBenhNhan").value = obj.maBenhNhan;
+    document.getElementById("slBacSi").value = obj.maBacSi ?? "";
+    document.getElementById("txtChanDoan").value = obj.chanDoan ?? "";
+    document.getElementById("txtXN").value = obj.chiDinhXN ?? "";
+    document.getElementById("txtCLS").value = obj.chiDinhCLS ?? "";
+    document.getElementById("txtGhiChu").value = obj.ghiChu ?? "";
 }
 
 document.getElementById("btnSave").onclick = async () => {
-  const model = {
-    maKham: id ? Number(id) : 0,
-    maBenhNhan: Number(document.getElementById("slBenhNhan").value),
-    maBacSi: Number(document.getElementById("slBacSi").value),
-    chanDoan: document.getElementById("txtChanDoan").value,
-    chiDinhXN: document.getElementById("txtXN").value,
-    chiDinhCLS: document.getElementById("txtCLS").value,
-    ghiChu: document.getElementById("txtGhiChu").value,
-    nguoiThucHien: "Admin"
-  };
+    const model = {
+        MaKham: id ? Number(id) : 0,
+        MaBenhNhan: Number(document.getElementById("slBenhNhan").value),
+        MaBacSi: Number(document.getElementById("slBacSi").value) || null,
+        NgayKham: new Date(),
+        ChanDoan: document.getElementById("txtChanDoan").value,
+        ChiDinhXN: document.getElementById("txtXN").value,
+        ChiDinhCLS: document.getElementById("txtCLS").value,
+        GhiChu: document.getElementById("txtGhiChu").value,
+        NguoiThucHien: "Admin"
+    };
 
-  const url = id ? "/api-admin/KhamBenh/update" : "/api-admin/KhamBenh/create";
-  const res = await fetchAuth(baseUrl + url, "POST", model);
+    const url = id ? "/api-admin/KhamBenh/update" : "/api-admin/KhamBenh/create";
+    const res = await fetchAuth(baseUrl + url, "POST", model);
 
-  alert(res);
-  location.href = "KhamBenh.html";
+    alert(res);
+    location.href = "KhamBenh.html";
 };
 
 loadSelects().then(loadData);
 
 document.getElementById("toggleSidebar").onclick = () =>
-  document.getElementById("sidebar").classList.toggle("collapsed");
-
+    document.getElementById("sidebar").classList.toggle("collapsed");
 </script>
-
 </body>
 </html>

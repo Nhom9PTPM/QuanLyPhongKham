@@ -20,6 +20,19 @@ namespace QuanLyPhongKham_Admin.Controllers
             _db = db;
         }
 
+        [Route("get-all")]
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var data = _db.BacSis
+                .Select(b => new
+                {
+                    b.MaBacSi,
+                    HoTen = b.MaNguoiDungNavigation.HoTen
+                })
+                .ToList();
+            return Ok(data);
+        }
         [HttpGet("get-by-id/{id}")]
         public IActionResult GetById(int id)
         {

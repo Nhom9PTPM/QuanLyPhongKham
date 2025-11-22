@@ -105,7 +105,7 @@
     txtSDT.value=data.soDienThoai;
     txtEmail.value=data.email;
     txtDiaChi.value=data.diaChi;
-    txtCMT.value=data.cMTND_NV;
+    txtCMT.value = data.cmtnD_NV || "";
   }
 
   document.getElementById("formBenhNhan").addEventListener("submit", async e=>{
@@ -118,7 +118,7 @@
       SoDienThoai: txtSDT.value,
       Email: txtEmail.value,
       DiaChi: txtDiaChi.value,
-      CMTND_NV: txtCMT.value
+      cmtnD_NV: txtCMT.value 
     } : {
       benhnhan:{
         HoTen: txtHoTen.value,
@@ -127,7 +127,7 @@
         SoDienThoai: txtSDT.value,
         Email: txtEmail.value,
         DiaChi: txtDiaChi.value,
-        CMTND_NV: txtCMT.value
+        cmtnD_NV: txtCMT.value 
       }
     };
 

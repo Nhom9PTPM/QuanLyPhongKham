@@ -24,7 +24,7 @@ namespace QuanLyPhongKham_Admin.Models
         public bool DaXoa { get; set; }
 
         public virtual HoSoBenhAn? MaHoSoNavigation { get; set; }
-        public virtual BenhNhan MaBenhNhanNavigation { get; set; } = null!;
+        public virtual BenhNhan? MaBenhNhanNavigation { get; set; } = null!;
         public virtual BacSi? MaBacSiNavigation { get; set; }
 
         public virtual ICollection<DonThuoc> DonThuocs { get; set; }

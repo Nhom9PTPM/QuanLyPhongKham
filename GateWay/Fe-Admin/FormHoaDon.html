@@ -1,260 +1,230 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thêm / Sửa Hóa đơn - DAH Clinic</title>
-
-    <link rel="stylesheet" href="css/LichHen.css">
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thêm / Sửa Hóa đơn - DAH Clinic</title>
+<link rel="stylesheet" href="css/LichHen.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
 </head>
-
 <body>
-    <div class="container">
+<div class="container">
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+            <span class="brand-text">DAH Clinic</span>
+        </div>
+    </aside>
 
-        <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
-                <span class="brand-text">DAH Clinic</span>
+    <main class="main">
+        <header class="header">
+            <h1 id="title">Thêm Hóa đơn</h1>
+            <div class="actions">
+                <button class="btn" onclick="saveForm()"><i class="fa-solid fa-save"></i> Lưu</button>
+                <a class="btn neutral" href="HoaDon.html"><i class="fa-solid fa-arrow-left"></i> Trở về</a>
             </div>
+        </header>
 
-            <nav class="menu">
-                <a href="index.html"><i class="fa-solid fa-chart-line"></i>Tổng quan</a>
-                <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i>Tài khoản</a>
-                <a href="BacSi.html"><i class="fa-solid fa-user-doctor"></i>Bác sĩ</a>
-                <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i>Bệnh nhân</a>
-                <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i>Lịch hẹn</a>
-                <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i>Hồ sơ bệnh án</a>
-                <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i>Thuốc</a>
-                <a href="TonKho.html"><i class="fa-solid fa-warehouse"></i>Tồn kho</a>
-                <a href="DonThuoc.html"><i class="fa-solid fa-prescription"></i>Đơn thuốc</a>
-                <a class="active" href="HoaDon.html"><i class="fa-solid fa-file-invoice-dollar"></i>Hóa đơn</a>
-                <a href="NhaCungCap.html"><i class="fa-solid fa-truck"></i>Nhà cung cấp</a>
-                <a href="ThongBao.html"><i class="fa-solid fa-bell"></i>Thông báo</a>
-                <a href="LichSu.html"><i class="fa-solid fa-book"></i>Nhật ký</a>
-            </nav>
-        </aside>
-
-        <!-- Main -->
-        <main class="main">
-
-            <header class="header">
-                <h1 id="title">Thêm Hóa đơn</h1>
-                <div class="actions">
-                    <button class="btn" onclick="saveForm()"><i class="fa-solid fa-save"></i> Lưu</button>
-                    <a class="btn neutral" href="HoaDon.html">
-                        <i class="fa-solid fa-arrow-left"></i> Trở về
-                    </a>
+        <section class="card">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Mã bệnh nhân</label>
+                    <input id="txtBenhNhan" class="input" placeholder="Nhập mã bệnh nhân..." />
                 </div>
-            </header>
-
-            <!-- Form -->
-            <section class="card">
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Bệnh nhân</label>
-                        <input id="txtBenhNhan" class="input" placeholder="Nhập tên bệnh nhân..." />
-                    </div>
-
-                    <div class="form-group">
-                        <label>Phương thức thanh toán</label>
-                        <select id="txtPTTT" class="input">
-                            <option value="">-- Chọn --</option>
-                            <option>Tiền mặt</option>
-                            <option>Chuyển khoản</option>
-                            <option>Thẻ ngân hàng</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Trạng thái</label>
-                        <select id="txtTrangThai" class="input">
-                            <option value="">-- Chọn --</option>
-                            <option>Chưa thanh toán</option>
-                            <option>Đã thanh toán</option>
-                        </select>
-                    </div>
-                </div>
-
-            </section>
-
-            <!-- Chi tiết hóa đơn -->
-            <section class="card" style="margin-top:20px;">
-                <div class="section-header">
-                    <h3>Chi tiết hóa đơn</h3>
-                    <button class="btn small" onclick="addRow()"><i class="fa-solid fa-plus"></i> Thêm dòng</button>
-                </div>
-
-                <div class="table-wrap" style="margin-top:12px;">
-                    <table id="tblCTHD">
-                        <thead>
-                            <tr>
-                                <th>Thuốc</th>
-                                <th>Số lượng</th>
-                                <th>Đơn giá</th>
-                                <th>Thành tiền</th>
-                                <th style="width:80px;">Xóa</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-
-                <h3 style="text-align:right;margin-top:12px;">
-                    Tổng: <span id="txtTongTien">0 đ</span>
-                </h3>
-            </section>
-
-        </main>
-    </div>
-
-    <script>
-        const baseUrl = "https://localhost:44340";
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-            alert("Vui lòng đăng nhập!");
-            location.href = "Login.html";
-        }
-
-        function fetchAuth(url, method = "GET", body = null) {
-            return fetch(url, {
-                method,
-                headers: {
-                    "Authorization": "Bearer " + token,
-                    "Content-Type": "application/json"
-                },
-                body: body ? JSON.stringify(body) : null
-            }).then(res => {
-                if (res.status === 401) {
-                    localStorage.removeItem("token");
-                    location.href = "Login.html";
-                }
-                return res.json();
-            });
-        }
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const id = urlParams.get("id");
-
-        let listThuoc = [];
-
-        async function loadThuoc() {
-            const res = await fetchAuth(baseUrl + "/api-admin/Thuoc/search", "POST", {
-                page: 1,
-                pageSize: 999
-            });
-            listThuoc = res.data;
-        }
-
-        function addRow(item = null) {
-            const tr = document.createElement("tr");
-
-            tr.innerHTML = `
-                <td>
-                    <select class="input cboThuoc">
-                        <option value="">-- Chọn thuốc --</option>
-                        ${listThuoc.map(t => `<option value="${t.maThuoc}">${t.tenThuoc}</option>`)}
+                <div class="form-group">
+                    <label>Phương thức thanh toán</label>
+                    <select id="txtPTTT" class="input">
+                        <option value="">-- Chọn --</option>
+                        <option>Tiền mặt</option>
+                        <option>Chuyển khoản</option>
+                        <option>Thẻ ngân hàng</option>
                     </select>
-                </td>
+                </div>
+                <div class="form-group">
+                    <label>Trạng thái</label>
+                    <select id="txtTrangThai" class="input">
+                        <option value="">-- Chọn --</option>
+                        <option>Chưa thanh toán</option>
+                        <option>Đã thanh toán</option>
+                    </select>
+                </div>
+            </div>
+        </section>
 
-                <td><input class="input soLuong" type="number" min="1" value="${item?.soLuong || 1}" /></td>
+        <section class="card" style="margin-top:20px;">
+            <div class="section-header">
+                <h3>Chi tiết hóa đơn</h3>
+                <button class="btn small" onclick="addRow()"><i class="fa-solid fa-plus"></i> Thêm dòng</button>
+            </div>
+            <div class="table-wrap" style="margin-top:12px;">
+                <table id="tblCTHD">
+                    <thead>
+                        <tr>
+                            <th>Thuốc</th>
+                            <th>Số lượng</th>
+                            <th>Đơn giá</th>
+                            <th>Thành tiền</th>
+                            <th style="width:80px;">Xóa</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <h3 style="text-align:right;margin-top:12px;">
+                Tổng: <span id="txtTongTien">0 đ</span>
+            </h3>
+        </section>
+    </main>
+</div>
 
-                <td><input class="input donGia" type="number" min="0" value="${item?.donGia || 0}" /></td>
+<script>
+const baseUrl = "https://localhost:44340";
+const token = localStorage.getItem("token");
+if(!token){alert("Vui lòng đăng nhập!");location.href="Login.html";}
 
-                <td class="thanhTien">0</td>
+const urlParams = new URLSearchParams(window.location.search);
+const id = urlParams.get("id"); // id hóa đơn nếu sửa
+let listThuoc = [];
 
-                <td><button class="btn small warn" onclick="this.parentElement.parentElement.remove(); calcTotal();">X</button></td>
-            `;
+async function fetchAuth(url, method="GET", body=null){
+    const res = await fetch(url,{
+        method,
+        headers: {"Authorization":"Bearer "+token,"Content-Type":"application/json"},
+        body: body ? JSON.stringify(body) : null
+    });
+    if(res.status === 401){ localStorage.removeItem("token"); alert("Hết hạn đăng nhập!"); location.href="Login.html"; }
+    return res.json();
+}
 
-            document.querySelector("#tblCTHD tbody").appendChild(tr);
-            calcTotal();
-        }
+// Load danh sách thuốc
+async function loadThuoc(){
+    const res = await fetchAuth(baseUrl+"/api-admin/Thuoc/search","POST",{page:1,pageSize:999});
+    listThuoc = res.data;
+}
 
-        function calcTotal() {
-            let total = 0;
+// Thêm dòng chi tiết
+function addRow(item=null){
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+        <td>
+            <select class="input cboThuoc">
+                <option value="">-- Chọn thuốc --</option>
+                ${listThuoc.map(t=>`<option value="${t.maThuoc}">${t.tenThuoc}</option>`).join('')}
+            </select>
+        </td>
+        <td><input class="input soLuong" type="number" min="1" value="${item?.soLuong||1}"/></td>
+        <td><input class="input donGia" type="number" min="0" value="${item?.donGia||0}"/></td>
+        <td class="thanhTien">0 đ</td>
+        <td><button class="btn small warn" onclick="this.parentElement.parentElement.remove(); calcTotal();">X</button></td>
+    `;
+    document.querySelector("#tblCTHD tbody").appendChild(tr);
 
-            document.querySelectorAll("#tblCTHD tbody tr").forEach(row => {
-                const sl = Number(row.querySelector(".soLuong").value) || 0;
-                const dg = Number(row.querySelector(".donGia").value) || 0;
-                const tt = sl * dg;
+    const cbo = tr.querySelector(".cboThuoc");
+    const sl = tr.querySelector(".soLuong");
+    const dg = tr.querySelector(".donGia");
 
-                row.querySelector(".thanhTien").innerText = tt.toLocaleString("vi-VN") + " đ";
-                total += tt;
+    if(item?.maThuoc) cbo.value = item.maThuoc;
+
+    cbo.addEventListener("change", function(){
+        const t = listThuoc.find(x=>x.maThuoc==this.value);
+        if(t) dg.value = t.giaBan || 0;
+        calcTotal();
+    });
+    sl.addEventListener("input", calcTotal);
+    dg.addEventListener("input", calcTotal);
+
+    calcTotal();
+}
+
+// Tính tổng
+function calcTotal(){
+    let total=0;
+    document.querySelectorAll("#tblCTHD tbody tr").forEach(row=>{
+        const sl=Number(row.querySelector(".soLuong").value)||0;
+        const dg=Number(row.querySelector(".donGia").value)||0;
+        const tt=sl*dg;
+        row.querySelector(".thanhTien").innerText=tt.toLocaleString("vi-VN")+" đ";
+        total+=tt;
+    });
+    document.getElementById("txtTongTien").innerText = total.toLocaleString("vi-VN")+" đ";
+}
+
+async function loadEdit() {
+    if (!id) return;
+    isLoadingEdit = true;
+
+    document.getElementById("title").innerText = "Sửa Hóa đơn";
+
+    const res = await fetchAuth(baseUrl + "/api-admin/HoaDon/get-by-id/" + id);
+    const hd = res.hd;
+    const ct = res.ct;
+
+    document.getElementById("txtBenhNhan").value = hd.maBenhNhan;
+    document.getElementById("txtPTTT").value = hd.phuongThucThanhToan;
+    document.getElementById("txtTrangThai").value = hd.trangThai;
+
+    document.querySelector("#tblCTHD tbody").innerHTML = "";
+    ct.forEach(x => addRow(x));
+
+    calcTotal();
+    isLoadingEdit = false;
+}
+
+
+async function saveForm() {
+    let listCT = [];
+
+    // Lấy danh sách chi tiết hiện tại
+    document.querySelectorAll("#tblCTHD tbody tr").forEach(row => {
+        const maCT = Number(row.querySelector(".maCT").value);
+        const maThuoc = Number(row.querySelector(".cboThuoc").value);
+        const sl = Number(row.querySelector(".soLuong").value);
+        const dg = Number(row.querySelector(".donGia").value);
+
+        if (maThuoc)
+            listCT.push({
+                maChiTietHoaDon: maCT, // >0 nếu là chi tiết cũ
+                maThuoc: maThuoc,
+                soLuong: sl,
+                donGia: dg
             });
+    });
 
-            document.getElementById("txtTongTien").innerText = total.toLocaleString("vi-VN") + " đ";
-        }
+    if (!document.getElementById("txtBenhNhan").value) {
+        alert("Vui lòng nhập mã bệnh nhân!");
+        return;
+    }
 
-        async function saveForm() {
-            let listCT = [];
+    // Tạo model theo API mới
+    const model = {
+        hoadon: {
+            maHoaDon: id ? Number(id) : 0, // nếu id tồn tại là update
+            maBenhNhan: Number(document.getElementById("txtBenhNhan").value),
+            phuongThucThanhToan: document.getElementById("txtPTTT").value,
+            trangThai: document.getElementById("txtTrangThai").value
+        },
+        listchitiet: listCT
+    };
 
-            document.querySelectorAll("#tblCTHD tbody tr").forEach(row => {
-                const maThuoc = row.querySelector(".cboThuoc").value;
-                const sl = row.querySelector(".soLuong").value;
-                const dg = row.querySelector(".donGia").value;
+    const url = id 
+        ? baseUrl + "/api-admin/HoaDon/update-hoadon" 
+        : baseUrl + "/api-admin/HoaDon/create-hoadon";
 
-                if (maThuoc)
-                    listCT.push({
-                        maChiTietHoaDon: 0,
-                        maThuoc,
-                        soLuong: Number(sl),
-                        donGia: Number(dg)
-                    });
-            });
+    try {
+        const res = await fetchAuth(url, "POST", model);
+        alert("Lưu thành công!");
+        location.href = "HoaDon.html";
+    } catch (err) {
+        console.error(err);
+        alert("Có lỗi xảy ra khi lưu hóa đơn!");
+    }
+}
 
-            const model = {
-                hoadon: {
-                    maHoaDon: id ? Number(id) : 0,
-                    tenBenhNhan: document.getElementById("txtBenhNhan").value,
-                    phuongThucThanhToan: document.getElementById("txtPTTT").value,
-                    trangThai: document.getElementById("txtTrangThai").value
-                },
-                listchitiet: listCT
-            };
+// INIT
+async function init(){ await loadThuoc(); await loadEdit(); }
+init();
 
-            let url = id
-                ? "/api-admin/HoaDon/update-hoadon"
-                : "/api-admin/HoaDon/create-hoadon";
-
-            const res = await fetchAuth(baseUrl + url, "POST", model);
-
-            alert("Lưu thành công!");
-            location.href = "HoaDon.html";
-        }
-
-        async function loadEdit() {
-            if (!id) return;
-
-            document.getElementById("title").innerText = "Sửa Hóa đơn";
-
-            const res = await fetchAuth(baseUrl + "/api-admin/HoaDon/get-by-id/" + id);
-
-            const hd = res.hd;
-            const ct = res.ct;
-
-            document.getElementById("txtBenhNhan").value = hd.maBenhNhan || "";
-            document.getElementById("txtPTTT").value = hd.phuongThucThanhToan;
-            document.getElementById("txtTrangThai").value = hd.trangThai;
-
-            ct.forEach(x => addRow(x));
-            calcTotal();
-        }
-
-        async function init() {
-            await loadThuoc();
-            await loadEdit();
-        }
-        init();
-
-        document.getElementById("toggleSidebar").onclick = () =>
-            document.getElementById("sidebar").classList.toggle("collapsed");
-
-    </script>
-
+document.getElementById("toggleSidebar").onclick = ()=>document.getElementById("sidebar").classList.toggle("collapsed");
+</script>
 </body>
 </html>

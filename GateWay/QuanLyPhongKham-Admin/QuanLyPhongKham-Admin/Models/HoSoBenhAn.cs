@@ -21,7 +21,7 @@ namespace QuanLyPhongKham_Admin.Models
         public string? NguoiLap { get; set; }
         public bool DaXoa { get; set; }
 
-        public virtual BenhNhan MaBenhNhanNavigation { get; set; } = null!;
+        public virtual BenhNhan? MaBenhNhanNavigation { get; set; } = null!;
         public virtual ICollection<KhamBenh> KhamBenhs { get; set; }
         public virtual ICollection<TapTin> TapTins { get; set; }
     }

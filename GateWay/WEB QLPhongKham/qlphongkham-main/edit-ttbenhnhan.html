@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="./img/logohinh.png" rel="icon" type="image/png">
+  <title>HeartCare lắng nghe tim bạn</title>
+  <link rel="stylesheet" href="./css/reset.css">
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="https:cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+  <div class="top-bar">
+    <div class="top-links">
+      <a href="./bacsi.html">Tìm bác sĩ</a>
+      <a href="#">Khóa học trực tuyến</a>
+      <a href="#">Chăm sóc khách hàng</a>
+    </div>
+  </div>
+
+  <header class="main-header">
+    <img src="./img/logo.png" alt="HeartCare Logo" class="logo">
+    <div class="search-section">
+      <!-- <i class="fa-solid fa-magnifying-glass search-icon"></i> -->
+      <input type="text" placeholder="Tìm kiếm...">
+      
+    </div>
+   <div class="tools">
+      <a href="./datlich.html"><i  class="fa-regular fa-calendar-days calendar-icon"></i></a>
+      <!-- <i class="fa-solid fa-pen edit-icon"></i> -->
+      <img src="https://flagcdn.com/w40/vn.png" alt="Vietnam Flag" class="flag-icon">
+      <!-- <i class="fa-solid fa-chevron-down dropdown-icon"></i> -->
+    </div> 
+
+  </header>
+
+  <nav class="menu-bar">
+     <a href="#" class="active">Trang chủ</a>
+          <a href="./about-us.html">Giới thiệu</a>
+          <a href="./dichvu.html">Dịch vụ</a>
+          <a href="./datlich.html">Đặt lịch</a>
+          <a href="./lienhe.html">Liên hệ</a>
+          <a href="./blog.html">Tin tức</a>
+  </nav>
+  <section class="banner">
+    <div class="container banner-content">
+      <h1>Chăm sóc sức khỏe tim mạch<br />Nâng niu cuộc sống</h1>
+      <a href="./datlich.html" class="btn-primary">Đặt lịch khám</a>
+    </div>
+  </section>
+
+   <body class="edit">
+  <div class="container-edit">
+    <h2>Chỉnh sửa thông tin cá nhân</h2>
+
+    <form action="#" method="post">
+      <div class="form-group">
+        <label>Họ và tên</label>
+        <input type="text" name="fullname" value="Nguyễn Văn A" />
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" value="nguyenvana@email.com" />
+      </div>
+
+      <div class="form-group">
+        <label>Số điện thoại</label>
+        <input type="text" name="phone" value="0123456789" />
+      </div>
+
+      <div class="form-group">
+        <label>Địa chỉ</label>
+        <textarea name="address">123 Đường Sức khỏe, Q. Ninh Kiều, TP Cần Thơ</textarea>
+      </div>
+
+      <button type="button" class="btn" onclick="togglePasswordForm()">Đổi mật khẩu</button>
+
+      <div id="password-section" class="change-password-form">
+        <div class="form-group">
+          <label>Mật khẩu hiện tại</label>
+          <input type="password" name="current_password" />
+        </div>
+
+        <div class="form-group">
+          <label>Mật khẩu mới</label>
+          <input type="password" name="new_password" />
+        </div>
+
+        <div class="form-group">
+          <label>Nhập lại mật khẩu mới</label>
+          <input type="password" name="confirm_password" />
+        </div>
+      </div>
+
+      <button type="submit" class="btn">Lưu thay đổi</button>
+    </form>
+  </div>
+
+  <script>
+    function togglePasswordForm() {
+      const passwordForm = document.getElementById("password-section");
+      passwordForm.style.display = passwordForm.style.display === "block" ? "none" : "block";
+    }
+  </script>
+
+</body>
+<footer class="modern-footer">
+  <div class="footer-container">
+    <!-- Cột 1: Liên hệ -->
+    <div class="footer-column">
+      <h3>Trung tâm hỗ trợ</h3>
+      <p class="footer-hotline">📞 1900 8686</p>
+      <p><strong>HeartCare Plus Clinic</strong></p>
+      <p><i class="fa-solid fa-location-dot"></i> 45 Nguyễn Trãi, P. An Cư, Ninh Kiều, Cần Thơ</p>
+      <p><i class="fa-solid fa-envelope"></i> contact@heartcare.vn</p>
+      <p><i class="fa-solid fa-phone"></i> 0292 1234 567</p>
+    </div>
+
+    <!-- Cột 2: Giới thiệu -->
+    <div class="footer-column">
+      <h3>Về HeartCare</h3>
+      <ul>
+        <li><a href="./about-us.html">Về chúng tôi</a></li>
+        <li><a href="./bacsi.html">Đội ngũ bác sĩ</a></li>
+        <li><a href="./dichvu.html">Dịch vụ</a></li>
+        <li><a href="./blog.html">Tin tức y khoa</a></li>
+      </ul>
+    </div>
+
+    <!-- Cột 3: Hỗ trợ -->
+    <div class="footer-column">
+      <h3>Hướng dẫn & Hỗ trợ</h3>
+      <ul>
+        <li><a href="./datlich.html">Đặt lịch khám</a></li>
+        <li><a href="./huongdan.html">Hướng dẫn sử dụng</a></li>
+        <li><a href="./faq.html">Câu hỏi thường gặp</a></li>
+        <li><a href="./terms.html">Chính sách & Điều khoản</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 HeartCare Plus. All rights reserved.</p>
+  </div>
+</footer>
+</body>
+</html>

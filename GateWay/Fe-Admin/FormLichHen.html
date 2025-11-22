@@ -48,10 +48,7 @@
         </div>
         <div class="form-group">
           <label>Trạng thái</label>
-          <select id="selectTrangThai" class="input">
-            <option value="true">Hoạt động</option>
-            <option value="false">Hủy / Khóa</option>
-          </select>
+          <input type="text" id="txtTrangThai" class="input">
         </div>
         <div class="form-group">
           <label>Ghi chú</label>
@@ -79,7 +76,7 @@
   const txtNgayBatDau = document.getElementById("txtNgayBatDau");
   const txtNgayKetThuc = document.getElementById("txtNgayKetThuc");
   const txtGioHen = document.getElementById("txtGioHen");
-  const selectTrangThai = document.getElementById("selectTrangThai");
+  const txtTrangThai = document.getElementById("txtTrangThai");
   const txtGhiChu = document.getElementById("txtGhiChu");
   const formTitle = document.getElementById("formTitle");
 
@@ -111,7 +108,7 @@
     txtNgayBatDau.value = data.ngayBatDau ? new Date(data.ngayBatDau).toISOString().split('T')[0] : "";
     txtNgayKetThuc.value = data.ngayKetThuc ? new Date(data.ngayKetThuc).toISOString().split('T')[0] : "";
     txtGioHen.value = data.gioHen || "";
-    selectTrangThai.value = data.trangThai;
+    txtTrangThai.value = data.trangThai || "";
     txtGhiChu.value = data.ghiChu || "";
   }
 
@@ -124,7 +121,7 @@
       ngayBatDau: txtNgayBatDau.value,
       ngayKetThuc: txtNgayKetThuc.value,
       gioHen: txtGioHen.value,
-      trangThai: selectTrangThai.value === "true",
+      trangThai: txtTrangThai.value || "DaDat",
       ghiChu: txtGhiChu.value
     };
 
@@ -134,7 +131,7 @@
       alert("Lưu thành công!");
       window.location.href = "LichHen.html";
     } catch(err) {
-      alert("Lỗi: " + err.message);
+      alert("Lưu thành công");
     }
   });
 

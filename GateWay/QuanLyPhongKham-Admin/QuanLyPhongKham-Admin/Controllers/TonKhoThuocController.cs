@@ -42,20 +42,32 @@ namespace QuanLyPhongKham_Admin.Controllers
 
         [Route("create-tonkho")]
         [HttpPost]
-        public IActionResult CreateTonKho(TonKhoThuocModels model)
+        public IActionResult CreateTonKho([FromBody] TonKhoThuocCreateModel model)
         {
             try
             {
-                model.tonkho.NgayCapNhat = DateTime.Now;
-                db.TonKhoThuocs.Add(model.tonkho);
+                if (model == null) return BadRequest("Dữ liệu rỗng");
+                if (model.SoLuong < 0) return BadRequest("Số lượng không hợp lệ");
+
+                var tonKho = new TonKhoThuoc
+                {
+                    MaThuoc = model.MaThuoc,
+                    SoLuong = model.SoLuong,
+                    MaKho = model.MaKho,
+                    NgayCapNhat = DateTime.Now
+                };
+
+                db.TonKhoThuocs.Add(tonKho);
                 db.SaveChanges();
-                return Ok("OK");
+
+                return Ok(new { message = "Tạo kho thuốc thành công", MaTonKho = tonKho.MaTonKho });
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(new { message = ex.Message });
             }
         }
+
 
         [Route("update-tonkho")]
         [HttpPost]

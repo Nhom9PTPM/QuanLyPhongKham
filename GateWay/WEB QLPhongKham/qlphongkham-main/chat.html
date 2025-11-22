@@ -1,0 +1,147 @@
+<!-- ICON CHAT NỔI -->
+<button class="toggle-chatbox" onclick="toggleChatbox()">💬</button>
+
+<!-- KHUNG CHAT -->
+<div class="chatbox hidden" id="chatbox">
+  <div class="chatbox-header">💬 Hỗ trợ trực tuyến
+    <span style="float:right; cursor:pointer;" onclick="toggleChatbox()">✖</span>
+  </div>
+  <div class="chatbox-body" id="chatBody">
+    <div class="message bot">Xin chào! Tôi có thể giúp gì cho bạn?</div>
+  </div>
+  <div class="chatbox-input">
+    <input type="text" id="chatInput" placeholder="Nhập tin nhắn...">
+    <button onclick="sendMessage()">Gửi</button>
+  </div>
+</div>
+
+<!-- CSS -->
+<style>
+  .toggle-chatbox {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #008080;
+    color: #fff;
+    border: none;
+    padding: 14px;
+    border-radius: 50%;
+    font-size: 22px;
+    cursor: pointer;
+    z-index: 9999;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  .chatbox {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 320px;
+    max-height: 450px;
+    border: 1px solid #ccc;
+    background: #fff;
+    box-shadow: 0 0 12px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    font-family: Arial;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  .chatbox-header {
+    background: #008080;
+    color: white;
+    padding: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    font-weight: bold;
+  }
+
+  .chatbox-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chatbox-input {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+  }
+
+  .chatbox-input input {
+    flex: 1;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .chatbox-input button {
+    margin-left: 5px;
+    padding: 6px 12px;
+    background: #008080;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .message {
+    margin: 6px 0;
+    padding: 8px 12px;
+    border-radius: 10px;
+    max-width: 80%;
+    word-wrap: break-word;
+  }
+
+  .message.bot {
+    background: #f1f1f1;
+    align-self: flex-start;
+  }
+
+  .message.user {
+    background: #008080;
+    color: white;
+    align-self: flex-end;
+    text-align: right;
+  }
+</style>
+
+<!-- JS -->
+<script>
+  function toggleChatbox() {
+    const chat = document.getElementById('chatbox');
+    chat.classList.toggle('hidden');
+  }
+
+  function sendMessage() {
+    const input = document.getElementById("chatInput");
+    const chatBody = document.getElementById("chatBody");
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    // Thêm tin nhắn người dùng
+    const userMsg = document.createElement("div");
+    userMsg.className = "message user";
+    userMsg.textContent = msg;
+    chatBody.appendChild(userMsg);
+
+    // Giả lập phản hồi bot
+    const botMsg = document.createElement("div");
+    botMsg.className = "message bot";
+    botMsg.textContent = "Cảm ơn bạn đã nhắn. Chúng tôi sẽ phản hồi sớm!";
+    setTimeout(() => {
+      chatBody.appendChild(botMsg);
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }, 800);
+
+    input.value = "";
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+</script>

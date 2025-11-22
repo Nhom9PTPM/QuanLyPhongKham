@@ -133,7 +133,7 @@
 
   async function deleteTonKho(id) {
     if (!confirm("Bạn có chắc chắn muốn xoá tồn kho này?")) return;
-    const res = await fetchAuth(baseUrl + "/api/TonKhoThuoc/delete-tonkho/" + id, "GET");
+    const res = await fetchAuth(baseUrl + "/api-admin/TonKhoThuoc/delete-tonkho/" + id, "GET");
     alert(res);
     loadTonKho();
   }

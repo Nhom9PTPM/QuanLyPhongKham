@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Quản lý Bệnh Nhân</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <h1>Danh sách bệnh nhân</h1>
+  <table id="benhnhanTable">
+    <thead>
+      <tr>
+        <th>Mã BN</th>
+        <th>Họ tên</th>
+        <th>Ngày sinh</th>
+        <th>SĐT</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script src="../js/api.js"></script>
+  <script>
+    async function loadBenhNhan() {
+      const data = await apiGet("benhnhan");
+      const tbody = document.querySelector("#benhnhanTable tbody");
+      tbody.innerHTML = "";
+      data.forEach(bn => {
+        const row = `<tr>
+            <td>${bn.maBN}</td>
+            <td>${bn.hoTen}</td>
+            <td>${new Date(bn.ngaySinh).toLocaleDateString()}</td>
+            <td>${bn.sdt}</td>
+          </tr>`;
+        tbody.insertAdjacentHTML("beforeend", row);
+      });
+    }
+
+    loadBenhNhan();
+  </script>
+</body>
+</html>

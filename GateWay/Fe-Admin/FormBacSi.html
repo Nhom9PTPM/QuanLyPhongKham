@@ -26,10 +26,15 @@
 
     <section class="card">
       <form id="formBacSi">
+        
+        <!-- CHỈ SỬA PHẦN NÀY — Thay Họ Tên thành chọn người dùng -->
         <div class="form-group">
-          <label>Họ tên</label>
-          <input type="text" id="txtHoTen" class="input" required>
+          <label>Chọn người dùng</label>
+          <select id="selectNguoiDung" class="input" required>
+            <option value="">-- Chọn người dùng --</option>
+          </select>
         </div>
+
         <div class="form-group">
           <label>Chuyên khoa</label>
           <input type="text" id="txtChuyenKhoa" class="input">
@@ -46,6 +51,7 @@
           <label>Số phòng</label>
           <input type="text" id="txtSoPhong" class="input">
         </div>
+
         <div class="form-group">
           <label>Trạng thái</label>
           <select id="selectTrangThai" class="input">
@@ -53,6 +59,7 @@
             <option value="false">Khóa</option>
           </select>
         </div>
+
         <button type="submit" class="btn"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
       </form>
     </section>
@@ -70,7 +77,7 @@
   const params = new URLSearchParams(window.location.search);
   const bacsiId = params.get("id");
 
-  const txtHoTen = document.getElementById("txtHoTen");
+  const selectNguoiDung = document.getElementById("selectNguoiDung");
   const txtChuyenKhoa = document.getElementById("txtChuyenKhoa");
   const txtBangCap = document.getElementById("txtBangCap");
   const txtKinhNghiem = document.getElementById("txtKinhNghiem");
@@ -79,7 +86,7 @@
   const formTitle = document.getElementById("formTitle");
 
   async function fetchAuth(url, method="GET", body=null) {
-    const res = await fetch(url, {
+    let res = await fetch(url, {
       method,
       headers: { 
         "Authorization": "Bearer " + token,
@@ -87,46 +94,79 @@
       },
       body: body ? JSON.stringify(body) : null
     });
-    if (res.status === 401) {
-      localStorage.removeItem("token");
-      alert("Hết hạn đăng nhập!");
-      location.href = "Login.html";
-      return;
-    }
     return res.json();
+  }
+
+  async function loadNguoiDung() {
+    const list = await fetchAuth(baseUrl + "/api-admin/users/search", "POST", {
+      page: 1,
+      pageSize: 1000
+    });
+
+    list.data.forEach(u => {
+      let opt = document.createElement("option");
+      opt.value = u.maNguoiDung;
+      opt.textContent = u.hoTen;
+      selectNguoiDung.appendChild(opt);
+    });
   }
 
   async function loadBacSi() {
     if (!bacsiId) return;
     formTitle.innerText = "Sửa bác sĩ";
+
     const data = await fetchAuth(baseUrl + "/api-admin/bacsi/get-by-id/" + bacsiId);
-    txtHoTen.value = data.hoTen;
+	selectNguoiDung.value = data.maNguoiDung;
     txtChuyenKhoa.value = data.chuyenKhoa;
     txtBangCap.value = data.bangCap;
     txtKinhNghiem.value = data.kinhNghiem;
-    txtSoPhong.value = data.soPhong || "";
+    txtSoPhong.value = data.soPhong;
     selectTrangThai.value = data.trangThai;
   }
 
   document.getElementById("formBacSi").addEventListener("submit", async e => {
     e.preventDefault();
-    const model = {
-      maBacSi: bacsiId ? parseInt(bacsiId) : 0,
-      chuyenKhoa: txtChuyenKhoa.value,
-      bangCap: txtBangCap.value,
-      kinhNghiem: txtKinhNghiem.value,
-      soPhong: txtSoPhong.value,
-      trangThai: selectTrangThai.value === "true"
-    };
 
-    const url = bacsiId ? baseUrl + "/api-admin/bacsi/update-bacsi" : baseUrl + "/api-admin/bacsi/create-bacsi";
+    let model;
+
+    if (!bacsiId) {
+      model = {
+        maNguoiDung: parseInt(selectNguoiDung.value),
+        chuyenKhoa: txtChuyenKhoa.value,
+        bangCap: txtBangCap.value,
+        kinhNghiem: txtKinhNghiem.value,
+        soPhong: txtSoPhong.value
+      };
+    } else {
+      model = {
+        maBacSi: parseInt(bacsiId),
+        chuyenKhoa: txtChuyenKhoa.value,
+        bangCap: txtBangCap.value,
+        kinhNghiem: txtKinhNghiem.value,
+        soPhong: txtSoPhong.value,
+        trangThai: selectTrangThai.value === "true"
+      };
+    }
+
+    const url = !bacsiId 
+      ? baseUrl + "/api-admin/bacsi/create-bacsi"
+      : baseUrl + "/api-admin/bacsi/update-bacsi";
+
     const res = await fetchAuth(url, "POST", model);
+
     alert(res.message);
     window.location.href = "BacSi.html";
   });
 
-  loadBacSi();
+async function init() {
+    await loadNguoiDung();
+    await loadBacSi();
+}
+init();
 
+
+</script>
+<script>
   const sidebar = document.getElementById("sidebar");
   document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
 </script>

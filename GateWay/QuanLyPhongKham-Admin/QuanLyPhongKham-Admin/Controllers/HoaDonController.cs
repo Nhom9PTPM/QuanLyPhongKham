@@ -2,6 +2,7 @@
 using QuanLyPhongKham_Admin.Models;
 using QuanLyPhongKham_Admin.Code;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace QuanLyPhongKham_Admin.Controllers
 {
@@ -36,72 +37,105 @@ namespace QuanLyPhongKham_Admin.Controllers
 
         [Route("create-hoadon")]
         [HttpPost]
-        public IActionResult CreateHoaDon(HoaDonModels model)
+        public IActionResult CreateHD([FromBody] HoaDonModels model)
         {
-            try
+            var hd = model.hoadon;
+
+            // Thiết lập thông tin ban đầu
+            hd.NgayLap = DateTime.Now;
+
+            // Nếu list chi tiết rỗng thì trả lỗi
+            if (model.listchitiet == null || !model.listchitiet.Any())
+                return BadRequest("Danh sách chi tiết hóa đơn không được rỗng.");
+
+            // Tính tổng tiền từ chi tiết
+            double tong = 0;
+            foreach (var ct in model.listchitiet)
             {
-                db.HoaDons.Add(model.hoadon);
-                db.SaveChanges();
-
-                if (model.listchitiet != null && model.listchitiet.Count > 0)
-                {
-                    foreach (var x in model.listchitiet)
-                        x.MaHoaDon = model.hoadon.MaHoaDon;
-
-                    model.hoadon.ChiTietHoaDons = model.listchitiet;
-                    db.SaveChanges();
-                }
-
-                return Ok("OK");
+                tong += (ct.SoLuong ?? 0) * (ct.DonGia ?? 0);
             }
-            catch
+            hd.TongTien = tong;
+
+            // Thêm hóa đơn vào database
+            db.HoaDons.Add(hd);
+            db.SaveChanges(); // Save để có MaHoaDon cho chi tiết
+
+            // Thêm chi tiết hóa đơn
+            foreach (var ct in model.listchitiet)
             {
-                return BadRequest();
+                ct.MaHoaDon = hd.MaHoaDon;
+                db.ChiTietHoaDons.Add(ct);
             }
+
+            db.SaveChanges();
+
+            return Ok(new { message = "Tạo hóa đơn thành công!", MaHoaDon = hd.MaHoaDon });
         }
+
 
         [Route("update-hoadon")]
         [HttpPost]
-        public IActionResult UpdateHoaDon(HoaDonEditModels model)
+        public IActionResult UpdateHoaDon([FromBody] HoaDonModels model)
         {
-            try
+            var hd = db.HoaDons.Include(x => x.ChiTietHoaDons)
+                                .FirstOrDefault(x => x.MaHoaDon == model.hoadon.MaHoaDon);
+            if (hd == null) return BadRequest("Không tồn tại hóa đơn!");
+
+            // Cập nhật thông tin chung
+            hd.MaBenhNhan = model.hoadon.MaBenhNhan;
+            hd.PhuongThucThanhToan = model.hoadon.PhuongThucThanhToan;
+            hd.TrangThai = model.hoadon.TrangThai;
+            hd.NgayLap = DateTime.Now;
+
+            // Danh sách chi tiết gửi lên
+            var updatedList = model.listchitiet;
+
+            // Xoá chi tiết đã bị loại bỏ
+            var chiTietToDelete = hd.ChiTietHoaDons
+                                     .Where(c => !updatedList.Any(u => u.MaChiTietHoaDon == c.MaChiTietHoaDon))
+                                     .ToList();
+            if (chiTietToDelete.Any())
+                db.ChiTietHoaDons.RemoveRange(chiTietToDelete);
+
+            double tong = 0;
+
+            foreach (var ct in updatedList)
             {
-                var hd = db.HoaDons.SingleOrDefault(x => x.MaHoaDon == model.hoadon.MaHoaDon);
-
-                hd.TrangThai = model.hoadon.TrangThai;
-                hd.PhuongThucThanhToan = model.hoadon.PhuongThucThanhToan;
-                db.SaveChanges();
-
-                if (model.listchitiet != null && model.listchitiet.Count > 0)
+                if (ct.MaChiTietHoaDon > 0)
                 {
-                    foreach (var x in model.listchitiet)
+                    // Cập nhật chi tiết đã tồn tại
+                    var existingCT = hd.ChiTietHoaDons.FirstOrDefault(x => x.MaChiTietHoaDon == ct.MaChiTietHoaDon);
+                    if (existingCT != null)
                     {
-                        if (x.MaChiTietHoaDon == 0)
-                        {
-                            var c = new ChiTietHoaDon();
-                            c.MaHoaDon = hd.MaHoaDon;
-                            c.MaThuoc = x.MaThuoc;
-                            c.SoLuong = x.SoLuong;
-                            c.DonGia = x.DonGia;
-                            db.ChiTietHoaDons.Add(c);
-                        }
-                        else
-                        {
-                            var obj = db.ChiTietHoaDons.SingleOrDefault(s => s.MaChiTietHoaDon == x.MaChiTietHoaDon);
-                            obj.SoLuong = x.SoLuong;
-                            obj.DonGia = x.DonGia;
-                        }
-                        db.SaveChanges();
+                        existingCT.MaThuoc = ct.MaThuoc;
+                        existingCT.SoLuong = ct.SoLuong;
+                        existingCT.DonGia = ct.DonGia;
                     }
                 }
+                else
+                {
+                    // Thêm chi tiết mới
+                    var newCT = new ChiTietHoaDon()
+                    {
+                        MaHoaDon = hd.MaHoaDon,
+                        MaThuoc = ct.MaThuoc,
+                        SoLuong = ct.SoLuong,
+                        DonGia = ct.DonGia
+                    };
+                    db.ChiTietHoaDons.Add(newCT);
+                }
 
-                return Ok("OK");
+                tong += (ct.SoLuong ?? 0) * (ct.DonGia ?? 0);
             }
-            catch
-            {
-                return BadRequest();
-            }
+
+            hd.TongTien = tong;
+
+            db.SaveChanges();
+
+            return Ok("Cập nhật thành công!");
         }
+
+
 
         [Route("delete-hoadon/{id}")]
         [HttpGet]

@@ -81,7 +81,10 @@ const baseUrl = "https://localhost:44340";
 async function fetchAuth(url, method="GET", body=null) {
     const res = await fetch(url, {
         method,
-        headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+        headers: {
+            "Authorization": "Bearer " + token,
+            "Content-Type": "application/json"
+        },
         body: body ? JSON.stringify(body) : null
     });
 
@@ -108,15 +111,21 @@ async function loadDonThuoc() {
     tbody.innerHTML = "";
 
     data.data.forEach(x => {
+
+        const id = x.maDonThuoc;
+        const ngay = x.ngayKe ? new Date(x.ngayKe).toLocaleDateString("vi-VN") : "";
+        const bacSi = x.bacSi || "";
+        const ghiChu = x.ghiChu || "";
+
         const row = `
             <tr>
-                <td>${x.maDonThuoc}</td>
-                <td>${x.ngayKe ? new Date(x.ngayKe).toLocaleDateString("vi-VN") : ""}</td>
-                <td>${x.bacSi || ""}</td>
-                <td>${x.ghiChu || ""}</td>
+                <td>${id}</td>
+                <td>${ngay}</td>
+                <td>${bacSi}</td>
+                <td>${ghiChu}</td>
                 <td>
-                    <a class="btn small neutral" href="FormDonThuoc.html?id=${x.maDonThuoc}">Sửa</a>
-                    <button class="btn small warn" onclick="deleteDT(${x.maDonThuoc})">Xóa</button>
+                    <a class="btn small neutral" href="FormDonThuoc.html?id=${id}">Sửa</a>
+                    <button class="btn small warn" onclick="deleteDT(${id})">Xóa</button>
                 </td>
             </tr>
         `;
@@ -124,8 +133,10 @@ async function loadDonThuoc() {
     });
 }
 
+
 async function deleteDT(id) {
     if (!confirm("Xóa đơn thuốc này?")) return;
+
     const rs = await fetchAuth(baseUrl + "/api-admin/DonThuoc/delete-donthuoc/" + id);
     alert(rs);
     loadDonThuoc();
@@ -139,6 +150,7 @@ loadDonThuoc();
 document.getElementById("toggleSidebar").onclick = () =>
     document.getElementById("sidebar").classList.toggle("collapsed");
 </script>
+
 
 </body>
 </html>

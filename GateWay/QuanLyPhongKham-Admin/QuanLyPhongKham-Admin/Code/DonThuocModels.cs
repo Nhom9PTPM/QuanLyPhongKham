@@ -5,13 +5,13 @@ namespace QuanLyPhongKham_Admin.Code
     public class DonThuocModels
     {
         public DonThuoc donthuoc { get; set; }
-        public List<ChiTietDonThuoc> listchitiet { get; set; }
+        public List<ChiTietDonThuoc> listchitiet { get; set; } = new List<ChiTietDonThuoc>();
     }
 
     public class DonThuocEditModels
     {
         public DonThuoc donthuoc { get; set; }
-        public List<ChiTietDonThuocEdit> listchitiet { get; set; }
+        public List<ChiTietDonThuoc> listchitiet { get; set; } = new List<ChiTietDonThuoc>();
     }
 
     public class ChiTietDonThuocEdit

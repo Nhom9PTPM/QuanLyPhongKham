@@ -7,11 +7,10 @@
   <link rel="stylesheet" href="css/LichHen.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
-
 <body>
 <div class="container">
 
-  <!-- SIDEBAR -->
+  <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
@@ -19,24 +18,23 @@
     </div>
 
     <nav class="menu">
-			<a href="index.html"><i class="fa-solid fa-chart-line"></i><span>Tổng quan</span></a>
-            <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i><span>Tài khoản</span></a>
-            <a href="BacSi.html"><i class="fa-solid fa-user-doctor"></i><span>Bác sĩ</span></a>
-            <a href="NhaCungCap.html"><i class="fa-solid fa-truck"></i><span>Nhà cung cấp</span></a>
-            <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i><span>Bệnh nhân</span></a>
-            <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i><span>Lịch hẹn</span></a>
-            <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i><span>Hồ sơ bệnh án</span></a>
-			<a href="KhamBenh.html"><i class="fa-solid fa-stethoscope"></i><span>Khám bệnh</span></a>
-            <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i><span>Thuốc</span></a>
-            <a href="DonThuoc.html"><i class="fa-solid fa-prescription-bottle-medical"></i><span>Đơn thuốc</span></a>
-            <a href="TonKho.html"><i class="fa-solid fa-warehouse"></i><span>Tồn kho thuốc</span></a>
-            <a href="HoaDon.html" class="active"><i class="fa-solid fa-file-invoice-dollar"></i><span>Hóa đơn</span></a>
+      <a href="index.html"><i class="fa-solid fa-chart-line"></i><span>Tổng quan</span></a>
+      <a href="TaiKhoan.html"><i class="fa-solid fa-user-shield"></i><span>Tài khoản</span></a>
+      <a href="BacSi.html"><i class="fa-solid fa-user-doctor"></i><span>Bác sĩ</span></a>
+      <a href="NhaCungCap.html"><i class="fa-solid fa-truck"></i><span>Nhà cung cấp</span></a>
+      <a href="BenhNhan.html"><i class="fa-solid fa-user-injured"></i><span>Bệnh nhân</span></a>
+      <a href="LichHen.html"><i class="fa-solid fa-calendar-days"></i><span>Lịch hẹn</span></a>
+      <a href="HoSoBenhAn.html"><i class="fa-solid fa-file-medical"></i><span>Hồ sơ bệnh án</span></a>
+      <a href="KhamBenh.html"><i class="fa-solid fa-stethoscope"></i><span>Khám bệnh</span></a>
+      <a href="Thuoc.html"><i class="fa-solid fa-capsules"></i><span>Thuốc</span></a>
+      <a href="DonThuoc.html"><i class="fa-solid fa-prescription-bottle-medical"></i><span>Đơn thuốc</span></a>
+      <a href="TonKho.html"><i class="fa-solid fa-warehouse"></i><span>Tồn kho thuốc</span></a>
+      <a href="HoaDon.html" class="active"><i class="fa-solid fa-file-invoice-dollar"></i><span>Hóa đơn</span></a>
     </nav>
   </aside>
 
-  <!-- MAIN -->
+  <!-- Main -->
   <main class="main">
-
     <header class="header">
       <h1>Quản lý Hóa đơn</h1>
       <div class="actions">
@@ -45,7 +43,7 @@
       </div>
     </header>
 
-    <!-- FILTER -->
+    <!-- Filter -->
     <section class="filter-bar card">
       <select id="txtTrangThai" class="input">
         <option value="">-- Tất cả trạng thái --</option>
@@ -54,10 +52,9 @@
       </select>
     </section>
 
-    <!-- TABLE -->
+    <!-- Table -->
     <section class="card">
       <h3>Danh sách Hóa đơn</h3>
-
       <div class="table-wrap" style="margin-top:12px;">
         <table id="tblHoaDon">
           <thead>
@@ -79,89 +76,93 @@
 </div>
 
 <script>
-  const token = localStorage.getItem("token");
-  if (!token) {
-    alert("Vui lòng đăng nhập!");
+const token = localStorage.getItem("token");
+if (!token) {
+  alert("Vui lòng đăng nhập!");
+  location.href = "Login.html";
+}
+
+const baseUrl = "https://localhost:44340";
+
+// Fetch API có auth
+async function fetchAuth(url, method="GET", body=null) {
+  const res = await fetch(url, {
+    method,
+    headers: {
+      "Authorization": "Bearer " + token,
+      "Content-Type": "application/json"
+    },
+    body: body ? JSON.stringify(body) : null
+  });
+
+  if (res.status === 401) {
+    localStorage.removeItem("token");
+    alert("Hết hạn đăng nhập!");
     location.href = "Login.html";
+    return;
   }
+  return res.json();
+}
 
-  const baseUrl = "https://localhost:44340";
+// Load danh sách hóa đơn
+async function loadHoaDon() {
+  const body = {
+    page: 1,
+    pageSize: 999,
+    TrangThai: document.getElementById("txtTrangThai").value || ""
+  };
 
-  async function fetchAuth(url, method="GET", body=null) {
-    const res = await fetch(url, {
-      method,
-      headers: {
-        "Authorization": "Bearer " + token,
-        "Content-Type": "application/json"
-      },
-      body: body ? JSON.stringify(body) : null
-    });
+  const data = await fetchAuth(baseUrl + "/api-admin/HoaDon/search", "POST", body);
+  const tbody = document.querySelector("#tblHoaDon tbody");
+  tbody.innerHTML = "";
 
-    if (res.status === 401) {
-      localStorage.removeItem("token");
-      alert("Hết hạn đăng nhập!");
-      location.href = "Login.html";
-      return;
-    }
-    return res.json();
-  }
+  data.data.forEach(hd => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${hd.maHoaDon}</td>
+      <td>${hd.tenBenhNhan || ""}</td>
+      <td>${formatDate(hd.ngayLap)}</td>
+      <td>${formatMoney(hd.tongTien)}</td>
+      <td>${hd.phuongThucThanhToan || ""}</td>
+      <td>${hd.trangThai || ""}</td>
+      <td>
+        <a class="btn small neutral" href="FormHoaDon.html?id=${hd.maHoaDon}">Sửa</a>
+        <button class="btn small warn" onclick="deleteHD(${hd.maHoaDon})">Xóa</button>
+      </td>
+    `;
+    tbody.appendChild(row);
+  });
+}
 
-  async function loadHoaDon() {
-    const body = {
-      page: 1,
-      pageSize: 999,
-      TrangThai: document.getElementById("txtTrangThai").value || ""
-    };
+// Format ngày
+function formatDate(date) {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("vi-VN");
+}
 
-    const data = await fetchAuth(baseUrl + "/api-admin/HoaDon/search", "POST", body);
-    const tbody = document.querySelector("#tblHoaDon tbody");
-    tbody.innerHTML = "";
+// Format tiền
+function formatMoney(amount) {
+  return amount ? Number(amount).toLocaleString("vi-VN") + " đ" : "0 đ";
+}
 
-    data.data.forEach(hd => {
-      const row = `
-        <tr>
-          <td>${hd.maHoaDon}</td>
-          <td>${hd.tenBenhNhan || ""}</td>
-          <td>${formatDate(hd.ngayLap)}</td>
-          <td>${formatMoney(hd.tongTien)}</td>
-          <td>${hd.phuongThucThanhToan || ""}</td>
-          <td>${hd.trangThai || ""}</td>
-
-          <td>
-            <a class="btn small neutral" href="FormHoaDon.html?id=${hd.maHoaDon}">Sửa</a>
-            <button class="btn small warn" onclick="deleteHD(${hd.maHoaDon})">Xóa</button>
-          </td>
-        </tr>`;
-      tbody.innerHTML += row;
-    });
-  }
-
-  function formatDate(date) {
-    if (!date) return "";
-    const d = new Date(date);
-    return d.toLocaleDateString("vi-VN");
-  }
-
-  function formatMoney(m) {
-    return m ? m.toLocaleString("vi-VN") + " đ" : "0 đ";
-  }
-
-  async function deleteHD(id) {
-    if (!confirm("Bạn có chắc muốn xóa hóa đơn này?")) return;
-    const res = await fetchAuth(baseUrl + "/api-admin/HoaDon/delete-hoadon/" + id, "GET");
-    alert(res);
-    loadHoaDon();
-  }
-
-  document.getElementById("txtTrangThai").addEventListener("change", loadHoaDon);
-  document.getElementById("btnRefresh").addEventListener("click", loadHoaDon);
-
+// Xóa hóa đơn
+async function deleteHD(id) {
+  if (!confirm("Bạn có chắc muốn xóa hóa đơn này?")) return;
+  await fetchAuth(baseUrl + "/api-admin/HoaDon/delete-hoadon/" + id, "GET");
+  alert("Xóa thành công!");
   loadHoaDon();
+}
 
-  document.getElementById("toggleSidebar").onclick = () =>
-    document.getElementById("sidebar").classList.toggle("collapsed");
+// Event
+document.getElementById("txtTrangThai").addEventListener("change", loadHoaDon);
+document.getElementById("btnRefresh").addEventListener("click", loadHoaDon);
 
+// Load lần đầu
+loadHoaDon();
+
+// Toggle sidebar
+document.getElementById("toggleSidebar").onclick = () =>
+  document.getElementById("sidebar").classList.toggle("collapsed");
 </script>
-
 </body>
 </html>

@@ -105,7 +105,7 @@
           <td>${bn.soDienThoai}</td>
           <td>${bn.email}</td>
           <td>${bn.diaChi}</td>
-          <td>${bn.cMTND_NV}</td>
+		  <td>${bn.cmtnD_NV || ""}</td>
           <td>
             <a class="btn small neutral" href="FormBenhNhan.html?id=${bn.maBenhNhan}">Sửa</a>
             <button class="btn small warn" onclick="deleteBenhNhan(${bn.maBenhNhan})">Xóa</button>

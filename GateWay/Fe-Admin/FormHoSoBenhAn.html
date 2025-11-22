@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Hồ sơ bệnh án - DAH</title>
+  <link rel="stylesheet" href="css/LichHen.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+<div class="container">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+      <span class="brand-text">DAH Clinic</span>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <header class="header">
+      <h1 id="formTitle">Thêm hồ sơ bệnh án</h1>
+      <div class="actions">
+        <a href="HoSoBenhAn.html" class="btn neutral"><i class="fa-solid fa-arrow-left"></i> Quay lại</a>
+      </div>
+    </header>
+
+    <section class="card">
+      <form id="formHoSoBenhAn">
+        <div class="form-group">
+          <label>Bệnh nhân</label>
+          <select id="selectBenhNhan" class="input" required>
+            <option value="">-- Chọn bệnh nhân --</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Chẩn đoán chính</label>
+          <input type="text" id="txtChanDoanChinh" class="input" required>
+        </div>
+
+        <div class="form-group">
+          <label>Tóm tắt bệnh lý</label>
+          <textarea id="txtTomTatBenhLy" class="input"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Lịch sử bệnh lý</label>
+          <textarea id="txtLichSuBenhLy" class="input"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Người lập</label>
+          <input type="text" id="txtNguoiLap" class="input" required>
+        </div>
+
+        <div class="form-group">
+          <label>Upload file (nếu có)</label>
+          <input type="file" id="fileUpload" class="input">
+          <div id="uploadedFile"></div>
+        </div>
+
+        <button type="submit" class="btn"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+      </form>
+    </section>
+  </main>
+</div>
+
+<script>
+const token = localStorage.getItem("token");
+if (!token) {
+    alert("Vui lòng đăng nhập!");
+    location.href = "Login.html";
+}
+
+const baseUrl = "https://localhost:44340";
+const params = new URLSearchParams(window.location.search);
+const hoSoId = params.get("id");
+
+const selectBenhNhan = document.getElementById("selectBenhNhan");
+const txtChanDoanChinh = document.getElementById("txtChanDoanChinh");
+const txtTomTatBenhLy = document.getElementById("txtTomTatBenhLy");
+const txtLichSuBenhLy = document.getElementById("txtLichSuBenhLy");
+const txtNguoiLap = document.getElementById("txtNguoiLap");
+const fileUpload = document.getElementById("fileUpload");
+const uploadedFile = document.getElementById("uploadedFile");
+const formTitle = document.getElementById("formTitle");
+
+// Hàm fetch với Authorization
+async function fetchAuth(url, method="GET", body=null) {
+    try {
+        const res = await fetch(url, {
+            method,
+            headers: { 
+                "Authorization": "Bearer " + token,
+                "Content-Type": body ? "application/json" : undefined
+            },
+            body: body ? JSON.stringify(body) : null
+        });
+
+        if (res.status === 401) {
+            localStorage.removeItem("token");
+            alert("Hết hạn đăng nhập!");
+            location.href = "Login.html";
+            return null;
+        }
+
+        if (!res.ok) return null;
+        return await res.json();
+    } catch (err) {
+        console.error("Lỗi fetch:", err);
+        return null;
+    }
+}
+
+// Load danh sách bệnh nhân
+async function loadBenhNhan() {
+    const data = await fetchAuth(baseUrl + "/api-admin/HoSoBenhAn/get-all");
+    if (!data) return;
+    data.forEach(bn => {
+        const option = document.createElement("option");
+        option.value = bn.maBenhNhan;
+        option.text = bn.hoTen;
+        selectBenhNhan.add(option);
+    });
+}
+
+// Upload file
+async function uploadFile(file) {
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+        const res = await fetch(baseUrl + "/api-admin/HoSoBenhAn/upload", {
+            method: "POST",
+            headers: { "Authorization": "Bearer " + token },
+            body: formData
+        });
+
+        if (!res.ok) {
+            alert("Upload file lỗi");
+            return null;
+        }
+
+        const data = await res.json();
+        uploadedFile.innerHTML = `<span>Đã upload: ${data.filePath}</span>`;
+        return data.filePath;
+
+    } catch (err) {
+        console.error("Upload lỗi:", err);
+        alert("Upload file lỗi");
+        return null;
+    }
+}
+
+// Load hồ sơ để sửa
+async function loadHoSo() {
+    if (!hoSoId) return;
+    formTitle.innerText = "Sửa hồ sơ bệnh án";
+    const data = await fetchAuth(baseUrl + "/api-admin/HoSoBenhAn/get-by-id/" + hoSoId);
+    if (!data) return;
+
+    // Chọn đúng bệnh nhân
+    Array.from(selectBenhNhan.options).forEach(opt => {
+        if(opt.value == data.hs?.maBenhNhan){
+            opt.selected = true;
+        }
+    });
+
+    txtChanDoanChinh.value = data.hs?.chanDoanChinh || "";
+    txtTomTatBenhLy.value = data.hs?.tomTatBenhLy || "";
+    txtLichSuBenhLy.value = data.hs?.lichSuBenhLy || "";
+    txtNguoiLap.value = data.hs?.nguoiLap || "";
+
+    if (data.ct && data.ct.length > 0) {
+        uploadedFile.innerHTML = `<span>File hiện tại: ${data.ct[0].tenTapTin}</span>`;
+    }
+}
+
+// Submit form (create & update)
+document.getElementById("formHoSoBenhAn").addEventListener("submit", async e => {
+    e.preventDefault();
+
+    if (!selectBenhNhan.value) {
+        alert("Vui lòng chọn bệnh nhân!");
+        return;
+    }
+    if (!txtNguoiLap.value) {
+        alert("Vui lòng nhập Người lập!");
+        return;
+    }
+
+    let filePath = null;
+    if (fileUpload.files.length > 0) {
+        filePath = await uploadFile(fileUpload.files[0]);
+        if (!filePath) return; // upload lỗi
+    }
+
+    let model;
+    if (hoSoId) {
+        // UPDATE
+        model = {
+            hosobenhan: {
+                MaHoSo: parseInt(hoSoId),
+                MaBenhNhan: parseInt(selectBenhNhan.value),
+                ChanDoanChinh: txtChanDoanChinh.value,
+                TomTatBenhLy: txtTomTatBenhLy.value,
+                LichSuBenhLy: txtLichSuBenhLy.value,
+                NguoiLap: txtNguoiLap.value
+            },
+            listchitiet: filePath ? [{
+                MaTapTin: 0, // thêm mới
+                TenTapTin: fileUpload.files[0].name,
+                DuongDan: filePath,
+                KichThuoc: fileUpload.files[0].size,
+                DinhDang: fileUpload.files[0].type,
+                TrangThai: 1
+            }] : []
+        };
+    } else {
+        // CREATE
+        model = {
+            MaBenhNhan: parseInt(selectBenhNhan.value),
+            TomTatBenhLy: txtTomTatBenhLy.value,
+            ChanDoanChinh: txtChanDoanChinh.value,
+            LichSuBenhLy: txtLichSuBenhLy.value,
+            NgayLap: new Date(),
+            NguoiLap: txtNguoiLap.value,
+            DaXoa: false,
+            TapTins: filePath ? [{
+                TenTapTin: fileUpload.files[0].name,
+                DuongDan: filePath,
+                KichThuoc: fileUpload.files[0].size,
+                DinhDang: fileUpload.files[0].type
+            }] : []
+        };
+    }
+
+    const url = hoSoId 
+        ? baseUrl + "/api-admin/HoSoBenhAn/update-hoso" 
+        : baseUrl + "/api-admin/HoSoBenhAn/create-hoso";
+
+    const res = await fetchAuth(url, "POST", model);
+    if (res) {
+        alert("Lưu thành công!");
+        window.location.href = "HoSoBenhAn.html";
+    } else {
+        alert("Lưu thất bại. Vui lòng thử lại!");
+    }
+});
+
+// Load dữ liệu
+(async function() {
+    await loadBenhNhan();
+    await loadHoSo();
+})();
+
+// Toggle sidebar
+document.getElementById("toggleSidebar").onclick = () =>
+    document.getElementById("sidebar").classList.toggle("collapsed");
+
+</script>
+</body>
+</html>

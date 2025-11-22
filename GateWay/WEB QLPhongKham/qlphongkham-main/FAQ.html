@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="./img/logohinh.png" rel="icon" type="image/png">
+  <title>HeartCare lắng nghe tim bạn</title>
+  <link rel="stylesheet" href="./css/reset.css">
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="https:cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+  <div class="top-bar">
+    <div class="top-links">
+      <a href="./bacsi.html">Tìm bác sĩ</a>
+      <a href="#">Khóa học trực tuyến</a>
+      <a href="#">Chăm sóc khách hàng</a>
+    </div>
+  </div>
+
+  <header class="main-header">
+    <img src="./img/logo.png" alt="HeartCare Logo" class="logo">
+    <div class="search-section">
+      <!-- <i class="fa-solid fa-magnifying-glass search-icon"></i> -->
+      <input type="text" placeholder="Tìm kiếm...">
+      
+    </div>
+   <div class="tools">
+      <i class="fa-regular fa-calendar-days calendar-icon"></i>
+      <!-- <i class="fa-solid fa-pen edit-icon"></i> -->
+      <img src="https://flagcdn.com/w40/vn.png" alt="Vietnam Flag" class="flag-icon">
+      <!-- <i class="fa-solid fa-chevron-down dropdown-icon"></i> -->
+    </div> 
+  </header>
+  <nav class="menu-bar">
+     <a href="./index.html" class="active">Trang chủ</a>
+          <a href="./about-us.html">Giới thiệu</a>
+          <a href="./dichvu.html">Dịch vụ</a>
+          <a href="./datlich.html">Đặt lịch</a>
+          <a href="./lienhe.html">Liên hệ</a>
+                    <a href="./blog.html">Tin tức</a>
+
+  </nav>
+  <section class="banner">
+    <div class="container banner-content">
+      <h1>Chăm sóc sức khỏe tim mạch<br />Nâng niu cuộc sống</h1>
+      <a href="./datlich.html" class="btn-primary">Đặt lịch khám</a>
+    </div>
+  </section>
+  <style>
+
+  
+    h2 {
+      text-align: left;
+      margin-bottom: 10px;
+      margin-left: 200px;
+      margin-right: 190px;
+      font-size: 2rem;
+      border-bottom: 2px solid #008080;
+    }
+    .faq-item {
+      background-color: #ffffff;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+        width: 1100px;
+        margin-left: 200px;
+    }
+
+    .faq-question {
+      cursor: pointer;
+      padding: 20px;
+      font-weight: bold;
+      position: relative;
+    }
+
+    .faq-question::after {
+      content: '+';
+      position: absolute;
+      right: 20px;
+      font-size: 18px;
+      transition: transform 0.3s;
+    }
+
+    .faq-item.active .faq-question::after {
+      content: '-';
+      transform: rotate(180deg);
+    }
+
+    .faq-answer {
+      display: none;
+      padding: 0 20px 20px;
+      border-top: 1px solid #eee;
+      color: #444;
+    }
+
+    .faq-item.active .faq-answer {
+      display: block;
+    }
+    .faq-question {
+  cursor: pointer;
+  padding: 20px;
+  font-weight: bold;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.faq-question img.faq-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+  </style>
+</head>
+<body>
+
+ <h2>FAQ - Câu hỏi thường gặp</h2>
+<div class="faq-item">
+    
+  <div class="faq-question"><img src="https://cdn-icons-png.flaticon.com/512/2920/2920222.png" alt="icon" class="faq-icon">Tôi có thể đặt lịch khám trực tuyến như thế nào?</div>
+  <div class="faq-answer">
+    Bạn có thể truy cập mục “Đặt lịch khám” trên website, điền đầy đủ thông tin và chọn ngày giờ phù hợp. Sau khi gửi, hệ thống sẽ xác nhận với bạn qua email hoặc điện thoại.
+  </div>
+</div>
+
+<div class="faq-item">
+    
+  <div class="faq-question"><img src="https://cdn-icons-png.flaticon.com/512/725/725643.png" alt="icon" class="faq-icon">Hệ thống có hỗ trợ khám từ xa không?</div>
+  <div class="faq-answer">
+    <img src="./img/faq/telehealth.png" alt="Khám từ xa" style="width: 100px; float: right; margin-left: 20px;">
+    Có. Dịch vụ Telehealth cho phép bạn kết nối với bác sĩ từ xa qua video call. Bạn cần đặt lịch trước và đảm bảo kết nối internet ổn định.
+  </div>
+</div>
+
+
+<div class="faq-item">
+    
+  <div class="faq-question"><img src="https://cdn-icons-png.flaticon.com/512/725/725643.png" alt="icon" class="faq-icon"> Tôi có thể hủy lịch khám đã đăng ký không?</div>
+  <div class="faq-answer">
+    <img src="./img/faq/cancel.png" alt="Hủy lịch khám" style="width: 100px; float: right; margin-left: 20px;">
+    Bạn có thể hủy lịch khám ít nhất 24h trước giờ hẹn bằng cách gọi đến tổng đài hoặc qua email xác nhận lịch hẹn.
+  </div>
+</div>
+
+<div class="faq-item">
+    
+  <div class="faq-question"><img src="https://cdn-icons-png.flaticon.com/512/725/725643.png" alt="icon" class="faq-icon">Những chuyên khoa nào đang được hỗ trợ?</div>
+  <div class="faq-answer">
+    <img src="./img/faq/specialist.png" alt="Chuyên khoa" style="width: 100px; float: right; margin-left: 20px;">
+    Chúng tôi hỗ trợ nhiều chuyên khoa: tim mạch, nội tổng quát, nhi khoa, sản khoa, da liễu, thần kinh, v.v. Danh sách đầy đủ được cập nhật ở mục “Dịch vụ”.
+  </div>
+</div>
+
+<div class="faq-item">
+    
+  <div class="faq-question"><img src="https://cdn-icons-png.flaticon.com/512/725/725643.png" alt="icon" class="faq-icon">Tôi có được bảo mật thông tin y tế cá nhân không?</div>
+  <div class="faq-answer">
+    <img src="./img/faq/privacy.png" alt="Bảo mật thông tin" style="width: 100px; float: right; margin-left: 20px;">
+    Chúng tôi cam kết bảo vệ mọi thông tin cá nhân và y tế của bạn theo đúng quy định pháp luật và chính sách bảo mật của hệ thống.
+  </div>
+</div>
+
+<!-- Câu hỏi bổ sung mới -->
+<div class="faq-item">
+  <div class="faq-question"><img src="https://cdn-icons-png.flaticon.com/512/2920/2920222.png" alt="icon" class="faq-icon">Làm sao tôi biết được bác sĩ nào sẽ khám cho tôi?</div>
+  <div class="faq-answer">
+    <img src="./img/faq/doctor.png" alt="Bác sĩ" style="width: 100px; float: right; margin-left: 20px;">
+    Khi đặt lịch, bạn có thể chọn bác sĩ mong muốn dựa trên thông tin hồ sơ và lịch làm việc công khai của từng bác sĩ.
+  </div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-question">7. Tôi có thể thanh toán chi phí khám bằng hình thức nào?</div>
+  <div class="faq-answer">
+    <img src="./img/faq/payment.png" alt="Thanh toán" style="width: 100px; float: right; margin-left: 20px;">
+    Hệ thống hỗ trợ thanh toán qua thẻ tín dụng, chuyển khoản ngân hàng và ví điện tử như Momo, ZaloPay.
+  </div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-question">8. Tôi có thể nhận kết quả khám qua email không?</div>
+  <div class="faq-answer">
+    <img src="./img/faq/email-report.png" alt="Email kết quả" style="width: 100px; float: right; margin-left: 20px;">
+    Có, bạn có thể yêu cầu nhận kết quả khám qua email hoặc tải trực tiếp từ tài khoản cá nhân trên hệ thống.
+  </div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-question">9. Dịch vụ cấp cứu có hoạt động 24/7 không?</div>
+  <div class="faq-answer">
+    <img src="./img/faq/emergency.png" alt="Cấp cứu" style="width: 100px; float: right; margin-left: 20px;">
+    Dịch vụ cấp cứu hoạt động 24/7. Vui lòng gọi số hotline nếu bạn cần hỗ trợ y tế khẩn cấp.
+  </div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-question">10. Làm sao để biết chương trình ưu đãi đang diễn ra?</div>
+  <div class="faq-answer">
+    <img src="./img/faq/promotion.png" alt="Ưu đãi" style="width: 100px; float: right; margin-left: 20px;">
+    Bạn có thể theo dõi trang “Tin tức” hoặc đăng ký nhận bản tin email để không bỏ lỡ các chương trình ưu đãi đặc biệt.
+  </div>
+</div>
+
+
+  <script>
+    const items = document.querySelectorAll('.faq-item');
+    items.forEach(item => {
+      item.querySelector('.faq-question').addEventListener('click', () => {
+        item.classList.toggle('active');
+      });
+    });
+  </script>
+
+  <footer class="modern-footer">
+  <div class="footer-container">
+    <!-- Cột 1: Liên hệ -->
+    <div class="footer-column">
+      <h3>Trung tâm hỗ trợ</h3>
+      <p class="footer-hotline">📞 1900 8686</p>
+      <p><strong>HeartCare Plus Clinic</strong></p>
+      <p><i class="fa-solid fa-location-dot"></i> 45 Nguyễn Trãi, P. An Cư, Ninh Kiều, Cần Thơ</p>
+      <p><i class="fa-solid fa-envelope"></i> contact@heartcare.vn</p>
+      <p><i class="fa-solid fa-phone"></i> 0292 1234 567</p>
+    </div>
+
+    <!-- Cột 2: Giới thiệu -->
+    <div class="footer-column">
+      <h3>Về HeartCare</h3>
+      <ul>
+        <li><a href="./about-us.html">Về chúng tôi</a></li>
+        <li><a href="./doctors.html">Đội ngũ bác sĩ</a></li>
+        <li><a href="./services.html">Dịch vụ</a></li>
+        <li><a href="./blog.html">Tin tức y khoa</a></li>
+      </ul>
+    </div>
+
+    <!-- Cột 3: Hỗ trợ -->
+    <div class="footer-column">
+      <h3>Hướng dẫn & Hỗ trợ</h3>
+      <ul>
+        <li><a href="./datlich.html">Đặt lịch khám</a></li>
+        <li><a href="./guide.html">Hướng dẫn sử dụng</a></li>
+        <li><a href="./faq.html">Câu hỏi thường gặp</a></li>
+        <li><a href="./terms.html">Chính sách & Điều khoản</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 HeartCare Plus. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>

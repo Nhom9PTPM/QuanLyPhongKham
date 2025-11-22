@@ -17,10 +17,9 @@ namespace QuanLyPhongKham_Admin.Code
     public class ChiTietHoaDonEdit
     {
         public int MaChiTietHoaDon { get; set; }
-        public int? MaHoaDon { get; set; }
         public int? MaThuoc { get; set; }
         public int? SoLuong { get; set; }
         public double? DonGia { get; set; }
-        public int TrangThai { get; set; }
     }
+
 }

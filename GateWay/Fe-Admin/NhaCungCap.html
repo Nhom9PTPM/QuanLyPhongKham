@@ -132,9 +132,12 @@
 
   loadNhaCungCap();
 
-  document.getElementById("toggleSidebar").onclick = () =>
-    document.getElementById("sidebar").classList.toggle("collapsed");
 
+
+</script>
+<script>
+  const sidebar = document.getElementById("sidebar");
+  document.getElementById("toggleSidebar").onclick = () => sidebar.classList.toggle("collapsed");
 </script>
 </body>
 </html>

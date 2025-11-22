@@ -18,7 +18,15 @@ namespace QuanLyPhongKham_Admin.Controllers
             _tools = tools;
             db = context;
         }
-
+        [Route("get-all")]
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var data = db.Thuocs
+                .Select(t => new { t.MaThuoc, t.TenThuoc })
+                .ToList();
+            return Ok(data);
+        }
 
         [Route("get-by-id/{id}")]
         [HttpGet]

@@ -13,4 +13,11 @@ namespace QuanLyPhongKham_Admin.Code
         public int? SoLuong { get; set; }
         public string? MaKho { get; set; }
     }
+    public class TonKhoThuocCreateModel
+    {
+        public int MaThuoc { get; set; }
+        public int SoLuong { get; set; }
+        public string? MaKho { get; set; }
+    }
+
 }

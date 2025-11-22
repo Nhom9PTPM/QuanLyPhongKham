@@ -163,7 +163,70 @@
     sidebar.classList.toggle('collapsed');
   });
 </script>
+<script>
+const token = localStorage.getItem('token');
+const role = localStorage.getItem('maVaiTro');
 
+if (!token) {
+    alert('Vui lòng đăng nhập!');
+    window.location.href = 'Login.html';
+} else {
+
+    if (role == "4") {
+        window.location.href = "web.html";
+    }
+
+    const menuAdminOnly = [
+        "TaiKhoan.html",
+        "NhaCungCap.html",
+        "TonKho.html",
+        "HoaDon.html"
+    ];
+
+    const menuDoctorAllowed = [
+        "BacSi.html",
+        "BenhNhan.html",
+        "LichHen.html",
+        "KhamBenh.html",
+        "HoSoBenhAn.html",
+        "DonThuoc.html",
+        "Thuoc.html"
+    ];
+
+    const links = document.querySelectorAll(".menu a");
+
+    links.forEach(link => {
+        const href = link.getAttribute("href");
+
+        // Admin → dùng hết menu, khỏi ẩn gì
+        if (role == "1") return;
+
+        // Bác sĩ
+        if (role == "2") {
+            if (!menuDoctorAllowed.includes(href)) {
+                link.style.display = "none";
+            }
+            return;
+        }
+
+        // Nhân viên
+        if (role == "3") {
+            // Nhân viên chỉ xem các phần này
+            const staffAllowed = [
+                "BenhNhan.html",
+                "LichHen.html",
+                "Thuoc.html",
+                "DonThuoc.html"
+            ];
+            if (!staffAllowed.includes(href)) {
+                link.style.display = "none";
+            }
+            return;
+        }
+    });
+}
+
+</script>
 
 </body>
 </html>

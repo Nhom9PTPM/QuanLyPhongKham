@@ -12,7 +12,7 @@ namespace QuanLyPhongKham_Admin.Models
         public int? SoLuong { get; set; }
         public double? DonGia { get; set; }
 
-        public virtual HoaDon MaHoaDonNavigation { get; set; } = null!;
+        public virtual HoaDon? MaHoaDonNavigation { get; set; }
         public virtual Thuoc? MaThuocNavigation { get; set; }
     }
 }

@@ -12,7 +12,11 @@ namespace QuanLyPhongKham_Admin.Models
         public string? CachDung { get; set; }
         public double? DonGia { get; set; }
 
-        public virtual DonThuoc MaDonThuocNavigation { get; set; } = null!;
-        public virtual Thuoc MaThuocNavigation { get; set; } = null!;
+        [ForeignKey("MaDonThuoc")]
+        public virtual DonThuoc? MaDonThuocNavigation { get; set; }
+
+        [ForeignKey("MaThuoc")]
+        public virtual Thuoc? MaThuocNavigation { get; set; }
+
     }
 }

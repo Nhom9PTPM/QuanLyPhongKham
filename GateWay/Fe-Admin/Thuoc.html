@@ -133,7 +133,7 @@
 
   async function deleteThuoc(id) {
     if (!confirm("Bạn có chắc chắn muốn xoá thuốc này?")) return;
-    const res = await fetchAuth(baseUrl + "/api/Thuoc/delete-thuoc/" + id, "GET");
+    const res = await fetchAuth(baseUrl + "/api-admin/Thuoc/delete-thuoc/" + id, "GET");
     alert(res);
     loadThuoc();
   }

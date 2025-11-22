@@ -20,7 +20,7 @@ namespace QuanLyPhongKham_Admin.Models
         public DateTime NgayTao { get; set; }
         public bool DaXoa { get; set; }
 
-        public virtual BenhNhan MaBenhNhanNavigation { get; set; }
+        public virtual BenhNhan? MaBenhNhanNavigation { get; set; }
 
         public virtual BacSi? MaBacSiNavigation { get; set; }
 
