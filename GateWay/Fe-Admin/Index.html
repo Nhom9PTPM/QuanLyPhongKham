@@ -90,6 +90,61 @@
     window.location.href = 'Login.html'; // dùng đường dẫn tương đối
   } else {
     console.log('Token hiện tại:', token);
+	// Lấy quyền từ localStorage
+const role = localStorage.getItem("maVaiTro");
+
+// Nếu là bệnh nhân → chuyển sang web.html
+if (role == "4") {
+    window.location.href = "web.html";
+}
+
+// Lấy danh sách các menu
+const links = document.querySelectorAll(".menu a");
+
+// Quyền cho bác sĩ
+const menuForDoctor = [
+	"index.html",
+    "BacSi.html",
+    "BenhNhan.html",
+    "LichHen.html",
+    "KhamBenh.html",
+    "HoSoBenhAn.html",
+    "DonThuoc.html",
+    "Thuoc.html"
+];
+
+// Quyền cho nhân viên
+const menuForStaff = [
+	"index.html",
+    "BenhNhan.html",
+    "LichHen.html",
+    "DonThuoc.html",
+    "Thuoc.html"
+];
+
+// Ẩn menu theo quyền
+links.forEach(link => {
+    const href = link.getAttribute("href");
+
+    // Admin → full quyền
+    if (role == "1") return;
+
+    // Bác sĩ
+    if (role == "2") {
+        if (!menuForDoctor.includes(href)) {
+            link.style.display = "none";
+        }
+        return;
+    }
+
+    // Nhân viên
+    if (role == "3") {
+        if (!menuForStaff.includes(href)) {
+            link.style.display = "none";
+        }
+        return;
+    }
+});
 
     // Hàm kiểm tra lỗi response
     async function fetchWithAuth(url) {
@@ -164,68 +219,12 @@
   });
 </script>
 <script>
-const token = localStorage.getItem('token');
-const role = localStorage.getItem('maVaiTro');
+  const toggleBtn = document.getElementById('toggleSidebar');
+  const sidebar = document.getElementById('sidebar');
 
-if (!token) {
-    alert('Vui lòng đăng nhập!');
-    window.location.href = 'Login.html';
-} else {
-
-    if (role == "4") {
-        window.location.href = "web.html";
-    }
-
-    const menuAdminOnly = [
-        "TaiKhoan.html",
-        "NhaCungCap.html",
-        "TonKho.html",
-        "HoaDon.html"
-    ];
-
-    const menuDoctorAllowed = [
-        "BacSi.html",
-        "BenhNhan.html",
-        "LichHen.html",
-        "KhamBenh.html",
-        "HoSoBenhAn.html",
-        "DonThuoc.html",
-        "Thuoc.html"
-    ];
-
-    const links = document.querySelectorAll(".menu a");
-
-    links.forEach(link => {
-        const href = link.getAttribute("href");
-
-        // Admin → dùng hết menu, khỏi ẩn gì
-        if (role == "1") return;
-
-        // Bác sĩ
-        if (role == "2") {
-            if (!menuDoctorAllowed.includes(href)) {
-                link.style.display = "none";
-            }
-            return;
-        }
-
-        // Nhân viên
-        if (role == "3") {
-            // Nhân viên chỉ xem các phần này
-            const staffAllowed = [
-                "BenhNhan.html",
-                "LichHen.html",
-                "Thuoc.html",
-                "DonThuoc.html"
-            ];
-            if (!staffAllowed.includes(href)) {
-                link.style.display = "none";
-            }
-            return;
-        }
-    });
-}
-
+  toggleBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('collapsed');
+  });
 </script>
 
 </body>

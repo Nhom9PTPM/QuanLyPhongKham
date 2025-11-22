@@ -123,15 +123,29 @@ namespace QuanLyPhongKham_Admin.Controllers
 
             try
             {
+                // Lấy đơn thuốc cần update
                 var dt = db.DonThuocs.SingleOrDefault(x => x.MaDonThuoc == model.donthuoc.MaDonThuoc);
                 if (dt == null)
                     return NotFound("Đơn thuốc không tồn tại");
 
+                // Cập nhật thông tin đơn thuốc
                 dt.GhiChu = model.donthuoc.GhiChu;
                 dt.NgayKe = model.donthuoc.NgayKe;
                 dt.NguoiKe = model.donthuoc.NguoiKe;
                 db.SaveChanges();
 
+                // Lấy danh sách chi tiết hiện có trong DB
+                var currentChiTiet = db.ChiTietDonThuocs.Where(c => c.MaDonThuoc == dt.MaDonThuoc).ToList();
+
+                // Xoá những chi tiết không còn trong danh sách gửi lên
+                var incomingIds = model.listchitiet?.Select(x => x.MaChiTietDon).ToList() ?? new List<int>();
+                var toDelete = currentChiTiet.Where(c => !incomingIds.Contains(c.MaChiTietDon)).ToList();
+                if (toDelete.Count > 0)
+                    db.ChiTietDonThuocs.RemoveRange(toDelete);
+
+                db.SaveChanges();
+
+                // Thêm hoặc cập nhật chi tiết
                 if (model.listchitiet != null && model.listchitiet.Count > 0)
                 {
                     foreach (var x in model.listchitiet)
@@ -177,6 +191,7 @@ namespace QuanLyPhongKham_Admin.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
         [Route("delete-donthuoc/{id}")]
         [HttpGet]
         public IActionResult DeleteDonThuoc(int id)

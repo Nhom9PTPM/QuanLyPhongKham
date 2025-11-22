@@ -60,6 +60,7 @@
                 <table id="tblCTHD">
                     <thead>
                         <tr>
+                            <th style="display:none;">ID</th>
                             <th>Thuốc</th>
                             <th>Số lượng</th>
                             <th>Đơn giá</th>
@@ -106,6 +107,9 @@ async function loadThuoc(){
 function addRow(item=null){
     const tr = document.createElement("tr");
     tr.innerHTML = `
+        <td style="display:none;">
+            <input type="hidden" class="maCT" value="${item?.maChiTietHoaDon || 0}">
+        </td>
         <td>
             <select class="input cboThuoc">
                 <option value="">-- Chọn thuốc --</option>
@@ -127,7 +131,7 @@ function addRow(item=null){
 
     cbo.addEventListener("change", function(){
         const t = listThuoc.find(x=>x.maThuoc==this.value);
-        if(t) dg.value = t.giaBan || 0;
+        if(t) dg.value = t.gia || 0;
         calcTotal();
     });
     sl.addEventListener("input", calcTotal);
@@ -149,10 +153,9 @@ function calcTotal(){
     document.getElementById("txtTongTien").innerText = total.toLocaleString("vi-VN")+" đ";
 }
 
+// Load dữ liệu khi sửa
 async function loadEdit() {
     if (!id) return;
-    isLoadingEdit = true;
-
     document.getElementById("title").innerText = "Sửa Hóa đơn";
 
     const res = await fetchAuth(baseUrl + "/api-admin/HoaDon/get-by-id/" + id);
@@ -167,14 +170,12 @@ async function loadEdit() {
     ct.forEach(x => addRow(x));
 
     calcTotal();
-    isLoadingEdit = false;
 }
 
-
+// Lưu hóa đơn
 async function saveForm() {
     let listCT = [];
 
-    // Lấy danh sách chi tiết hiện tại
     document.querySelectorAll("#tblCTHD tbody tr").forEach(row => {
         const maCT = Number(row.querySelector(".maCT").value);
         const maThuoc = Number(row.querySelector(".cboThuoc").value);
@@ -183,7 +184,7 @@ async function saveForm() {
 
         if (maThuoc)
             listCT.push({
-                maChiTietHoaDon: maCT, // >0 nếu là chi tiết cũ
+                maChiTietHoaDon: maCT, 
                 maThuoc: maThuoc,
                 soLuong: sl,
                 donGia: dg
@@ -195,13 +196,13 @@ async function saveForm() {
         return;
     }
 
-    // Tạo model theo API mới
     const model = {
         hoadon: {
-            maHoaDon: id ? Number(id) : 0, // nếu id tồn tại là update
+            maHoaDon: id ? Number(id) : 0,
             maBenhNhan: Number(document.getElementById("txtBenhNhan").value),
             phuongThucThanhToan: document.getElementById("txtPTTT").value,
-            trangThai: document.getElementById("txtTrangThai").value
+            trangThai: document.getElementById("txtTrangThai").value,
+            tongTien: Number(document.getElementById("txtTongTien").innerText.replace(/\D/g,''))
         },
         listchitiet: listCT
     };
@@ -212,6 +213,11 @@ async function saveForm() {
 
     try {
         const res = await fetchAuth(url, "POST", model);
+        if(res.errors){
+            console.error(res);
+            alert("Lỗi validation: " + JSON.stringify(res.errors));
+            return;
+        }
         alert("Lưu thành công!");
         location.href = "HoaDon.html";
     } catch (err) {
@@ -221,7 +227,10 @@ async function saveForm() {
 }
 
 // INIT
-async function init(){ await loadThuoc(); await loadEdit(); }
+async function init(){ 
+    await loadThuoc(); 
+    await loadEdit(); 
+}
 init();
 
 document.getElementById("toggleSidebar").onclick = ()=>document.getElementById("sidebar").classList.toggle("collapsed");

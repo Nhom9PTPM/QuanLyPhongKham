@@ -7,196 +7,229 @@
 <link rel="stylesheet" href="css/LichHen.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 <style>
+/* Layout giống Form Hóa Đơn */
 .container { display:flex; min-height:100vh; font-family:Arial,sans-serif; }
-.main { flex:1; padding:20px; background:#f4f4f4; }
+.sidebar { width:220px; background:#2c3e50; color:#fff; transition:0.3s; }
+.sidebar.collapsed { width:60px; }
+.sidebar-header { display:flex; align-items:center; justify-content:space-between; padding:15px; font-size:1.1em; font-weight:bold; }
+.sidebar-header .menu-btn { background:none; border:none; color:#fff; cursor:pointer; font-size:1.2em; }
+.sidebar-header .brand-text { margin-left:10px; }
+.main { flex:1; padding:20px; background:#f4f4f4; transition:0.3s margin-left; }
+.sidebar.collapsed ~ .main { margin-left:60px; }
+
 .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
-.card { background:#fff; padding:20px; border-radius:5px; box-shadow:0 0 10px rgba(0,0,0,0.1); }
+.header .actions button, .header .actions a { margin-left:5px; }
+
+.card { background:#fff; padding:20px; border-radius:5px; box-shadow:0 0 10px rgba(0,0,0,0.1); margin-bottom:20px; }
 .form-row { margin-bottom:15px; display:flex; flex-direction:column; }
 .form-row label { font-weight:bold; margin-bottom:5px; }
 .input, select, textarea { padding:8px; border:1px solid #ccc; border-radius:4px; width:100%; }
 textarea { resize:vertical; min-height:60px; }
+
 .btn { display:inline-flex; align-items:center; gap:5px; padding:8px 15px; border:none; border-radius:4px; cursor:pointer; }
 .btn.primary { background:#3498db; color:#fff; }
 .btn.neutral { background:#bdc3c7; color:#2c3e50; }
 .btn.warn { background:#e74c3c; color:#fff; }
+.btn.small { padding:5px 10px; font-size:0.9em; }
+
 table { width:100%; border-collapse:collapse; margin-top:10px; }
 table th, table td { border:1px solid #ccc; padding:8px; text-align:left; }
+table tbody tr:hover { background:#f0f0f0; }
+.table-wrap { overflow-x:auto; }
+.section-header { display:flex; justify-content:space-between; align-items:center; }
+.section-header h3 { margin:0; }
 </style>
 </head>
 <body>
 <div class="container">
-<main class="main">
-<header class="header">
-<h1 id="formTitle">Thêm/Sửa Đơn Thuốc</h1>
-<a href="DonThuoc.html" class="btn neutral"><i class="fa-solid fa-arrow-left"></i> Quay lại</a>
-</header>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button id="toggleSidebar" class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+            <span class="brand-text">DAH Clinic</span>
+        </div>
+    </aside>
 
-<section class="card">
-  <div class="form-row">
-    <label>Bác sĩ</label>
-    <input type="text" id="txtBacSi" class="input">
-  </div>
-  <div class="form-row">
-    <label>Người kê</label>
-    <input type="text" id="txtNguoiKe" class="input">
-  </div>
-  <div class="form-row">
-    <label>Ghi chú</label>
-    <textarea id="txtGhiChu" class="input"></textarea>
-  </div>
+    <main class="main">
+        <header class="header">
+            <h1 id="formTitle">Thêm Đơn Thuốc</h1>
+            <div class="actions">
+                <button class="btn primary" id="btnSave"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
+                <a class="btn neutral" href="DonThuoc.html"><i class="fa-solid fa-arrow-left"></i> Trở về</a>
+            </div>
+        </header>
 
-  <h3>Chi tiết đơn thuốc</h3>
-  <table id="tblChiTietDon">
-    <thead>
-      <tr>
-        <th>Thuốc</th>
-        <th>Số lượng</th>
-        <th>Cách dùng</th>
-        <th>Đơn giá</th>
-        <th>Thao tác</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-  <button id="btnAddRow" class="btn neutral">Thêm thuốc</button>
+        <section class="card">
+            <div class="form-row">
+                <label>Bác sĩ</label>
+                <input type="text" id="txtBacSi" class="input">
+            </div>
+            <div class="form-row">
+                <label>Người kê</label>
+                <input type="text" id="txtNguoiKe" class="input">
+            </div>
+            <div class="form-row">
+                <label>Ghi chú</label>
+                <textarea id="txtGhiChu" class="input"></textarea>
+            </div>
+        </section>
 
-  <div style="margin-top:20px;">
-    <button id="btnSave" class="btn primary"><i class="fa-solid fa-floppy-disk"></i> Lưu</button>
-  </div>
-</section>
-</main>
+        <section class="card">
+            <div class="section-header">
+                <h3>Chi tiết đơn thuốc</h3>
+                <button class="btn neutral small" id="btnAddRow"><i class="fa-solid fa-plus"></i> Thêm thuốc</button>
+            </div>
+            <div class="table-wrap">
+                <table id="tblChiTietDon">
+                    <thead>
+                        <tr>
+                            <th>Thuốc</th>
+                            <th>Số lượng</th>
+                            <th>Cách dùng</th>
+                            <th>Đơn giá</th>
+                            <th>Xóa</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
 </div>
 
 <script>
 const token = localStorage.getItem("token");
-if (!token) { alert("Vui lòng đăng nhập!"); location.href="Login.html"; }
+if(!token){ alert("Vui lòng đăng nhập!"); location.href="Login.html"; }
 
 const baseUrl = "https://localhost:44340";
 const id = new URLSearchParams(location.search).get("id");
-
 let allThuoc = [];
 
 async function fetchAuth(url, method="GET", body=null){
-  const res = await fetch(url,{
-    method,
-    headers:{
-      "Authorization":"Bearer "+token,
-      "Content-Type":"application/json"
-    },
-    body: body?JSON.stringify(body):null
-  });
-  if(!res.ok) throw new Error(await res.text());
-  return res.json();
+    const res = await fetch(url,{
+        method,
+        headers: {"Authorization":"Bearer "+token,"Content-Type":"application/json"},
+        body: body ? JSON.stringify(body) : null
+    });
+    if(res.status===401){ localStorage.removeItem("token"); alert("Hết hạn đăng nhập!"); location.href="Login.html"; }
+    if(!res.ok) throw new Error(await res.text());
+    return res.json();
 }
 
 // Load danh sách thuốc
 async function loadAllThuoc(){
-  try{
-    allThuoc = await fetchAuth(baseUrl+"/api-admin/Thuoc/get-all");
-  }catch(err){
-    console.error(err);
-    allThuoc = [];
-  }
+    try{
+        allThuoc = await fetchAuth(baseUrl+"/api-admin/Thuoc/get-all");
+    }catch(err){ console.error(err); allThuoc=[]; }
 }
 
-// Thêm 1 row chi tiết
+// Thêm dòng chi tiết
 function addChiTietRow(item={}){
-  const tbody = document.querySelector("#tblChiTietDon tbody");
-  const tr = document.createElement("tr");
+    const tbody = document.querySelector("#tblChiTietDon tbody");
+    const tr = document.createElement("tr");
+    tr.dataset.id = item.MaChiTietDon || 0; // Lưu id để update
 
-  // Select thuốc
-  const selectThuoc = document.createElement("select");
-  selectThuoc.className = "input";
-  allThuoc.forEach(t=>{
-    const opt = document.createElement("option");
-    opt.value = t.maThuoc;
-    opt.text = t.tenThuoc;
-    selectThuoc.add(opt);
-  });
-  if(item.MaThuoc) selectThuoc.value = item.MaThuoc;
+    const selectThuoc = document.createElement("select");
+    selectThuoc.className = "input";
+    const defaultOpt = document.createElement("option");
+    defaultOpt.value = "";
+    defaultOpt.text = "-- Chọn thuốc --";
+    selectThuoc.add(defaultOpt);
 
-  tr.innerHTML = `
-    <td></td>
-    <td><input type="number" class="input" value="${item.SoLuong||1}"></td>
-    <td><input type="text" class="input" value="${item.CachDung||''}"></td>
-    <td><input type="number" class="input" value="${item.DonGia||0}"></td>
-    <td><button class="btn warn btnRemove">Xóa</button></td>
-  `;
-  tr.cells[0].appendChild(selectThuoc);
-  tr.querySelector(".btnRemove").onclick = ()=>tr.remove();
-  tbody.appendChild(tr);
-}
-
-// Load dữ liệu đơn thuốc (nếu sửa)
-async function loadDonThuoc(){
-  await loadAllThuoc();
-
-  if(!id) return; // Thêm mới
-
-  try{
-    const data = await fetchAuth(baseUrl+"/api-admin/DonThuoc/get-by-id/"+id);
-    document.getElementById("formTitle").innerText = "Sửa Đơn Thuốc";
-
-    document.getElementById("txtBacSi").value = data.donThuoc?.maBacSi||"";
-    document.getElementById("txtNguoiKe").value = data.donThuoc?.nguoiKe||"";
-    document.getElementById("txtGhiChu").value = data.donThuoc?.ghiChu||"";
-
-    data.chiTiet?.forEach(item=>{
-      addChiTietRow({
-        MaChiTietDon: item.maChiTietDon,
-        MaThuoc: item.maThuoc,
-        SoLuong: item.soLuong,
-        CachDung: item.cachDung,
-        DonGia: item.donGia
-      });
+    allThuoc.forEach(t=>{
+        const opt = document.createElement("option");
+        opt.value = t.maThuoc;
+        opt.text = t.tenThuoc;
+        selectThuoc.add(opt);
     });
+    if(item.MaThuoc) selectThuoc.value = item.MaThuoc;
 
-  }catch(err){
-    console.error(err);
-    alert("Không tải được dữ liệu!");
-  }
+    tr.innerHTML = `
+        <td></td>
+        <td><input type="number" class="input soLuong" min="1" value="${item.SoLuong||1}"></td>
+        <td><input type="text" class="input cachDung" value="${item.CachDung||''}"></td>
+        <td><input type="number" class="input donGia" min="0" value="${item.DonGia||0}"></td>
+        <td><button class="btn warn btnRemove"><i class="fa-solid fa-trash"></i></button></td>
+    `;
+    tr.cells[0].appendChild(selectThuoc);
+
+    // Khi chọn thuốc, tự động cập nhật giá
+    selectThuoc.onchange = function(){
+        const t = allThuoc.find(x=>x.maThuoc==this.value);
+        if(t) tr.querySelector(".donGia").value = t.giaBan || 0;
+    }
+
+    tr.querySelector(".btnRemove").onclick = ()=>tr.remove();
+    tbody.appendChild(tr);
 }
 
-// Thêm thuốc
+// Load dữ liệu đơn thuốc (sửa)
+async function loadDonThuoc(){
+    await loadAllThuoc();
+    const tbody = document.querySelector("#tblChiTietDon tbody");
+    tbody.innerHTML = ""; // Xóa cũ
+
+    if(!id) return; // Thêm mới
+
+    try{
+        const res = await fetchAuth(baseUrl+"/api-admin/DonThuoc/get-by-id/"+id);
+        document.getElementById("formTitle").innerText = "Sửa Đơn Thuốc";
+
+        document.getElementById("txtBacSi").value = res.donThuoc?.maBacSi || "";
+        document.getElementById("txtNguoiKe").value = res.donThuoc?.nguoiKe || "";
+        document.getElementById("txtGhiChu").value = res.donThuoc?.ghiChu || "";
+
+        res.chiTiet?.forEach(item=>{
+            addChiTietRow({
+                MaChiTietDon: item.maChiTietDon,
+                MaThuoc: item.maThuoc,
+                SoLuong: item.soLuong,
+                CachDung: item.cachDung,
+                DonGia: item.donGia
+            });
+        });
+    }catch(err){ console.error(err); alert("Không tải được dữ liệu!"); }
+}
+
+// Thêm dòng mới
 document.getElementById("btnAddRow").onclick = ()=>addChiTietRow({});
 
-// Lưu
+// Lưu dữ liệu
 document.getElementById("btnSave").onclick = async ()=>{
-  const donThuoc = {
-    MaDonThuoc: id?parseInt(id):0,
-    MaBacSi: parseInt(document.getElementById("txtBacSi").value),
-    NguoiKe: document.getElementById("txtNguoiKe").value,
-    GhiChu: document.getElementById("txtGhiChu").value,
-    NgayKe: new Date()
-  };
+    const donThuoc = {
+        MaDonThuoc: id?parseInt(id):0,
+        MaBacSi: parseInt(document.getElementById("txtBacSi").value),
+        NguoiKe: document.getElementById("txtNguoiKe").value,
+        GhiChu: document.getElementById("txtGhiChu").value,
+        NgayKe: new Date()
+    };
 
-  const listchitiet=[];
-  document.querySelectorAll("#tblChiTietDon tbody tr").forEach(tr=>{
-    const t = tr.cells[0].querySelector("select").value;
-    const sl = tr.cells[1].querySelector("input").value;
-    const cd = tr.cells[2].querySelector("input").value;
-    const dg = tr.cells[3].querySelector("input").value;
-    listchitiet.push({
-      MaThuoc: parseInt(t),
-      SoLuong: parseInt(sl),
-      CachDung: cd,
-      DonGia: parseFloat(dg)
+    const listchitiet = [];
+    document.querySelectorAll("#tblChiTietDon tbody tr").forEach(tr=>{
+        const maThuoc = tr.cells[0].querySelector("select").value;
+        const sl = tr.cells[1].querySelector("input").value;
+        const cd = tr.cells[2].querySelector("input").value;
+        const dg = tr.cells[3].querySelector("input").value;
+        if(maThuoc) listchitiet.push({
+            MaChiTietDon: parseInt(tr.dataset.id || 0),
+            MaThuoc: parseInt(maThuoc),
+            SoLuong: parseInt(sl),
+            CachDung: cd,
+            DonGia: parseFloat(dg)
+        });
     });
-  });
 
-  const body = { donThuoc, listchitiet };
-
-  try{
-    const url = id?baseUrl+"/api-admin/DonThuoc/update-donthuoc":baseUrl+"/api-admin/DonThuoc/create-donthuoc";
-    await fetchAuth(url,"POST",body);
-    alert("Lưu thành công!");
-    window.location.href="DonThuoc.html";
-  }catch(err){
-    console.error(err);
-    alert("Lưu thất bại: "+err.message);
-  }
+    try{
+        const url = id ? baseUrl+"/api-admin/DonThuoc/update-donthuoc" : baseUrl+"/api-admin/DonThuoc/create-donthuoc";
+        await fetchAuth(url,"POST",{ donThuoc, listchitiet });
+        alert("Lưu thành công!");
+        window.location.href="DonThuoc.html";
+    }catch(err){ console.error(err); alert("Lưu thất bại: "+err.message); }
 }
 
+// Toggle sidebar
+document.getElementById("toggleSidebar").onclick = ()=>document.getElementById("sidebar").classList.toggle("collapsed");
+
+// INIT
 loadDonThuoc();
 </script>
 </body>
