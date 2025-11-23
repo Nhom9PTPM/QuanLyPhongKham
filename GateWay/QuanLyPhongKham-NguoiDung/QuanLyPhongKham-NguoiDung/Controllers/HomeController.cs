@@ -33,26 +33,6 @@ namespace QuanLyPhongKham_NguoiDung.Controllers
             return Ok(result);
         }
 
-        [Route("get-benhnhan-moi/{sl}")]
-        [HttpGet]
-        public IActionResult GetBenhNhanMoi(int sl)
-        {
-            var result = db.BenhNhans
-                .Where(x => x.DaXoa == false)
-                .OrderByDescending(x => x.NgayTao)
-                .Take(sl)
-                .Select(x => new
-                {
-                    x.MaBenhNhan,
-                    x.HoTen,
-                    x.NgaySinh,
-                    x.GioiTinh,
-                    x.SoDienThoai
-                })
-                .ToList();
-
-            return Ok(result);
-        }
 
         [Route("get-thuoc-banchay/{sl}")]
         [HttpGet]
@@ -78,14 +58,42 @@ namespace QuanLyPhongKham_NguoiDung.Controllers
         public IActionResult GetHome(int sl)
         {
             var topBacSi = GetBacSiNoiBat(sl) as OkObjectResult;
-            var topBenhNhan = GetBenhNhanMoi(sl) as OkObjectResult;
             var topThuoc = GetThuocBanChay(sl) as OkObjectResult;
 
             return Ok(new
             {
                 BacSiNoiBat = topBacSi?.Value,
-                BenhNhanMoi = topBenhNhan?.Value,
                 ThuocBanChay = topThuoc?.Value
+            });
+        }
+
+        [HttpGet("tim-kiem")]
+        public IActionResult TimKiemBacSi(string keyword, int page = 1, int pageSize = 10)
+        {
+            if (string.IsNullOrEmpty(keyword))
+                return BadRequest("Từ khóa không được để trống");
+
+            var query = from b in db.BacSis
+                        join nd in db.NguoiDungs on b.MaNguoiDung equals nd.MaNguoiDung
+                        where nd.HoTen.Contains(keyword) || b.ChuyenKhoa.Contains(keyword)
+                        select new
+                        {
+                            b.MaBacSi,
+                            HoTen = nd.HoTen,
+                            b.ChuyenKhoa,
+                            b.SoPhong,
+                            b.TrangThai
+                        };
+
+            var data = query.ToList();
+            var pagedData = data.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            return Ok(new
+            {
+                TotalItems = data.Count,
+                Page = page,
+                PageSize = pageSize,
+                Data = pagedData
             });
         }
     }

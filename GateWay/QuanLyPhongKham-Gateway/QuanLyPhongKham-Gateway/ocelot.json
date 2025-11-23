@@ -35,7 +35,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 44387
+          "Port": 44386
         }
       ],
       "UpstreamPathTemplate": "/api-nguoidung/{everything}",
