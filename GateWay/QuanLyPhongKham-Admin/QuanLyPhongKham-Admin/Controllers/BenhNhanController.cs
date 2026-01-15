@@ -8,7 +8,6 @@ namespace QuanLyPhongKham_Admin.Controllers
     [ApiController]
     public class BenhNhanController : ControllerBase
     {
-        //  Khai báo biến _bll ở đây (đây là thứ bạn bị thiếu)
         private readonly BenhNhanBLL _bll;
 
         public BenhNhanController(BenhNhanBLL bll)
@@ -16,7 +15,9 @@ namespace QuanLyPhongKham_Admin.Controllers
             _bll = bll;
         }
 
-        //  Lấy danh sách bệnh nhân
+        // ================================
+        //  LẤY DANH SÁCH BỆNH NHÂN
+        // ================================
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -24,7 +25,9 @@ namespace QuanLyPhongKham_Admin.Controllers
             return Ok(new { success = true, data });
         }
 
-        //  Lấy chi tiết bệnh nhân theo ID
+        // ================================
+        //  LẤY CHI TIẾT BỆNH NHÂN
+        // ================================
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -35,7 +38,9 @@ namespace QuanLyPhongKham_Admin.Controllers
             return Ok(new { success = true, data });
         }
 
-        //  Thêm bệnh nhân mới
+        // ================================
+        //  THÊM BỆNH NHÂN
+        // ================================
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] BenhNhan bn)
         {
@@ -43,7 +48,9 @@ namespace QuanLyPhongKham_Admin.Controllers
             return Ok(new { success = true, message = "Thêm bệnh nhân thành công!" });
         }
 
-        //  Cập nhật bệnh nhân
+        // ================================
+        //  CẬP NHẬT BỆNH NHÂN
+        // ================================
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] BenhNhan bn)
         {
@@ -52,7 +59,9 @@ namespace QuanLyPhongKham_Admin.Controllers
             return Ok(new { success = true, message = "Cập nhật thành công!" });
         }
 
-        //  Xóa mềm bệnh nhân
+        // ================================
+        //  XÓA MỀM BỆNH NHÂN
+        // ================================
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -60,7 +69,9 @@ namespace QuanLyPhongKham_Admin.Controllers
             return Ok(new { success = true, message = "Xóa mềm thành công!" });
         }
 
-        //  Lấy thông tin đầy đủ (kết hợp hồ sơ, thuốc, tập tin)
+        // ================================
+        //  LẤY THÔNG TIN ĐẦY ĐỦ
+        // ================================
         [HttpGet("ThongTinDayDu/{id}")]
         public async Task<IActionResult> ThongTinDayDu(int id)
         {
@@ -68,6 +79,16 @@ namespace QuanLyPhongKham_Admin.Controllers
             if (data == null)
                 return NotFound(new { success = false, message = "Không tìm thấy bệnh nhân." });
 
+            return Ok(new { success = true, data });
+        }
+
+        // ================================
+        //   API TÌM KIẾM BỆNH NHÂN
+        // ================================
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] string keyword)
+        {
+            var data = await _bll.TimKiem(keyword ?? "");
             return Ok(new { success = true, data });
         }
     }

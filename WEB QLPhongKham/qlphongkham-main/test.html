@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tin tức - HeartCare</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    .blog-new {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+
+    .container {
+      padding: 40px 5%;
+    }
+
+    .breadcrumb {
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+      color: #0073b1;
+    }
+
+    .breadcrumb a {
+      text-decoration: none;
+      color: #0073b1;
+      font-weight: bold;
+    }
+
+    .news-layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .news-large {
+      position: relative;
+      background-color: #004f79;
+      color: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .news-large img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+    }
+
+    .news-large .content {
+      padding: 20px;
+    }
+
+    .news-large h3 {
+      margin-top: 0;
+      font-size: 1.2rem;
+    }
+
+    .news-large p {
+      font-size: 0.92rem;
+      margin-bottom: 0;
+    }
+
+    .news-card {
+      background-color: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .news-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+    }
+
+    .news-card .content {
+      padding: 16px;
+    }
+
+    .news-card h4 {
+      font-size: 1rem;
+      color: #0073b1;
+    }
+
+    .news-card p {
+      font-size: 0.9rem;
+      color: #444;
+    }
+
+    .news-card a {
+      color: #0073b1;
+      text-decoration: none;
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+
+    .news-tags {
+      padding: 20px 5%;
+    }
+
+    .news-tags h3 {
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #008080;
+      display: inline-block;
+    }
+
+    .news-tags .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .news-tags .tag {
+      font-size: 0.9rem;
+      padding: 6px 12px;
+      background-color: #e7f4f3;
+      border-radius: 16px;
+      color: #007c7c;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .news-tags .tag:hover {
+      background-color: #c8eae7;
+    }
+    .latest-posts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin: 40px 5% 60px;
+}
+
+.post-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+  padding: 16px;
+  transition: transform 0.2s ease;
+}
+
+.post-card:hover {
+  transform: translateY(-4px);
+}
+
+.post-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+.post-card h4 {
+  font-size: 1rem;
+  color: #004f79;
+  margin: 0 0 8px;
+}
+
+.post-card p {
+  font-size: 0.9rem;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+.post-card a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #0073b1;
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="breadcrumb">
+   
+
+    <div class="news-layout">
+      <!-- Bài viết lớn -->
+      <div class="news-large">
+        <img src="./img/news1.jpg" alt="Bài viết nổi bật" />
+        <div class="content">
+          <h3>GS Nguyễn Thanh Liêm nhận giải thưởng Nikkei Châu Á</h3>
+          <p>Ngày 13/6/2018 tại Tokyo, GS.TS Nguyễn Thanh Liêm được vinh danh với giải thưởng Nikkei Châu Á cho những đóng góp nổi bật trong nghiên cứu tế bào gốc & công nghệ gen...</p>
+          <a href="#" style="color:#fff;">Xem thêm &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Bài viết phụ 1 -->
+      <div class="news-card">
+        <img src="./img/ECG.png" alt="Vinmec nhận bằng khen" />
+        <div class="content">
+          <h4>Vinmec nhận bằng khen của Bộ Y tế vì đóng góp tích cực</h4>
+          <p>Trong buổi lễ phát động tầm soát ung thư vú và cổ tử cung...</p>
+          <a href="#">Xem thêm &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Bài viết phụ 2 -->
+      <div class="news-card">
+        <img src="./img/news3.jpg" alt="Vinmec đạt giải thưởng bệnh viện tiến bộ" />
+        <div class="content">
+          <h4>Vinmec đạt giải thưởng "Bệnh viện Việt Nam tiến bộ nhất"</h4>
+          <p>Giải thưởng của Hiệp hội Quản lý bệnh viện châu Á cho các tiêu chí an toàn, hiệu quả...</p>
+          <a href="#">Xem thêm &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chủ đề bài viết -->
+    <div class="news-tags">
+      <h3>Bài viết mới nhất</h3>
+      
+    </div>
+    <div class="latest-posts">
+  <div class="post-card">
+    <img src="./img/post1.jpg" alt="GS Nguyễn Thanh Liêm" />
+    <h4>GS Nguyễn Thanh Liêm được vinh danh là 1 trong 100 nhà khoa học tiêu biểu</h4>
+    <p>Ông được vinh danh bởi những đóng góp nổi bật trong nghiên cứu tế bào gốc và điều trị ung thư...</p>
+    <a href="#">Xem thêm &rarr;</a>
+  </div>
+
+  <div class="post-card">
+    <img src="./img/post2.jpg" alt="Cống hiến tiêu biểu" />
+    <h4>GS Nguyễn Thanh Liêm được trao danh hiệu “Cống hiến tiêu biểu”</h4>
+    <p>Với nhiều năm cống hiến trong lĩnh vực y tế nhi khoa và tế bào gốc...</p>
+    <a href="#">Xem thêm &rarr;</a>
+  </div>
+
+  <div class="post-card">
+    <img src="./img/post3.jpg" alt="Vinmec cảnh giác dược" />
+    <h4>Vinmec Times City được công nhận là 1 trong 15 bệnh viện tốt công tác cảnh giác dược</h4>
+    <p>Đạt tiêu chuẩn đánh giá nghiêm ngặt từ Bộ Y tế trong hoạt động giám sát thuốc...</p>
+    <a href="#">Xem thêm &rarr;</a>
+  </div>
+
+  <div class="post-card">
+    <img src="./img/post4.jpg" alt="Vinmec an toàn người bệnh" />
+    <h4>Vinmec được vinh danh là “Bệnh viện tiến bộ nhất” và “An toàn cho người bệnh”</h4>
+    <p>Được vinh danh tại Hội nghị quản lý bệnh viện châu Á với nhiều cải tiến toàn diện...</p>
+    <a href="#">Xem thêm &rarr;</a>
+  </div>
+</div>
+
+  </div>
+</body>
+</html>

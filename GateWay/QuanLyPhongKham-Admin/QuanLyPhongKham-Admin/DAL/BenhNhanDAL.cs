@@ -64,6 +64,33 @@ namespace QuanLyPhongKham_Admin.DAL
                 .OrderByDescending(h => h.NgayLap)
                 .ToListAsync();
         }
+        // Tìm kiếm bệnh nhân theo từ khóa (tên, sđt, email, CMT)
+        public async Task<List<BenhNhan>> SearchAsync(string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+                keyword = "";
+
+            return await _context.BenhNhan
+                .Where(b => !b.DaXoa &&
+                       (b.HoTen.Contains(keyword) ||
+                        b.SoDienThoai.Contains(keyword) ||
+                        b.Email.Contains(keyword) ||
+                        b.CMTND_NV.Contains(keyword)))
+                .OrderByDescending(b => b.MaBenhNhan)
+                .Select(b => new BenhNhan
+                {
+                    MaBenhNhan = b.MaBenhNhan,
+                    HoTen = b.HoTen,
+                    NgaySinh = b.NgaySinh,
+                    GioiTinh = b.GioiTinh,
+                    SoDienThoai = b.SoDienThoai,
+                    Email = b.Email,
+                    DiaChi = b.DiaChi,
+                    CMTND_NV = b.CMTND_NV,
+                    NgayTao = b.NgayTao
+                })
+                .ToListAsync();
+        }
 
     }
 }

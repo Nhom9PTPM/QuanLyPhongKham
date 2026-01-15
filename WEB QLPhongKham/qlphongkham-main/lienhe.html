@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="./img/logohinh.png" rel="icon" type="image/png">
+  <title>Liên hệ</title>
+  <link rel="stylesheet" href="./css/reset.css">
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="https:cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+  <div class="top-bar">
+    <div class="top-links">
+      <a href="./bacsi.html">Tìm bác sĩ</a>
+      <a href="#">Khóa học trực tuyến</a>
+      <a href="#">Chăm sóc khách hàng</a>
+    </div>
+  </div>
+
+  <header class="main-header">
+    <img src="./img/logo.png" alt="HeartCare Logo" class="logo">
+    <div class="search-section">
+      <!-- <i class="fa-solid fa-magnifying-glass search-icon"></i> -->
+      <input type="text" placeholder="Tìm kiếm...">
+      
+    </div>
+   <div class="tools">
+      <i class="fa-regular fa-calendar-days calendar-icon"></i>
+      <!-- <i class="fa-solid fa-pen edit-icon"></i> -->
+      <img src="https://flagcdn.com/w40/vn.png" alt="Vietnam Flag" class="flag-icon">
+      <!-- <i class="fa-solid fa-chevron-down dropdown-icon"></i> -->
+    </div> 
+
+  </header>
+
+  <nav class="menu-bar">
+     <a href="./index.html" class="active">Trang chủ</a>
+          <a href="./about-us.html">Giới thiệu</a>
+          <a href="./dichvu.html">Dịch vụ</a>
+          <a href="./datlich.html">Đặt lịch</a>
+          <a href="#">Liên hệ</a>
+                    <a href="./blog.html">Tin tức</a>
+  </nav>
+  <section class="banner">
+    <div class="container banner-content">
+      <h1>Liên hệ với chúng tôi<br /></h1>
+      <a href="./datlich.html" class="btn-primary">Đặt lịch khám</a>
+    </div>
+  </section>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Liên hệ - HeartCare</title>
+  <link rel="stylesheet" href="./css/style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .contact-container {
+      display: flex;
+      flex-wrap: wrap;
+      max-width: 1200px;
+      margin: 60px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+
+    .contact-info, .contact-form {
+      flex: 1 1 50%;
+      padding: 20px;
+    }
+
+    .contact-info h2, .contact-form h2 {
+      color: #008080;
+      margin-bottom: 20px;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .info-item i {
+      font-size: 20px;
+      color: #008080;
+      margin-right: 12px;
+      width: 24px;
+    }
+
+    .contact-form form input, .contact-form form textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .contact-form form button {
+      background-color: #008080;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .contact-form form button:hover {
+      background-color: #006666;
+    }
+
+    .map-container {
+      width: 100%;
+      margin-top: 40px;
+    }
+
+    .map-container iframe {
+      width: 100%;
+      height: 400px;
+      border: 0;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .contact-container {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="contact-container">
+    <!-- Thông tin liên hệ -->
+    <div class="contact-info">
+      <h2>Liên hệ với HeartCare</h2>
+      <div class="info-item">
+        <i class="fas fa-map-marker-alt"></i>
+        <p>Khu II, Đường 3 Tháng 2, Xuân Khánh, Ninh Kiều, Cần Thơ</p>
+      </div>
+      <div class="info-item">
+        <i class="fas fa-phone"></i>
+        <p>028.3838.1234 | Hotline: 1900 6067</p>
+      </div>
+      <div class="info-item">
+        <i class="fas fa-envelope"></i>
+        <p>hotro@heartcare.vn</p>
+      </div>
+      <div class="info-item">
+        <i class="fas fa-clock"></i>
+        <p>Thứ 2 - Thứ 7: 7h30 - 17h00</p>
+      </div>
+    </div>
+
+    <!-- Form liên hệ -->
+    <div class="contact-form">
+      <h2>Gửi phản hồi</h2>
+      <form action="#" method="post">
+        <input type="text" name="name" placeholder="Họ và tên" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="tel" name="phone" placeholder="Số điện thoại">
+        <textarea name="message" rows="6" placeholder="Nội dung tin nhắn" required></textarea>
+        <button type="submit">Gửi liên hệ</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Google Maps -->
+  <div class="map-container">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3915.527208637096!2d105.76900031480023!3d10.029938775924985!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31a08825798be9f1%3A0x365ce2b5ef1690e6!2sCan%20Tho%20University!5e0!3m2!1sen!2s!4v1653028383337!5m2!1sen!2s" allowfullscreen="" loading="lazy"></iframe>
+  </div>
+
+</body>
+</html>
+
+<footer class="modern-footer">
+  <div class="footer-container">
+    <!-- Cột 1: Liên hệ -->
+    <div class="footer-column">
+      <h3>Trung tâm hỗ trợ</h3>
+      <p class="footer-hotline">📞 1900 8686</p>
+      <p><strong>HeartCare Plus Clinic</strong></p>
+      <p><i class="fa-solid fa-location-dot"></i> 45 Nguyễn Trãi, P. An Cư, Ninh Kiều, Cần Thơ</p>
+      <p><i class="fa-solid fa-envelope"></i> contact@heartcare.vn</p>
+      <p><i class="fa-solid fa-phone"></i> 0292 1234 567</p>
+    </div>
+
+    <!-- Cột 2: Giới thiệu -->
+    <div class="footer-column">
+      <h3>Về HeartCare</h3>
+      <ul>
+        <li><a href="./about-us.html">Về chúng tôi</a></li>
+        <li><a href="./doctors.html">Đội ngũ bác sĩ</a></li>
+        <li><a href="./services.html">Dịch vụ</a></li>
+        <li><a href="./blog.html">Tin tức y khoa</a></li>
+      </ul>
+    </div>
+
+    <!-- Cột 3: Hỗ trợ -->
+    <div class="footer-column">
+      <h3>Hướng dẫn & Hỗ trợ</h3>
+      <ul>
+        <li><a href="./datlich.html">Đặt lịch khám</a></li>
+        <li><a href="./guide.html">Hướng dẫn sử dụng</a></li>
+        <li><a href="./faq.html">Câu hỏi thường gặp</a></li>
+        <li><a href="./terms.html">Chính sách & Điều khoản</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 HeartCare Plus. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>
